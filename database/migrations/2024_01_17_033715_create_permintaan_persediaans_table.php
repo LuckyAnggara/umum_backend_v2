@@ -17,8 +17,11 @@ return new class extends Migration
             $table->string('nama');
             $table->string('unit');
             $table->string('nip')->nullable();
-            $table->string('status')->default('ORDERING');
+            $table->string('status')->default('ORDER');
             $table->string('catatan')->nullable();
+            $table->string('penerima')->nullable();
+            $table->date('tanggal_diterima')->nullable();
+            $table->text('ttd')->nullable();
             $table->timestamps();
         });
     }

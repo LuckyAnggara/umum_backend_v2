@@ -14,7 +14,7 @@ class DetailPermintaanPersediaan extends Model
         'inventory_id',
         'jumlah',
         'jumlah_accept',
-        'checked'
+        'checked',
     ];
 
     protected $casts = [

@@ -1,8 +1,11 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BmnController;
 use App\Http\Controllers\InventoryController;
+use App\Http\Controllers\MutasiPersediaanController;
 use App\Http\Controllers\PermintaanPersediaanController;
+use App\Models\MutasiPersediaan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -28,6 +31,9 @@ Route::resource('permintaan-persediaan', PermintaanPersediaanController::class)-
     'store', 'show',
 ]);
 
+Route::put('/permintaan-persediaan/done/{id}', [PermintaanPersediaanController::class, 'updateDone']);
+
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/auth/user', [AuthController::class, 'user'])->name('user');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
@@ -35,7 +41,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resource('permintaan-persediaan', PermintaanPersediaanController::class)->only([
         'index', 'update'
     ]);
+
+    Route::put('/permintaan-persediaan/undo/{id}', [PermintaanPersediaanController::class, 'updateUndo']);
     Route::resource('inventory', InventoryController::class);
+    Route::resource('bmn', BmnController::class);
+    Route::resource('/persediaan/mutasi', MutasiPersediaanController::class);
 
     Route::get('/persediaan/cek-nama', [InventoryController::class, 'cekNama']);
     Route::post(

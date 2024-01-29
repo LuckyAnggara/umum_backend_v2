@@ -17,10 +17,14 @@ class PermintaanPersediaan extends Model
         'nip',
         'status',
         'catatan',
+        'penerima',
+        'ttd',
+        'tanggal_diterima',
     ];
 
     protected $casts = [
         'created_at' => 'datetime:d F Y',
+        'tanggal_diterima' => 'datetime:d F Y',
     ];
 
     public static function generateTicketNumber()

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\DetailPermintaanPersediaan;
 use App\Models\MutasiPersediaan;
 use App\Models\PermintaanPersediaan;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -60,7 +61,7 @@ class PermintaanPersediaanController extends Controller
                 foreach ($data->detail as $key => $value) {
                     DetailPermintaanPersediaan::create([
                         'permintaan_persediaan_id' => $result->id,
-                        'PermintaanPersediaan_id' => $value->id,
+                        'inventory_id' => $value->id,
                         'jumlah' => $value->qty,
                         'checked' => true,
                     ]);
@@ -93,34 +94,114 @@ class PermintaanPersediaanController extends Controller
         DB::beginTransaction();
         try {
             // Cari dan update data PermintaanPersediaan berdasarkan ID
-            $result = PermintaanPersediaan::findOrFail($id);
+            $result = PermintaanPersediaan::with('detail')->findOrFail($id);
             $result->update([
                 'status' => $data->status
             ]);
 
             if ($data->status == 'APPROVE') {
-
+                $catatan = 'Permintaan di terima';
                 foreach ($data->detail as $key => $value) {
                     $detail = DetailPermintaanPersediaan::find($value->id);
-                    if ($detail) {
                         $detail->update([
                             'jumlah_accept' => $value->confirm_permintaan,
-                            'status' => $value->checked
+                            'checked' => $value->checked
                         ]);
-
-                        MutasiPersediaanController::createMutasi($value->inventory_id, 'KREDIT', $value->confirm_permintaan, 'PERMINTAAN DARI TIKE NOMOR #' . $result->tiket);
-                    }
                 }
-                $catatan = 'Permintaan di terima';
                 LogPermintaanPersediaanController::createLogPermintaan($result->id, 'APPROVE', $catatan, Auth::user()->name);
-            } else {
-                $catatan = 'Permintaan di tolak';
+            } else if($data->status == 'PROCESS') {
+                $catatan = 'Permintaan di proses';
+                LogPermintaanPersediaanController::createLogPermintaan($result->id, 'PROCESS', $catatan, Auth::user()->name);
+            } else if($data->status == 'DONE') {
+                $catatan = 'Permintaan selesai';
+              
+                LogPermintaanPersediaanController::createLogPermintaan($result->id, 'DONE', $catatan, Auth::user()->name);
+            }else{
+                     $catatan = 'Permintaan di tolak';
                 LogPermintaanPersediaanController::createLogPermintaan($result->id, 'REJECT', $catatan, Auth::user()->name);
             }
+            $output = PermintaanPersediaan::with('detail.persediaan', 'log')->findOrFail($id);
             // Commit transaksi jika berhasil
             DB::commit();
             // Berikan respons sukses
-            return response()->json(['message' => 'Data berhasil diperbarui'], 200);
+            return response()->json(['data' => $output, 'message' => 'Data berhasil diperbarui'], 200);
+        } catch (\Exception $e) {
+            // Rollback transaksi jika terjadi kesalahan
+            DB::rollback();
+            // Berikan respons error
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
+    }
+
+    public function updateDone(Request $request, $id)
+    {
+        $data = json_decode($request->getContent());
+        DB::beginTransaction();
+        try {
+
+            $result = PermintaanPersediaan::with('detail.persediaan', 'log')->findOrFail($id);
+            $result->update([
+                'status' => $data->status,
+                'tanggal_diterima'=> Carbon::createFromFormat('d F Y', $data->tanggalPenerimaan)->format('Y-m-d'),
+                'penerima'=> $data->name,
+                'ttd' => $data->image,
+            ]);
+
+            $catatan = 'Permintaan selesai';
+               foreach ($result->detail as $key => $value) {
+                 if($value->status == true){
+                        MutasiPersediaanController::createMutasi($value->inventory_id, 'KREDIT', $value->confirm_permintaan, 'PERMINTAAN DARI TIKET NOMOR #' . $result->tiket);
+                 }
+                    
+                }
+
+            LogPermintaanPersediaanController::createLogPermintaan($result->id, 'DONE', $catatan, $data->name);
+         
+
+             $output = PermintaanPersediaan::with('detail.persediaan', 'log')->findOrFail($id);
+            // Commit transaksi jika berhasil
+            DB::commit();
+            // Berikan respons sukses
+            return response()->json(['data' => $output, 'message' => 'Data berhasil diperbarui'], 200);
+        } catch (\Exception $e) {
+            // Rollback transaksi jika terjadi kesalahan
+            DB::rollback();
+            // Berikan respons error
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
+    }
+
+      public function updateUndo(Request $request, $id)
+    {
+        $data = json_decode($request->getContent());
+        DB::beginTransaction();
+        try {
+
+            $result = PermintaanPersediaan::with('detail')->findOrFail($id);
+            $result->update([
+                'status' => 'ORDER',
+                'tanggal_diterima'=> null,
+                'penerima'=> null,
+                'ttd' => null,
+            ]);
+
+            $catatan = 'Permintaan di reset ke proses awal';
+
+                foreach ($result->detail as $key => $value) {
+                    $detail = DetailPermintaanPersediaan::find($value->id);
+                        $detail->update([
+                            'jumlah_accept' => $value->jumlah,
+                            'checked' => true
+                        ]);
+                }
+            LogPermintaanPersediaanController::createLogPermintaan($result->id, 'UNDO', $catatan, Auth::user()->name);
+         
+
+            $output = PermintaanPersediaan::with('detail.persediaan', 'log')->findOrFail($id);
+            // Commit transaksi jika berhasil
+            DB::commit();
+            // Berikan respons sukses
+            return response()->json(['data' => $output, 'message' => 'Data berhasil diperbarui'], 200);
         } catch (\Exception $e) {
             // Rollback transaksi jika terjadi kesalahan
             DB::rollback();

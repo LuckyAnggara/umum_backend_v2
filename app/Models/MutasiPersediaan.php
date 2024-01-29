@@ -17,4 +17,8 @@ class MutasiPersediaan extends Model
         'saldo',
         'keterangan'
     ];
+
+        protected $casts = [
+        'created_at' => 'datetime:d F Y',
+    ];
 }
