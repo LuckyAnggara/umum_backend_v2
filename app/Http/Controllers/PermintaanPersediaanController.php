@@ -22,6 +22,7 @@ class PermintaanPersediaanController extends Controller
             // Mengambil data inventaris dengan paginasi
             $result = PermintaanPersediaan::with('detail')->when($name, function ($query, $name) {
                 return $query->where('nama', 'like', '%' . $name . '%')
+                    ->orWhere('tiket', 'like', '%' . $name . '%')
                     ->orWhere('nip', 'like', '%' . $name . '%')
                     ->orWhere('unit', 'like', '%' . $name . '%');
             })->when($status, function ($query, $status) {
@@ -55,6 +56,7 @@ class PermintaanPersediaanController extends Controller
                 'unit' => $data->unit,
                 'nip' => $data->nip,
                 'catatan' => $data->catatan,
+                'status' => 'ORDER',
             ]);
 
             if ($result) {
@@ -208,5 +210,14 @@ class PermintaanPersediaanController extends Controller
             // Berikan respons error
             return response()->json(['message' => $e->getMessage()], 500);
         }
+    }
+
+
+    public function getStatus($tiket)
+    {
+
+         $status = PermintaanPersediaan::where('tiket', $tiket)->first()->status;
+
+         return $status;
     }
 }

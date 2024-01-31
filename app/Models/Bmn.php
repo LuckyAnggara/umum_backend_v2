@@ -12,6 +12,7 @@ class Bmn extends Model
 
         protected $fillable = [
         'nup',
+        'nama',
         'keterangan',
         'penanggung_jawab',
         'ruangan',

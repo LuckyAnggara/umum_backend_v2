@@ -5,8 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Bmn;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
-class BmnController extends Controller
+class BmnController extends BaseController
 {
      public function index(Request $request)
     {
@@ -35,8 +36,9 @@ class BmnController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nup' => 'required|string|unique',
+            'nup' => 'required|string|unique:bmns',
             'nama' => 'required|string',
+            'tahun_perolehan' => 'required|string',
         ]);
 
         // Mulai transaksi database
@@ -45,24 +47,19 @@ class BmnController extends Controller
         try {
             $file_path = null;
             if ($request->file) {
-                $file_path = $request->file->store('persediaan', 'public');
+                $file_path = $request->file->store('bmn', 'public');
             }
             // Simpan data ke database menggunakan metode create
             $result = Bmn::create([
-                'nup' => $request->nama,
+                'nup' => $request->nup,
                 'nama' => $request->nama,
                 'keterangan' => $request->keterangan,
                 'ruangan' => $request->ruangan,
                 'tahun_perolehan' => $request->tahun_perolehan,
+                'penanggung_jawab' => $request->penanggung_jawab,
                 'image' => $file_path,
             ]);
-
-       
-
-            if ($request->saldo > 0) {
-                MutasiPersediaanController::createMutasi($result->id, 'DEBIT', $request->saldo, 'SALDO AWAL');
-            }
-
+ 
             DB::commit();
             return $this->sendResponse($result, 'Data berhasil dibuat');
         } catch (\Exception $e) {
@@ -99,13 +96,19 @@ class BmnController extends Controller
                 if ($bmn->image) {
                     Storage::disk('public')->delete($bmn->image);
                 }
-                $file_path = $request->file->store('persediaan', 'public');
+                $file_path = $request->file->store('bmn', 'public');
             }
             $bmn->update([
+
+                  'nup' => $request->nup,
                 'nama' => $request->nama,
-                'saldo' => $request->saldo,
-                'satuan' => $request->satuan,
-                'image' => $request->file == 'null' ? null : $file_path ?? $bmn->image,
+                'keterangan' => $request->keterangan,
+                'ruangan' => $request->ruangan,
+                'tahun_perolehan' => $request->tahun_perolehan,
+                'penanggung_jawab' => $request->penanggung_jawab,
+                'image' =>  $request->file == 'null' ? null : $file_path ?? $bmn->image,
+
+               
             ]);
 
             // Commit transaksi jika berhasil
@@ -131,6 +134,30 @@ class BmnController extends Controller
             $bmn->delete();
             // Berikan respons sukses
             return response()->json(['message' => 'Data berhasil dihapus'], 200);
+        } catch (\Exception $e) {
+            // Berikan respons error jika data tidak ditemukan
+            return response()->json(['message' => 'Data tidak ditemukan'], 404);
+        }
+    }
+
+    public function cekNup(Request $request)
+    {
+        $name = $request->input('query');
+        $bmn = Bmn::where('nup', $name)->first();
+        if ($bmn) {
+            return true;
+        }
+        return "false";
+    }
+
+        public function showNup($nup)
+    {
+        try {
+            // Ambil data bmn berdasarkan ID
+            $bmn = Bmn::where('nup', $nup)->first();
+            return response()->json(['data' => $bmn], 200);
+           
+            // Berikan respons dengan data bmn
         } catch (\Exception $e) {
             // Berikan respons error jika data tidak ditemukan
             return response()->json(['message' => 'Data tidak ditemukan'], 404);
