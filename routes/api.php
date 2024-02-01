@@ -38,6 +38,7 @@ Route::resource('permintaan-layanan-bmn', PermintaanLayananBmnController::class)
     'store', 'show',
 ]);
 Route::get('/permintaan-layanan-bmn/get-status/{tiket}', [PermintaanLayananBmnController::class, 'getStatus']);
+Route::get('/bmn/show-nup/{nup}', [BmnController::class, 'showNup']);
 
 
 Route::put('/permintaan-persediaan/done/{id}', [PermintaanPersediaanController::class, 'updateDone']);
@@ -60,7 +61,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/permintaan-persediaan/undo/{id}', [PermintaanPersediaanController::class, 'updateUndo']);
     Route::resource('inventory', InventoryController::class);
     Route::resource('bmn', BmnController::class);
-    Route::get('/bmn/show-nup/{nup}', [BmnController::class, 'showNup']);
     Route::resource('/persediaan/mutasi', MutasiPersediaanController::class);
 
     Route::get('/persediaan/cek-nama', [InventoryController::class, 'cekNama']);

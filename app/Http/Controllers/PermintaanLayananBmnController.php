@@ -18,13 +18,15 @@ class PermintaanLayananBmnController extends BaseController
         try {
             // Mengambil data inventaris dengan paginasi
             $result = PermintaanLayananBmn::when($name, function ($query, $name) {
-                return $query->where('nup', 'like', '%' . $name . '%')
+                return $query
+                    ->where('nup', 'like', '%' . $name . '%')
                     ->orWhere('nama_peminta', 'like', '%' . $name . '%')
                     ->orWhere('unit', 'like', '%' . $name . '%')
                     ->orWhere('tiket', 'like', '%' . $name . '%');
-            })->when($status, function ($query, $status) {
-                return $query->where('status', $status);
             })
+                ->when($status, function ($query, $status) {
+                    return $query->where('status', $status);
+                })
                 ->orderBy('created_at', 'desc')
                 ->latest()
                 ->paginate($perPage);
@@ -37,17 +39,15 @@ class PermintaanLayananBmnController extends BaseController
 
     public function store(Request $request)
     {
-
         // Mulai transaksi database
         $data = json_decode($request->getContent());
         DB::beginTransaction();
         try {
-
             $ticketNumber = PermintaanLayananBmn::generateTicketNumber();
             $result = PermintaanLayananBmn::create([
                 'tiket' => $ticketNumber,
                 'nup' => $data->nup,
-                'jenis_layanan'=>$data->jenis_layanan,
+                'jenis_layanan' => $data->jenis_layanan,
                 'nip' => $data->nip,
                 'nama_peminta' => $data->nama_peminta,
                 'catatan' => $data->catatan ?? null,
@@ -57,7 +57,6 @@ class PermintaanLayananBmnController extends BaseController
                 'status' => $data->status ?? 'ORDER',
             ]);
 
-                          
             DB::commit();
             return response()->json(['data' => $result], 200);
         } catch (\Exception $e) {
@@ -66,27 +65,28 @@ class PermintaanLayananBmnController extends BaseController
         }
     }
 
-      public function show($id)
+    public function show($id)
     {
         try {
-            $result = PermintaanLayananBmn::with('bmn')->where('tiket', $id)->first();
+            $result = PermintaanLayananBmn::with('bmn')
+                ->where('tiket', $id)
+                ->first();
             return response()->json(['data' => $result], 200);
         } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
     }
 
-        public function updateDone(Request $request, $id)
+    public function updateDone(Request $request, $id)
     {
         $data = json_decode($request->getContent());
         DB::beginTransaction();
         try {
-
             $result = PermintaanLayananBmn::with('bmn')->findOrFail($id);
             $result->update([
                 'status' => $data->status,
-                'tanggal_diterima'=> Carbon::createFromFormat('d F Y', $data->tanggalPenerimaan)->format('Y-m-d'),
-                'penerima'=> $data->name,
+                'tanggal_diterima' => Carbon::createFromFormat('d F Y', $data->tanggalPenerimaan)->format('Y-m-d'),
+                'penerima' => $data->name,
                 'ttd' => $data->image,
             ]);
             // Commit transaksi jika berhasil
@@ -101,12 +101,17 @@ class PermintaanLayananBmnController extends BaseController
         }
     }
 
-        public function getStatus($tiket)
+    public function getStatus($tiket)
     {
-
-         $status = PermintaanLayananBmn::where('tiket', $tiket)->first()->status;
-
-         return $status;
+        $data = PermintaanLayananBmn::where('tiket', $tiket)->first();
+        if ($data) {
+            if ($data->status == 'DONE') {
+                return 'delete';
+            } else {
+                return $data->status;
+            }
+        } else {
+            return 'delete';
+        }
     }
-
 }

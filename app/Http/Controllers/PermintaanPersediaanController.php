@@ -216,8 +216,18 @@ class PermintaanPersediaanController extends Controller
     public function getStatus($tiket)
     {
 
-         $status = PermintaanPersediaan::where('tiket', $tiket)->first()->status;
+         $data = PermintaanPersediaan::where('tiket', $tiket)->first();
 
-         return $status;
+          if ($data) {
+            if ($data->status == 'DONE') {
+                return 'delete';
+            } else {
+                return $data->status;
+            }
+        } else {
+            return 'delete';
+        }
     }
+
+  
 }
