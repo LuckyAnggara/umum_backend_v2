@@ -6,6 +6,7 @@ use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\MutasiPersediaanController;
 use App\Http\Controllers\PermintaanLayananBmnController;
 use App\Http\Controllers\PermintaanPersediaanController;
+use App\Http\Controllers\TempatController;
 use App\Models\MutasiPersediaan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -32,6 +33,7 @@ Route::resource('permintaan-persediaan', PermintaanPersediaanController::class)-
     'store', 'show',
 ]);
 Route::get('/permintaan-persediaan/get-status/{tiket}', [PermintaanPersediaanController::class, 'getStatus']);
+Route::resource('tempat', TempatController::class);
 
 
 Route::resource('permintaan-layanan-bmn', PermintaanLayananBmnController::class)->only([

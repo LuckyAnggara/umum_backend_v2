@@ -17,7 +17,7 @@ return new class extends Migration
             $table->date('tanggal');
             $table->time('jam_mulai');
             $table->time('jam_akhir');
-            $table->string('nip');
+            $table->string('nip')->nullable();
             $table->string('nama');
             $table->string('unit');
             $table->text('kegiatan');
