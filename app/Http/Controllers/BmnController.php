@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Storage;
 
 class BmnController extends BaseController
 {
-     public function index(Request $request)
+    public function index(Request $request)
     {
         $perPage = $request->input('limit', 5);
         $name = $request->input('query');
@@ -59,7 +59,7 @@ class BmnController extends BaseController
                 'penanggung_jawab' => $request->penanggung_jawab,
                 'image' => $file_path,
             ]);
- 
+
             DB::commit();
             return $this->sendResponse($result, 'Data berhasil dibuat');
         } catch (\Exception $e) {
@@ -98,9 +98,12 @@ class BmnController extends BaseController
                 }
                 $file_path = $request->file->store('bmn', 'public');
             }
+
+
+
             $bmn->update([
 
-                  'nup' => $request->nup,
+                'nup' => $request->nup,
                 'nama' => $request->nama,
                 'keterangan' => $request->keterangan,
                 'ruangan' => $request->ruangan,
@@ -108,7 +111,7 @@ class BmnController extends BaseController
                 'penanggung_jawab' => $request->penanggung_jawab,
                 'image' =>  $request->file == 'null' ? null : $file_path ?? $bmn->image,
 
-               
+
             ]);
 
             // Commit transaksi jika berhasil
@@ -150,18 +153,17 @@ class BmnController extends BaseController
         return "false";
     }
 
-        public function showNup($nup)
+    public function showNup($nup)
     {
         try {
             // Ambil data bmn berdasarkan ID
             $bmn = Bmn::where('nup', $nup)->first();
             return response()->json(['data' => $bmn], 200);
-           
+
             // Berikan respons dengan data bmn
         } catch (\Exception $e) {
             // Berikan respons error jika data tidak ditemukan
             return response()->json(['message' => 'Data tidak ditemukan'], 404);
         }
     }
-
 }
