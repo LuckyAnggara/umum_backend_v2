@@ -22,21 +22,24 @@ class Tempat extends Model
         'status',
     ];
 
-    protected $appends = ['title','start','end'];
+
+    protected $casts = [
+        'tanggal' => 'datetime:Y-m-d',
+    ];
+    protected $appends = ['title', 'start', 'end'];
 
     public function getTitleAttribute()
     {
         return $this->kegiatan;
     }
 
-        public function getStartAttribute()
+    public function getStartAttribute()
     {
         return $this->jam_mulai;
     }
 
-        public function getEndAttribute()
+    public function getEndAttribute()
     {
-        return $this->jam_akhir ;
+        return $this->jam_akhir;
     }
-
 }
