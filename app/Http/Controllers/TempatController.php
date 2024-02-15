@@ -51,6 +51,27 @@ class TempatController extends BaseController
         }
     }
 
+    public function destroy($id, Request $request)
+    {
+        // $no_wa = '082116562811';
+        //        return PesanController::kirimPesan($no_wa, $request->input('pesan'));
+
+        try {
+            // Cari dan hapus data bmn berdasarkan ID
+            $tempat = Tempat::findOrFail($id);
+
+            if($tempat){
+                // $tempat->delete();
+            }
+            // $tempat->delete();
+            // Berikan respons sukses
+            return response()->json(['message' => 'Data berhasil dihapus'], 200);
+        } catch (\Exception $e) {
+            // Berikan respons error jika data tidak ditemukan
+            return response()->json(['message' => 'Data tidak ditemukan'], 404);
+        }
+    }
+
     function convertDate($date, $time)
     {
         // Konversi objek waktu ke format string

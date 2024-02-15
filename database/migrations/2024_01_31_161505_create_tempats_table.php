@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('nip')->nullable();
             $table->string('nama');
             $table->string('unit');
+            $table->string('no_wa');
             $table->text('kegiatan');
             $table->string('status')->default('BELUM SELESAI');
             $table->timestamps();

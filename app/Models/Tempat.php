@@ -23,9 +23,7 @@ class Tempat extends Model
     ];
 
 
-    protected $casts = [
-        'tanggal' => 'datetime:Y-m-d',
-    ];
+ 
     protected $appends = ['title', 'start', 'end'];
 
     public function getTitleAttribute()
