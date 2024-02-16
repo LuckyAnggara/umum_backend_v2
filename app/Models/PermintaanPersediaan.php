@@ -19,6 +19,7 @@ class PermintaanPersediaan extends Model
         'catatan',
         'penerima',
         'ttd',
+        'no_wa',
         'tanggal_diterima',
     ];
 

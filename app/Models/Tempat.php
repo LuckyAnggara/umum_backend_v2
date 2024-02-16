@@ -19,11 +19,13 @@ class Tempat extends Model
         'nama',
         'unit',
         'kegiatan',
+        'jumlah_peserta',
+        'no_wa',
         'status',
     ];
 
 
- 
+
     protected $appends = ['title', 'start', 'end'];
 
     public function getTitleAttribute()

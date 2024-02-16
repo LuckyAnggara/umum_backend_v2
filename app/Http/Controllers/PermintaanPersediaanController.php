@@ -55,6 +55,7 @@ class PermintaanPersediaanController extends Controller
                 'nama' => $data->nama,
                 'unit' => $data->unit,
                 'nip' => $data->nip,
+                'no_wa' => $data->no_wa,
                 'catatan' => $data->catatan,
                 'status' => 'ORDER',
             ]);
@@ -68,8 +69,10 @@ class PermintaanPersediaanController extends Controller
                         'checked' => true,
                     ]);
                 }
-                $catatan = 'Permintaa persediaan baru telah dibuat';
+                $catatan = 'Permintaan persediaan baru telah dibuat';
+                $pesan = 'Permintaan Persediaan Nomor Tiket ' . $ticketNumber . ' berhasil dibuat, silahkan menunggu Informasi selanjutnya';
                 LogPermintaanPersediaanController::createLogPermintaan($result->id, 'ORDER', $catatan, $data->nama);
+                PesanController::kirimPesan($data->no_wa, $pesan);
             }
             DB::commit();
             return response()->json(['data' => $result], 200);
@@ -105,21 +108,21 @@ class PermintaanPersediaanController extends Controller
                 $catatan = 'Permintaan di terima';
                 foreach ($data->detail as $key => $value) {
                     $detail = DetailPermintaanPersediaan::find($value->id);
-                        $detail->update([
-                            'jumlah_accept' => $value->confirm_permintaan,
-                            'checked' => $value->checked
-                        ]);
+                    $detail->update([
+                        'jumlah_accept' => $value->confirm_permintaan,
+                        'checked' => $value->checked
+                    ]);
                 }
                 LogPermintaanPersediaanController::createLogPermintaan($result->id, 'APPROVE', $catatan, Auth::user()->name);
-            } else if($data->status == 'PROCESS') {
+            } else if ($data->status == 'PROCESS') {
                 $catatan = 'Permintaan di proses';
                 LogPermintaanPersediaanController::createLogPermintaan($result->id, 'PROCESS', $catatan, Auth::user()->name);
-            } else if($data->status == 'DONE') {
+            } else if ($data->status == 'DONE') {
                 $catatan = 'Permintaan selesai';
-              
+
                 LogPermintaanPersediaanController::createLogPermintaan($result->id, 'DONE', $catatan, Auth::user()->name);
-            }else{
-                     $catatan = 'Permintaan di tolak';
+            } else {
+                $catatan = 'Permintaan di tolak';
                 LogPermintaanPersediaanController::createLogPermintaan($result->id, 'REJECT', $catatan, Auth::user()->name);
             }
             $output = PermintaanPersediaan::with('detail.persediaan', 'log')->findOrFail($id);
@@ -144,23 +147,22 @@ class PermintaanPersediaanController extends Controller
             $result = PermintaanPersediaan::with('detail.persediaan', 'log')->findOrFail($id);
             $result->update([
                 'status' => $data->status,
-                'tanggal_diterima'=> Carbon::createFromFormat('d F Y', $data->tanggalPenerimaan)->format('Y-m-d'),
-                'penerima'=> $data->name,
+                'tanggal_diterima' => Carbon::createFromFormat('d F Y', $data->tanggalPenerimaan)->format('Y-m-d'),
+                'penerima' => $data->name,
                 'ttd' => $data->image,
             ]);
 
             $catatan = 'Permintaan selesai';
-               foreach ($result->detail as $key => $value) {
-                 if($value->status == true){
-                        MutasiPersediaanController::createMutasi($value->inventory_id, 'KREDIT', $value->confirm_permintaan, 'PERMINTAAN DARI TIKET NOMOR #' . $result->tiket);
-                 }
-                    
+            foreach ($result->detail as $key => $value) {
+                if ($value->status == true) {
+                    MutasiPersediaanController::createMutasi($value->inventory_id, 'KREDIT', $value->confirm_permintaan, 'PERMINTAAN DARI TIKET NOMOR #' . $result->tiket);
                 }
+            }
 
             LogPermintaanPersediaanController::createLogPermintaan($result->id, 'DONE', $catatan, $data->name);
-         
 
-             $output = PermintaanPersediaan::with('detail.persediaan', 'log')->findOrFail($id);
+
+            $output = PermintaanPersediaan::with('detail.persediaan', 'log')->findOrFail($id);
             // Commit transaksi jika berhasil
             DB::commit();
             // Berikan respons sukses
@@ -173,7 +175,7 @@ class PermintaanPersediaanController extends Controller
         }
     }
 
-      public function updateUndo(Request $request, $id)
+    public function updateUndo(Request $request, $id)
     {
         $data = json_decode($request->getContent());
         DB::beginTransaction();
@@ -182,22 +184,22 @@ class PermintaanPersediaanController extends Controller
             $result = PermintaanPersediaan::with('detail')->findOrFail($id);
             $result->update([
                 'status' => 'ORDER',
-                'tanggal_diterima'=> null,
-                'penerima'=> null,
+                'tanggal_diterima' => null,
+                'penerima' => null,
                 'ttd' => null,
             ]);
 
             $catatan = 'Permintaan di reset ke proses awal';
 
-                foreach ($result->detail as $key => $value) {
-                    $detail = DetailPermintaanPersediaan::find($value->id);
-                        $detail->update([
-                            'jumlah_accept' => $value->jumlah,
-                            'checked' => true
-                        ]);
-                }
+            foreach ($result->detail as $key => $value) {
+                $detail = DetailPermintaanPersediaan::find($value->id);
+                $detail->update([
+                    'jumlah_accept' => $value->jumlah,
+                    'checked' => true
+                ]);
+            }
             LogPermintaanPersediaanController::createLogPermintaan($result->id, 'UNDO', $catatan, Auth::user()->name);
-         
+
 
             $output = PermintaanPersediaan::with('detail.persediaan', 'log')->findOrFail($id);
             // Commit transaksi jika berhasil
@@ -216,9 +218,9 @@ class PermintaanPersediaanController extends Controller
     public function getStatus($tiket)
     {
 
-         $data = PermintaanPersediaan::where('tiket', $tiket)->first();
+        $data = PermintaanPersediaan::where('tiket', $tiket)->first();
 
-          if ($data) {
+        if ($data) {
             if ($data->status == 'DONE') {
                 return 'delete';
             } else {
@@ -228,6 +230,4 @@ class PermintaanPersediaanController extends Controller
             return 'delete';
         }
     }
-
-  
 }

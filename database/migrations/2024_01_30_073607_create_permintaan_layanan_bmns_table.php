@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('catatan')->nullable();
             $table->string('status')->default('ORDER');
             $table->string('penerima')->nullable();
-            $table->string('no_wa');
+            $table->string('no_wa')->nullable();
             $table->date('tanggal_diterima')->nullable();
             $table->text('ttd')->nullable();
             $table->timestamps();

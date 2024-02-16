@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 
 class TempatController extends BaseController
 {
-      public function index(Request $request)
+    public function index(Request $request)
     {
         $name = $request->input('query');
         $date = $request->input('date');
@@ -17,8 +17,8 @@ class TempatController extends BaseController
         try {
             // Mengambil data inventaris dengan paginasi
             $tempat = Tempat::where('ruangan', $name)->when($date, function ($query, $date) {
-                    return $query->whereDate('tanggal', $date);
-                })->get();
+                return $query->whereDate('tanggal', $date);
+            })->get();
             return response()->json(['data' => $tempat], 200);
         } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
@@ -26,23 +26,28 @@ class TempatController extends BaseController
     }
 
     public function store(Request $request)
-    {       
+    {
         // Mulai transaksi database
-         $data = json_decode($request->getContent());
+        $data = json_decode($request->getContent());
         DB::beginTransaction();
 
         try {
             $result = Tempat::create([
                 'ruangan' => $data->ruangan,
                 'tanggal' => $data->tanggal,
-                'jam_mulai' =>$this->convertDate($data->tanggal, $data->jam_mulai),
+                'jam_mulai' => $this->convertDate($data->tanggal, $data->jam_mulai),
                 'jam_akhir' => $this->convertDate($data->tanggal, $data->jam_akhir),
                 'nip' => $data->nip ?? null,
                 'nama' => $data->nama,
+                'jumlah_peserta' => $data->jumlah_peserta,
                 'unit' => $data->unit,
+                'no_wa' => $data->no_wa,
+                'status' => 'BELUM SELESAI',
                 'kegiatan' => $data->kegiatan,
             ]);
- 
+
+            $pesan = 'Booking kegiatan di tanggal ' . $data->tanggal;
+            PesanController::kirimPesan($data->no_wa, $pesan);
             DB::commit();
             return $this->sendResponse($result, 'Data berhasil dibuat');
         } catch (\Exception $e) {
@@ -54,14 +59,14 @@ class TempatController extends BaseController
     public function destroy($id, Request $request)
     {
         // $no_wa = '082116562811';
-        //        return PesanController::kirimPesan($no_wa, $request->input('pesan'));
 
         try {
             // Cari dan hapus data bmn berdasarkan ID
             $tempat = Tempat::findOrFail($id);
 
-            if($tempat){
-                // $tempat->delete();
+            if ($tempat) {
+                PesanController::kirimPesan($tempat->no_wa, $request->input('pesan'));
+                $tempat->delete();
             }
             // $tempat->delete();
             // Berikan respons sukses
@@ -79,8 +84,8 @@ class TempatController extends BaseController
 
         $carbonDateTime = Carbon::parse($date);
 
-// Format objek Carbon sesuai dengan kebutuhan
-$formattedDate = $carbonDateTime->format('Y-m-d');
+        // Format objek Carbon sesuai dengan kebutuhan
+        $formattedDate = $carbonDateTime->format('Y-m-d');
 
         // Gabungkan tanggal dan waktu
         $dateTimeString = $formattedDate . ' ' . $timeString;

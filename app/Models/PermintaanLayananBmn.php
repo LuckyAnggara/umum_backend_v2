@@ -20,6 +20,7 @@ class PermintaanLayananBmn extends Model
         'catatan',
         'penerima',
         'ttd',
+        'no_wa',
         'tanggal_diterima',
         'status'
     ];
@@ -49,6 +50,3 @@ class PermintaanLayananBmn extends Model
     //     return  $this->hasMany(LogPermintaanPersediaan::class, 'permintaan_persediaan_id', 'id');
     // }
 }
-
-
-    

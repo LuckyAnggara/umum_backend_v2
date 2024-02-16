@@ -53,6 +53,7 @@ class PermintaanLayananBmnController extends BaseController
                 'catatan' => $data->catatan ?? null,
                 'penerima' => $data->penerima ?? null,
                 'ttd' => $data->ttd ?? null,
+                'no_wa' => $data->no_wa,
                 'tanggal_diterima' => $data->tanggal_diterima ?? null,
                 'status' => $data->status ?? 'ORDER',
             ]);
