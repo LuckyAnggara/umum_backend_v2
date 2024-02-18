@@ -7,6 +7,7 @@ use App\Http\Controllers\MutasiPersediaanController;
 use App\Http\Controllers\PermintaanLayananBmnController;
 use App\Http\Controllers\PermintaanPersediaanController;
 use App\Http\Controllers\PesanController;
+use App\Http\Controllers\PtjController;
 use App\Http\Controllers\TempatController;
 use App\Models\MutasiPersediaan;
 use Illuminate\Http\Request;
@@ -33,9 +34,12 @@ Route::get('/inventory/get', [InventoryController::class, 'index']);
 Route::resource('permintaan-persediaan', PermintaanPersediaanController::class)->only([
     'store', 'show',
 ]);
+Route::resource('ptj', PtjController::class)->only([
+    'store', 'show',
+]);
+
 Route::get('/permintaan-persediaan/get-status/{tiket}', [PermintaanPersediaanController::class, 'getStatus']);
 Route::resource('tempat', TempatController::class);
-
 
 Route::resource('permintaan-layanan-bmn', PermintaanLayananBmnController::class)->only([
     'store', 'show',
@@ -44,7 +48,6 @@ Route::get('/permintaan-layanan-bmn/get-status/{tiket}', [PermintaanLayananBmnCo
 Route::get('/bmn/show-nup/{nup}', [BmnController::class, 'showNup']);
 
 
-Route::get('/kirim-pesan', [PesanController::class, 'kirim']);
 
 
 Route::put('/permintaan-persediaan/done/{id}', [PermintaanPersediaanController::class, 'updateDone']);
@@ -55,6 +58,7 @@ Route::put('/permintaan-layanan-bmn/done/{id}', [PermintaanLayananBmnController:
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/auth/user', [AuthController::class, 'user'])->name('user');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::get('/kirim-pesan', [PesanController::class, 'kirim']);
 
     Route::resource('permintaan-persediaan', PermintaanPersediaanController::class)->only([
         'index', 'update'
