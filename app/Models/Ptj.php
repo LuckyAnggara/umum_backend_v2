@@ -18,9 +18,13 @@ class Ptj extends Model
         'no_wa',
     ];
 
-     protected $casts = [
+    protected $casts = [
         'created_at' => 'datetime:d F Y',
         'tanggal' => 'datetime:d F Y',
     ];
 
+    public function lampiran()
+    {
+        return  $this->hasMany(PtjLampiran::class, 'ptj_id', 'id');
+    }
 }

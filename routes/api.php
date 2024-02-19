@@ -8,6 +8,7 @@ use App\Http\Controllers\PermintaanLayananBmnController;
 use App\Http\Controllers\PermintaanPersediaanController;
 use App\Http\Controllers\PesanController;
 use App\Http\Controllers\PtjController;
+use App\Http\Controllers\PtjLampiranController;
 use App\Http\Controllers\TempatController;
 use App\Models\MutasiPersediaan;
 use Illuminate\Http\Request;
@@ -52,8 +53,11 @@ Route::get('/bmn/show-nup/{nup}', [BmnController::class, 'showNup']);
 
 Route::put('/permintaan-persediaan/done/{id}', [PermintaanPersediaanController::class, 'updateDone']);
 Route::put('/permintaan-layanan-bmn/done/{id}', [PermintaanLayananBmnController::class, 'updateDone']);
-    Route::get('/bmn/cek-nup', [BmnController::class, 'cekNup']);
-
+Route::get('/bmn/cek-nup', [BmnController::class, 'cekNup']);
+Route::get(
+    'ptj-lampiran/{id}',
+    [PtjLampiranController::class, 'download']
+);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/auth/user', [AuthController::class, 'user'])->name('user');
@@ -62,6 +66,10 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::resource('permintaan-persediaan', PermintaanPersediaanController::class)->only([
         'index', 'update'
+    ]);
+
+    Route::resource('ptj', PtjController::class)->only([
+        'index', 'update', 'destroy'
     ]);
 
     Route::resource('permintaan-layanan-bmn', PermintaanLayananBmnController::class)->only([
