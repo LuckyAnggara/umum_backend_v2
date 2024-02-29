@@ -18,6 +18,7 @@ return new class extends Migration
             $table->text('keterangan')->nullable();
             $table->string('penanggung_jawab')->nullable();
             $table->string('ruangan')->nullable();
+            $table->boolean('sewa')->default(false);
             $table->string('tahun_perolehan')->nullable();
             $table->string('image')->nullable();
             $table->timestamps();

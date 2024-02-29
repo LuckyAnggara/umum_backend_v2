@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\PermintaanLayananBmn;
+use App\Models\PeminjamanBmn;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class PermintaanLayananBmnController extends BaseController
+class PeminjamanBmnController extends BaseController
 {
     public function index(Request $request)
     {
@@ -17,7 +17,7 @@ class PermintaanLayananBmnController extends BaseController
 
         try {
             // Mengambil data inventaris dengan paginasi
-            $result = PermintaanLayananBmn::when($name, function ($query, $name) {
+            $result = PeminjamanBmn::when($name, function ($query, $name) {
                 return $query
                     ->where('nup', 'like', '%' . $name . '%')
                     ->orWhere('nama_peminta', 'like', '%' . $name . '%')
@@ -27,7 +27,6 @@ class PermintaanLayananBmnController extends BaseController
                 ->when($status, function ($query, $status) {
                     return $query->where('status', $status);
                 })
-
                 ->orderBy('created_at', 'desc')
                 ->latest()
                 ->paginate($perPage);
@@ -44,8 +43,9 @@ class PermintaanLayananBmnController extends BaseController
         $data = json_decode($request->getContent());
         DB::beginTransaction();
         try {
-            $ticketNumber = PermintaanLayananBmn::generateTicketNumber();
-            $result = PermintaanLayananBmn::create([
+            $ticketNumber = PeminjamanBmn::generateTicketNumber();
+
+            $result = PeminjamanBmn::create([
                 'tiket' => $ticketNumber,
                 'nup' => $data->nup,
                 'jenis_layanan' => $data->jenis_layanan,
@@ -56,8 +56,14 @@ class PermintaanLayananBmnController extends BaseController
                 'ttd' => $data->ttd ?? null,
                 'no_wa' => $data->no_wa,
                 'tanggal_diterima' => $data->tanggal_diterima ?? null,
-                'status' => $data->status ?? 'ORDER',
+                'tanggal_pengembalian' => Carbon::parse($data->tanggal_pengembalian)->toDateTimeString() ?? null,
+                'status' => $data->status ?? 'VERIFIKASI ADMIN',
             ]);
+
+            if ($result) {
+                $pesan = 'Peminjaman BMN pengajuan di tanggal ' . $result->created_at;
+                PesanController::kirimPesan($data->no_wa, $pesan);
+            }
 
             DB::commit();
             return response()->json(['data' => $result], 200);
@@ -70,7 +76,7 @@ class PermintaanLayananBmnController extends BaseController
     public function show($id)
     {
         try {
-            $result = PermintaanLayananBmn::with('bmn')
+            $result = PeminjamanBmn::with('bmn')
                 ->where('tiket', $id)
                 ->first();
             return response()->json(['data' => $result], 200);
@@ -84,7 +90,7 @@ class PermintaanLayananBmnController extends BaseController
         $data = json_decode($request->getContent());
         DB::beginTransaction();
         try {
-            $result = PermintaanLayananBmn::with('bmn')->findOrFail($id);
+            $result = PeminjamanBmn::with('bmn')->findOrFail($id);
             $result->update([
                 'status' => $data->status,
                 'tanggal_diterima' => Carbon::createFromFormat('d F Y', $data->tanggalPenerimaan)->format('Y-m-d'),
@@ -105,7 +111,7 @@ class PermintaanLayananBmnController extends BaseController
 
     public function getStatus($tiket)
     {
-        $data = PermintaanLayananBmn::where('tiket', $tiket)->first();
+        $data = PeminjamanBmn::where('tiket', $tiket)->first();
         if ($data) {
             if ($data->status == 'DONE') {
                 return 'delete';

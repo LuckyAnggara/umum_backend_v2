@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BmnController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\MutasiPersediaanController;
+use App\Http\Controllers\PeminjamanBmnController;
 use App\Http\Controllers\PermintaanLayananBmnController;
 use App\Http\Controllers\PermintaanPersediaanController;
 use App\Http\Controllers\PesanController;
@@ -45,6 +46,11 @@ Route::resource('tempat', TempatController::class);
 Route::resource('permintaan-layanan-bmn', PermintaanLayananBmnController::class)->only([
     'store', 'show',
 ]);
+
+Route::resource('peminjaman-bmn', PeminjamanBmnController::class)->only([
+    'store', 'show',
+]);
+
 Route::get('/permintaan-layanan-bmn/get-status/{tiket}', [PermintaanLayananBmnController::class, 'getStatus']);
 Route::get('/bmn/show-nup/{nup}', [BmnController::class, 'showNup']);
 
@@ -58,6 +64,8 @@ Route::get(
     'ptj-lampiran/{id}',
     [PtjLampiranController::class, 'download']
 );
+
+Route::resource('bmn', BmnController::class);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/auth/user', [AuthController::class, 'user'])->name('user');
@@ -76,9 +84,13 @@ Route::middleware('auth:sanctum')->group(function () {
         'index', 'update'
     ]);
 
+    Route::resource('bmn', BmnController::class)->only([
+        'store', 'update'
+    ]);
+
+
     Route::put('/permintaan-persediaan/undo/{id}', [PermintaanPersediaanController::class, 'updateUndo']);
     Route::resource('inventory', InventoryController::class);
-    Route::resource('bmn', BmnController::class);
     Route::resource('/persediaan/mutasi', MutasiPersediaanController::class);
 
     Route::get('/persediaan/cek-nama', [InventoryController::class, 'cekNama']);
