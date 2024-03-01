@@ -50,6 +50,8 @@ Route::resource('permintaan-layanan-bmn', PermintaanLayananBmnController::class)
 Route::resource('peminjaman-bmn', PeminjamanBmnController::class)->only([
     'store', 'show',
 ]);
+Route::get('/peminjaman-bmn/get-status/{tiket}', [PeminjamanBmnController::class, 'getStatus']);
+
 
 Route::get('/permintaan-layanan-bmn/get-status/{tiket}', [PermintaanLayananBmnController::class, 'getStatus']);
 Route::get('/bmn/show-nup/{nup}', [BmnController::class, 'showNup']);
@@ -82,6 +84,10 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::resource('permintaan-layanan-bmn', PermintaanLayananBmnController::class)->only([
         'index', 'update'
+    ]);
+
+    Route::resource('peminjaman-bmn', PeminjamanBmnController::class)->only([
+        'index', 'update', 'destroy'
     ]);
 
     Route::resource('bmn', BmnController::class)->only([

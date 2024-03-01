@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Bmn;
 use App\Models\PeminjamanBmn;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -109,15 +110,55 @@ class PeminjamanBmnController extends BaseController
         }
     }
 
+    public function update(Request $request, $id)
+    {
+        $data = json_decode($request->getContent());
+        DB::beginTransaction();
+        try {
+            // Cari dan update data PermintaanPersediaan berdasarkan ID
+            $result = PeminjamanBmn::with('bmn')->findOrFail($id);
+
+            $detail = Bmn::where('nup', $result->nup)->first();
+            if ($detail->sewa == 'tersedia') {
+
+                $result->update([
+                    'status' => $data->status
+                ]);
+
+                if ($data->status == 'APPROVE') {
+                    $detail->update([
+                        'sewa' => 'di pinjam'
+                    ]);
+
+                    $pesan = 'Peminjaman BMN pengajuan Nomor Tiket ' .  $result->tiket . ' di tanggal ' . $result->created_at . ' di Terima';
+                    PesanController::kirimPesan($result->no_wa, $pesan);
+                } else {
+                    $pesan = 'Peminjaman BMN pengajuan Nomor Tiket ' .  $result->tiket . ' di tanggal ' . $result->created_at . ' di Tolak';
+                    PesanController::kirimPesan($result->no_wa, $pesan);
+                }
+            } else {
+                $result->update([
+                    'status' => 'PENDING'
+                ]);
+            }
+            // Commit transaksi jika berhasil
+            DB::commit();
+            // Berikan respons sukses
+            return response()->json(['data' => $result, 'message' => 'Data berhasil diperbarui'], 200);
+        } catch (\Exception $e) {
+            // Rollback transaksi jika terjadi kesalahan
+            DB::rollback();
+            // Berikan respons error
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
+    }
+
     public function getStatus($tiket)
     {
         $data = PeminjamanBmn::where('tiket', $tiket)->first();
         if ($data) {
-            if ($data->status == 'DONE') {
-                return 'delete';
-            } else {
-                return $data->status;
-            }
+
+            return $data->status;
         } else {
             return 'delete';
         }
