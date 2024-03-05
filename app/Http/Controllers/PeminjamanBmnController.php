@@ -54,6 +54,7 @@ class PeminjamanBmnController extends BaseController
                 'nama_peminta' => $data->nama_peminta,
                 'catatan' => $data->catatan ?? null,
                 'penerima' => $data->penerima ?? null,
+                'unit' => $data->unit ?? null,
                 'ttd' => $data->ttd ?? null,
                 'no_wa' => $data->no_wa,
                 'tanggal_diterima' => $data->tanggal_diterima ?? null,
@@ -62,6 +63,13 @@ class PeminjamanBmnController extends BaseController
             ]);
 
             if ($result) {
+                $bmn = Bmn::where('nup', $data->nup)->first();
+
+                if ($bmn) {
+                    $bmn->sewa = 'ANTRIAN PINJAM';
+                    $bmn->save();
+                }
+
                 $pesan = 'Peminjaman BMN pengajuan di tanggal ' . $result->created_at;
                 PesanController::kirimPesan($data->no_wa, $pesan);
             }
@@ -98,6 +106,22 @@ class PeminjamanBmnController extends BaseController
                 'penerima' => $data->name,
                 'ttd' => $data->image,
             ]);
+
+
+
+            if ($result) {
+                $detail = Bmn::where('nup', $result->nup)->first();
+                $detail->update([
+                    'sewa' => 'di pinjam'
+                ]);
+                $pesan = 'BMN pengajuan Nomor Tiket ' .  $result->tiket . ' di tanggal ' . $result->created_at . ' telah diterima oleh ' . $data->name;
+                PesanController::kirimPesan($result->no_wa, $pesan);
+            } else {
+                $result->update([
+                    'status' => 'PENDING'
+                ]);
+            }
+
             // Commit transaksi jika berhasil
             DB::commit();
             // Berikan respons sukses
@@ -126,9 +150,6 @@ class PeminjamanBmnController extends BaseController
                 ]);
 
                 if ($data->status == 'APPROVE') {
-                    $detail->update([
-                        'sewa' => 'di pinjam'
-                    ]);
 
                     $pesan = 'Peminjaman BMN pengajuan Nomor Tiket ' .  $result->tiket . ' di tanggal ' . $result->created_at . ' di Terima';
                     PesanController::kirimPesan($result->no_wa, $pesan);
@@ -161,6 +182,23 @@ class PeminjamanBmnController extends BaseController
             return $data->status;
         } else {
             return 'delete';
+        }
+    }
+
+    public function destroy($id)
+    {
+        try {
+            // Cari dan hapus data bmn berdasarkan ID
+            $ptj = PeminjamanBmn::findOrFail($id);
+            if ($ptj) {
+                $ptj->delete();
+            }
+
+            // Berikan respons sukses
+            return response()->json(['message' => 'Data berhasil dihapus'], 200);
+        } catch (\Exception $e) {
+            // Berikan respons error jika data tidak ditemukan
+            return response()->json(['message' => 'Data tidak ditemukan'], 404);
         }
     }
 }

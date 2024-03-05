@@ -61,6 +61,8 @@ Route::get('/bmn/show-nup/{nup}', [BmnController::class, 'showNup']);
 
 Route::put('/permintaan-persediaan/done/{id}', [PermintaanPersediaanController::class, 'updateDone']);
 Route::put('/permintaan-layanan-bmn/done/{id}', [PermintaanLayananBmnController::class, 'updateDone']);
+Route::put('/peminjaman-bmn/done/{id}', [PeminjamanBmnController::class, 'updateDone']);
+
 Route::get('/bmn/cek-nup', [BmnController::class, 'cekNup']);
 Route::get(
     'ptj-lampiran/{id}',
