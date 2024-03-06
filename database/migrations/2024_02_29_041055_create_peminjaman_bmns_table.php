@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('jenis_layanan');
             $table->string('nip')->nullable();
             $table->date('tanggal_pengembalian')->nullable();
+            $table->string('status_pengembalian')->default('BELUM KEMBALI');
             $table->string('status')->default('VERIFIKASI ADMIN');
             $table->string('nama_peminta')->nullable();
             $table->string('unit')->nullable();
@@ -26,6 +27,9 @@ return new class extends Migration
             $table->string('no_wa')->nullable();
             $table->date('tanggal_diterima')->nullable();
             $table->text('ttd')->nullable();
+            $table->date('tanggal_terima_pengembalian')->nullable();
+            $table->text('ttd_pengembalian')->nullable();
+            $table->string('penerima_pengembalian')->nullable();
             $table->timestamps();
         });
     }

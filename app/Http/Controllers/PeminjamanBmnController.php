@@ -18,7 +18,7 @@ class PeminjamanBmnController extends BaseController
 
         try {
             // Mengambil data inventaris dengan paginasi
-            $result = PeminjamanBmn::when($name, function ($query, $name) {
+            $result = PeminjamanBmn::with('bmn')->when($name, function ($query, $name) {
                 return $query
                     ->where('nup', 'like', '%' . $name . '%')
                     ->orWhere('nama_peminta', 'like', '%' . $name . '%')

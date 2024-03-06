@@ -22,7 +22,11 @@ class PeminjamanBmn extends Model
         'ttd',
         'no_wa',
         'tanggal_diterima', 'tanggal_pengembalian',
-        'status'
+        'status',
+        'tanggal_terima_pengembalian',
+        'ttd_pengembalian',
+        'penerima_pengembalian',
+        'status_pengembalian'
     ];
 
     protected $casts = [
