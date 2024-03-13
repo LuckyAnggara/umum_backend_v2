@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AgendaController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BmnController;
 use App\Http\Controllers\InventoryController;
@@ -42,6 +43,7 @@ Route::resource('ptj', PtjController::class)->only([
 
 Route::get('/permintaan-persediaan/get-status/{tiket}', [PermintaanPersediaanController::class, 'getStatus']);
 Route::resource('tempat', TempatController::class);
+Route::resource('agenda', AgendaController::class);
 
 Route::resource('permintaan-layanan-bmn', PermintaanLayananBmnController::class)->only([
     'store', 'show',
@@ -55,9 +57,6 @@ Route::get('/peminjaman-bmn/get-status/{tiket}', [PeminjamanBmnController::class
 
 Route::get('/permintaan-layanan-bmn/get-status/{tiket}', [PermintaanLayananBmnController::class, 'getStatus']);
 Route::get('/bmn/show-nup/{nup}', [BmnController::class, 'showNup']);
-
-
-
 
 Route::put('/permintaan-persediaan/done/{id}', [PermintaanPersediaanController::class, 'updateDone']);
 Route::put('/permintaan-layanan-bmn/done/{id}', [PermintaanLayananBmnController::class, 'updateDone']);

@@ -6,27 +6,23 @@ use Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Tempat extends Model
+class Agenda extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'ruangan',
+        'kegiatan',
         'tanggal',
         'jam_mulai',
         'jam_akhir',
-        'nip',
-        'nama',
-        'unit',
-        'kegiatan',
-        'jumlah_peserta',
-        'no_wa',
+        'pimpinan',
+        'tempat',
         'status',
     ];
 
 
 
-   protected $appends = ['title', 'start', 'end'];
+    protected $appends = ['title', 'start', 'end'];
 
     public function getTitleAttribute()
     {
@@ -35,11 +31,11 @@ class Tempat extends Model
 
     public function getStartAttribute()
     {
-        return $this->jam_mulai;
+        return $this->tanggal . ' ' .$this->jam_mulai;
     }
 
     public function getEndAttribute()
     {
-        return $this->jam_akhir;
+        return $this->tanggal . ' ' .$this->jam_akhir;
     }
 }

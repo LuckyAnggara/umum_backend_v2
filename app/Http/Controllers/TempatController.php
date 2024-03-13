@@ -32,9 +32,11 @@ class TempatController extends BaseController
         DB::beginTransaction();
 
         try {
+              
+                
             $result = Tempat::create([
                 'ruangan' => $data->ruangan,
-                'tanggal' => $data->tanggal,
+                 'tanggal' =>  Carbon::parse($request->tanggal)->format('Y-m-d'),
                 'jam_mulai' => $this->convertDate($data->tanggal, $data->jam_mulai),
                 'jam_akhir' => $this->convertDate($data->tanggal, $data->jam_akhir),
                 'nip' => $data->nip ?? null,
@@ -93,7 +95,8 @@ class TempatController extends BaseController
         // Buat objek Carbon dari string yang sudah diformat
         $carbonDateTime = Carbon::createFromFormat('Y-m-d H:i:s', $dateTimeString);
         // Format objek Carbon sesuai dengan kebutuhan
-        $formattedDateTime = $carbonDateTime->format('Y-m-d\TH:i:s');
+        // $formattedDateTime = $carbonDateTime->format('Y-m-d\TH:i:s');
+        $formattedDateTime = $carbonDateTime->format('H:i:s');
         return $formattedDateTime;
     }
 }
