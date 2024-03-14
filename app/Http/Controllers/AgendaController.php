@@ -31,19 +31,20 @@ class AgendaController extends BaseController
     {
         // Mulai transaksi database
         DB::beginTransaction();
+        // return $request->jam_mulai['hours'];
 
         try {
             $result = Agenda::create([
                 'kegiatan' => $request->kegiatan,
-                'tanggal' =>  Carbon::parse($request->tanggal)->format('Y-m-d'),
-                'jam_mulai' => $this->convertDate($request->tanggal, $request->jam_mulai['hours'],$request->jam_mulai['minutes'], $request->jam_mulai['seconds'],  ),
-                'jam_akhir' => $this->convertDate($request->tanggal, $request->jam_akhir['hours'],$request->jam_akhir['minutes'], $request->jam_akhir['seconds']),
+                'tanggal' =>  Carbon::parse($request->tanggal)->toDateString(),
+                'jam_mulai' => $this->convertDate($request->tanggal, $request->jam_mulai['hours'], $request->jam_mulai['minutes'], $request->jam_mulai['seconds'],),
+                'jam_akhir' => $this->convertDate($request->tanggal, $request->jam_akhir['hours'], $request->jam_akhir['minutes'], $request->jam_akhir['seconds']),
                 'pimpinan' => $request->pimpinan,
                 'tempat' => $request->tempat,
                 'status' => 'BELUM SELESAI',
             ]);
 
-             if ($result) {
+            if ($result) {
                 for ($i = 0; $i < $request->jumlah_lampiran; $i++) {
                     $file_path = $request->file[$i]->store('agenda', 'public');
                     $detail = AgendaLampiran::create([
@@ -54,7 +55,7 @@ class AgendaController extends BaseController
                 }
             }
 
-           
+
             DB::commit();
             return $this->sendResponse($result, 'Data berhasil dibuat');
         } catch (\Exception $e) {
