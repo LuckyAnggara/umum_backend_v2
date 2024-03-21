@@ -38,4 +38,8 @@ class Agenda extends Model
     {
         return $this->tanggal . ' ' .$this->jam_akhir;
     }
+    public function lampiran()
+    {
+        return  $this->hasMany(AgendaLampiran::class, 'agenda_id', 'id');
+    }
 }

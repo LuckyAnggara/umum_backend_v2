@@ -18,7 +18,7 @@ class AgendaController extends BaseController
 
         try {
             // Mengambil data inventaris dengan paginasi
-            $agenda = Agenda::where('pimpinan', $pimpinan)->when($date, function ($query, $date) {
+            $agenda = Agenda::with('lampiran')->where('pimpinan', $pimpinan)->when($date, function ($query, $date) {
                 return $query->whereDate('tanggal', $date);
             })->get();
             return response()->json(['data' => $agenda], 200);
