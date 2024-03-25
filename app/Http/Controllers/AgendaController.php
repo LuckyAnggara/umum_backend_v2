@@ -15,12 +15,21 @@ class AgendaController extends BaseController
     {
         $pimpinan = $request->input('query');
         $date = $request->input('date');
+          $startDate = $request->input('start-date');
+        $endDate = $request->input('end-date');
+        
 
         try {
             // Mengambil data inventaris dengan paginasi
             $agenda = Agenda::with('lampiran')->where('pimpinan', $pimpinan)->when($date, function ($query, $date) {
                 return $query->whereDate('tanggal', $date);
-            })->get();
+            })->
+                   when($startDate && $endDate, function ($query) use ($startDate, $endDate) {
+              
+                return $query->whereBetween('tanggal', [$startDate, $endDate]);
+            })
+          
+            ->get();
             return response()->json(['data' => $agenda], 200);
         } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
