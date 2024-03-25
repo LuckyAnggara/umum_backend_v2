@@ -25,6 +25,9 @@ return new class extends Migration
             $table->string('no_wa')->nullable();
             $table->date('tanggal_diterima')->nullable();
             $table->text('ttd')->nullable();
+            $table->date('tanggal_terima_pengembalian')->nullable();
+            $table->text('ttd_pengembalian')->nullable();
+            $table->string('penerima_pengembalian')->nullable();
             $table->timestamps();
         });
     }

@@ -11,6 +11,7 @@ use App\Http\Controllers\PermintaanPersediaanController;
 use App\Http\Controllers\PesanController;
 use App\Http\Controllers\PtjController;
 use App\Http\Controllers\PtjLampiranController;
+use App\Http\Controllers\RateController;
 use App\Http\Controllers\TempatController;
 use App\Models\MutasiPersediaan;
 use Illuminate\Http\Request;
@@ -48,6 +49,9 @@ Route::resource('agenda', AgendaController::class);
 Route::resource('permintaan-layanan-bmn', PermintaanLayananBmnController::class)->only([
     'store', 'show',
 ]);
+Route::resource('rate-layanan', RateController::class)->only([
+    'store',
+]);
 
 Route::resource('peminjaman-bmn', PeminjamanBmnController::class)->only([
     'store', 'show',
@@ -59,7 +63,8 @@ Route::get('/permintaan-layanan-bmn/get-status/{tiket}', [PermintaanLayananBmnCo
 Route::get('/bmn/show-nup/{nup}', [BmnController::class, 'showNup']);
 
 Route::put('/permintaan-persediaan/done/{id}', [PermintaanPersediaanController::class, 'updateDone']);
-Route::put('/permintaan-layanan-bmn/done/{id}', [PermintaanLayananBmnController::class, 'updateDone']);
+Route::put('/permintaan-layanan-bmn/done-bawa/{id}', [PermintaanLayananBmnController::class, 'updateDoneBawa']);
+Route::put('/permintaan-layanan-bmn/done-balik/{id}', [PermintaanLayananBmnController::class, 'updateDoneBalik']);
 Route::put('/peminjaman-bmn/done/{id}', [PeminjamanBmnController::class, 'updateDone']);
 
 Route::get('/bmn/cek-nup', [BmnController::class, 'cekNup']);

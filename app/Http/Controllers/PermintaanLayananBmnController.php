@@ -53,6 +53,7 @@ class PermintaanLayananBmnController extends BaseController
                 'nama_peminta' => $data->nama_peminta,
                 'catatan' => $data->catatan ?? null,
                 'penerima' => $data->penerima ?? null,
+                'unit' => $data->unit ?? null,
                 'ttd' => $data->ttd ?? null,
                 'no_wa' => $data->no_wa,
                 'tanggal_diterima' => $data->tanggal_diterima ?? null,
@@ -79,7 +80,7 @@ class PermintaanLayananBmnController extends BaseController
         }
     }
 
-    public function updateDone(Request $request, $id)
+    public function updateDoneBawa(Request $request, $id)
     {
         $data = json_decode($request->getContent());
         DB::beginTransaction();
@@ -90,6 +91,30 @@ class PermintaanLayananBmnController extends BaseController
                 'tanggal_diterima' => Carbon::createFromFormat('d F Y', $data->tanggalPenerimaan)->format('Y-m-d'),
                 'penerima' => $data->name,
                 'ttd' => $data->image,
+            ]);
+            // Commit transaksi jika berhasil
+            DB::commit();
+            // Berikan respons sukses
+            return response()->json(['data' => $result, 'message' => 'Data berhasil diperbarui'], 200);
+        } catch (\Exception $e) {
+            // Rollback transaksi jika terjadi kesalahan
+            DB::rollback();
+            // Berikan respons error
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
+    }
+
+    public function updateDoneBalik(Request $request, $id)
+    {
+        $data = json_decode($request->getContent());
+        DB::beginTransaction();
+        try {
+            $result = PermintaanLayananBmn::with('bmn')->findOrFail($id);
+            $result->update([
+                'status' => $data->status,
+                'tanggal_terima_pengembalian' => Carbon::createFromFormat('d F Y', $data->tanggalPenerimaan)->format('Y-m-d'),
+                'penerima_pengembalian' => $data->name,
+                'ttd_pengembalian' => $data->image,
             ]);
             // Commit transaksi jika berhasil
             DB::commit();
