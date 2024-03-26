@@ -12,23 +12,23 @@ class MutasiPersediaanController extends Controller
     static function createMutasi($inventory_id, $tipe, $jumlah, $keterangan)
     {
         // Cari saldo terakhir dari MutasiPersediaan berdasarkan inventory_id
-        $lastMutasi = MutasiPersediaan::where('inventory_id', $inventory_id)
-            ->orderBy('created_at', 'desc')
-            ->first();
+        // $lastMutasi = MutasiPersediaan::where('inventory_id', $inventory_id)
+        //     ->orderBy('created_at', 'desc')
+        //     ->first();
 
         $produk = Inventory::find($inventory_id);
 
         // Hitung saldo baru
-        if ($lastMutasi) {
-            $saldo = $lastMutasi->saldo + ($tipe == 'DEBIT' ? $jumlah : - ($jumlah));
+        if ($tipe == 'DEBIT') {
+            $saldo = $produk->saldo + $jumlah;
             $produk->saldo = $saldo;
         } else {
             // Jika ini merupakan mutasi pertama untuk inventory_id tertentu
-            $saldo = $tipe == 'DEBIT' ? $jumlah : 0;
+            $saldo = $produk->saldo - $jumlah;
             $produk->saldo = $saldo;
         }
-        
-         $produk->save();
+
+        $produk->save();
 
         // Buat mutasi baru
         $mutasi = MutasiPersediaan::create([
@@ -39,7 +39,7 @@ class MutasiPersediaanController extends Controller
             'keterangan' => $keterangan,
         ]);
 
-     
+
 
         return $mutasi;
     }
@@ -71,22 +71,22 @@ class MutasiPersediaanController extends Controller
         DB::beginTransaction();
         try {
 
-        $produk = Inventory::find($data->id);
-             $lastMutasi = MutasiPersediaan::where('inventory_id', $data->id)
-            ->orderBy('created_at', 'desc')
-            ->first();
+            $produk = Inventory::find($data->id);
+            $lastMutasi = MutasiPersediaan::where('inventory_id', $data->id)
+                ->orderBy('created_at', 'desc')
+                ->first();
 
-              // Hitung saldo baru
-        if ($lastMutasi) {
-            $saldo = $lastMutasi->saldo +  ($data->tipe == 'DEBIT' ? $data->jumlah : - ($data->jumlah));
-            $produk->saldo = $saldo;
-        } else {
-            // Jika ini merupakan mutasi pertama untuk inventory_id tertentu
-            $saldo = $data->tipe == 'DEBIT' ? $data->jumlah : 0;
-            $produk->saldo = $saldo;
-        }
+            // Hitung saldo baru
+            if ($lastMutasi) {
+                $saldo = $lastMutasi->saldo +  ($data->tipe == 'DEBIT' ? $data->jumlah : - ($data->jumlah));
+                $produk->saldo = $saldo;
+            } else {
+                // Jika ini merupakan mutasi pertama untuk inventory_id tertentu
+                $saldo = $data->tipe == 'DEBIT' ? $data->jumlah : 0;
+                $produk->saldo = $saldo;
+            }
 
-         $produk->save();
+            $produk->save();
 
             // Buat mutasi baru
             $mutasi = MutasiPersediaan::create([
@@ -96,7 +96,7 @@ class MutasiPersediaanController extends Controller
                 'saldo' => $saldo,
                 'keterangan' => $data->catatan,
             ]);
-  
+
 
             DB::commit();
             return response()->json(['data' => $saldo], 200);
@@ -104,9 +104,5 @@ class MutasiPersediaanController extends Controller
             DB::rollBack();
             return response()->json(['message' => $e->getMessage()], 500);
         }
-
-
-
-      
     }
 }

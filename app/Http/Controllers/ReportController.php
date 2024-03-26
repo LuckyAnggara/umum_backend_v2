@@ -29,7 +29,7 @@ class ReportController extends BaseController
                 $value->balance = 0;
                 $mutation = MutasiPersediaan::where('inventory_id', $value->id)->whereDate('created_at', $date)->orderBy('id', 'desc')->first();
                 if ($mutation) {
-                    return $value->balance = $mutation->balance;
+                    return $value->balance = $mutation->saldo;
                 } else {
                     return $value->balance = $value->saldo;
                 }

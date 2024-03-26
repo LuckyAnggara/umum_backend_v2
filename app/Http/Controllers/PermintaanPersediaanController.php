@@ -119,7 +119,6 @@ class PermintaanPersediaanController extends Controller
                 LogPermintaanPersediaanController::createLogPermintaan($result->id, 'PROCESS', $catatan, Auth::user()->name);
             } else if ($data->status == 'DONE') {
                 $catatan = 'Permintaan selesai';
-
                 LogPermintaanPersediaanController::createLogPermintaan($result->id, 'DONE', $catatan, Auth::user()->name);
             } else {
                 $catatan = 'Permintaan di tolak';
@@ -154,8 +153,8 @@ class PermintaanPersediaanController extends Controller
 
             $catatan = 'Permintaan selesai';
             foreach ($result->detail as $key => $value) {
-                if ($value->status == true) {
-                    MutasiPersediaanController::createMutasi($value->inventory_id, 'KREDIT', $value->confirm_permintaan, 'PERMINTAAN DARI TIKET NOMOR #' . $result->tiket);
+                if ($value->checked == true) {
+                    MutasiPersediaanController::createMutasi($value->inventory_id, 'KREDIT', $value->jumlah_accept, 'PERMINTAAN DARI TIKET NOMOR #' . $result->tiket);
                 }
             }
 

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
@@ -75,5 +76,25 @@ class AuthController extends Controller
     public function user(Request $request)
     {
         return Auth::user();
+    }
+
+    public function update(Request $request, $id)
+    {
+        DB::beginTransaction();
+        try {
+            $user = User::findOrFail(Auth::id());
+            $user->update([
+                'name' => $request->name,
+            ]);
+            // Commit transaksi jika berhasil
+            DB::commit();
+            // Berikan respons sukses
+            return response()->json(['message' => 'Data berhasil diperbarui'], 200);
+        } catch (\Exception $e) {
+            // Rollback transaksi jika terjadi kesalahan
+            DB::rollback();
+            // Berikan respons error
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
     }
 }
