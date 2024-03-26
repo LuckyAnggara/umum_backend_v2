@@ -12,6 +12,7 @@ use App\Http\Controllers\PesanController;
 use App\Http\Controllers\PtjController;
 use App\Http\Controllers\PtjLampiranController;
 use App\Http\Controllers\RateController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\TempatController;
 use App\Models\MutasiPersediaan;
 use Illuminate\Http\Request;
@@ -78,6 +79,7 @@ Route::resource('bmn', BmnController::class);
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/auth/user', [AuthController::class, 'user'])->name('user');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::get('/report/inventory', [ReportController::class, 'reportInventory']);
     Route::get('/kirim-pesan', [PesanController::class, 'kirim']);
 
     Route::resource('permintaan-persediaan', PermintaanPersediaanController::class)->only([
