@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AgendaController;
+use App\Http\Controllers\ArsipController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BmnController;
 use App\Http\Controllers\InventoryController;
@@ -74,8 +75,10 @@ Route::get(
     [PtjLampiranController::class, 'download']
 );
 
-Route::resource('bmn', BmnController::class);
+Route::resource('arsip', ArsipController::class);
 
+
+Route::resource('bmn', BmnController::class);
 Route::middleware('auth:sanctum')->group(function () {
     Route::resource('auth/user', AuthController::class)->only([
         'update'
@@ -108,6 +111,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::put('/permintaan-persediaan/undo/{id}', [PermintaanPersediaanController::class, 'updateUndo']);
     Route::resource('inventory', InventoryController::class);
+
     Route::resource('/persediaan/mutasi', MutasiPersediaanController::class);
 
     Route::get('/persediaan/cek-nama', [InventoryController::class, 'cekNama']);
