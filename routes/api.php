@@ -4,6 +4,7 @@ use App\Http\Controllers\AgendaController;
 use App\Http\Controllers\ArsipController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BmnController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\MutasiPersediaanController;
 use App\Http\Controllers\PeminjamanBmnController;
@@ -80,6 +81,7 @@ Route::resource('arsip', ArsipController::class);
 
 Route::resource('bmn', BmnController::class);
 Route::middleware('auth:sanctum')->group(function () {
+    Route::resource('dashboard', DashboardController::class);
     Route::resource('auth/user', AuthController::class)->only([
         'update'
     ]);

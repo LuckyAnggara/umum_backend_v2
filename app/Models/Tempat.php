@@ -33,13 +33,15 @@ class Tempat extends Model
         return $this->kegiatan;
     }
 
-    public function getStartAttribute()
+       public function getStartAttribute()
     {
-        return $this->jam_mulai;
+        return $this->tanggal . ' ' .$this->jam_mulai;
     }
 
     public function getEndAttribute()
     {
-        return $this->jam_akhir;
+        return $this->tanggal . ' ' .$this->jam_akhir;
     }
+
+  
 }
