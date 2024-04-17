@@ -70,7 +70,9 @@ class PeminjamanBmnController extends BaseController
                     $bmn->save();
                 }
 
-                $pesan = 'Peminjaman BMN pengajuan di tanggal ' . $result->created_at;
+
+                $shorten = PesanController::shorten('/#/user/bmn/peminjaman/' . $ticketNumber . '/output');
+                $pesan = 'Permintaan peminjaman BMN pengajuan di tanggal ' . $result->created_at . ' dengan Nomor Tiket *' . $ticketNumber . '* berhasil dibuat, silahkan menunggu Informasi selanjutnya ' . $shorten . ' (klik link untuk melihat tiket)';
                 PesanController::kirimPesan($data->no_wa, $pesan);
             }
 

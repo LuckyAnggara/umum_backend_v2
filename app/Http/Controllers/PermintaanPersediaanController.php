@@ -69,8 +69,11 @@ class PermintaanPersediaanController extends Controller
                         'checked' => true,
                     ]);
                 }
+
                 $catatan = 'Permintaan persediaan baru telah dibuat';
-                $pesan = 'Permintaan Persediaan Nomor Tiket ' . $ticketNumber . ' berhasil dibuat, silahkan menunggu Informasi selanjutnya';
+                $shorten = PesanController::shorten('/#/user/persediaan/permintaan/' . $ticketNumber . '/output');
+                $pesan = 'Permintaan Persediaan Nomor Tiket ' . $ticketNumber . ' berhasil dibuat, silahkan menunggu Informasi selanjutnya ' . $shorten . ' (klik link untuk melihat tiket)';
+
                 LogPermintaanPersediaanController::createLogPermintaan($result->id, 'ORDER', $catatan, $data->nama);
                 PesanController::kirimPesan($data->no_wa, $pesan);
             }
@@ -117,11 +120,16 @@ class PermintaanPersediaanController extends Controller
             } else if ($data->status == 'PROCESS') {
                 $catatan = 'Permintaan di proses';
                 LogPermintaanPersediaanController::createLogPermintaan($result->id, 'PROCESS', $catatan, Auth::user()->name);
+
+                $pesan = 'Permintaan Persediaan Nomor Tiket ' . $result->tiket . ' sedang dalam proses oleh Bagian UMUM';
+                PesanController::kirimPesan($result->no_wa, $pesan);
             } else if ($data->status == 'DONE') {
                 $catatan = 'Permintaan selesai';
                 LogPermintaanPersediaanController::createLogPermintaan($result->id, 'DONE', $catatan, Auth::user()->name);
             } else {
                 $catatan = 'Permintaan di tolak';
+                $pesan = 'Permintaan Persediaan Nomor Tiket ' . $result->tiket . ' di *TOLAK* oleh Bagian UMUM';
+                PesanController::kirimPesan($result->no_wa, $pesan);
                 LogPermintaanPersediaanController::createLogPermintaan($result->id, 'REJECT', $catatan, Auth::user()->name);
             }
             $output = PermintaanPersediaan::with('detail.persediaan', 'log')->findOrFail($id);
@@ -159,9 +167,9 @@ class PermintaanPersediaanController extends Controller
             }
 
             LogPermintaanPersediaanController::createLogPermintaan($result->id, 'DONE', $catatan, $data->name);
-
-
             $output = PermintaanPersediaan::with('detail.persediaan', 'log')->findOrFail($id);
+
+
             // Commit transaksi jika berhasil
             DB::commit();
             // Berikan respons sukses
@@ -198,8 +206,6 @@ class PermintaanPersediaanController extends Controller
                 ]);
             }
             LogPermintaanPersediaanController::createLogPermintaan($result->id, 'UNDO', $catatan, Auth::user()->name);
-
-
             $output = PermintaanPersediaan::with('detail.persediaan', 'log')->findOrFail($id);
             // Commit transaksi jika berhasil
             DB::commit();

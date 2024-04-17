@@ -32,11 +32,11 @@ class TempatController extends BaseController
         DB::beginTransaction();
 
         try {
-              
-                
+
+
             $result = Tempat::create([
                 'ruangan' => $data->ruangan,
-                 'tanggal' =>  Carbon::parse($request->tanggal)->format('Y-m-d'),
+                'tanggal' =>  Carbon::parse($request->tanggal)->format('Y-m-d'),
                 'jam_mulai' => $this->convertDate($data->tanggal, $data->jam_mulai),
                 'jam_akhir' => $this->convertDate($data->tanggal, $data->jam_akhir),
                 'nip' => $data->nip ?? null,
@@ -48,7 +48,8 @@ class TempatController extends BaseController
                 'kegiatan' => $data->kegiatan,
             ]);
 
-            $pesan = 'Booking kegiatan di tanggal ' . $data->tanggal;
+            $pesan = 'Booking kegiatan *' . $result->kegiatan . '* bertempat *' . $result->ruangan . '* di tanggal *' . $result->tanggal . '*  Jam ' . $result->jam_mulai . ' - ' . $result->jam_akhir . ' berhasil di buat';
+
             PesanController::kirimPesan($data->no_wa, $pesan);
             DB::commit();
             return $this->sendResponse($result, 'Data berhasil dibuat');
@@ -98,5 +99,27 @@ class TempatController extends BaseController
         // $formattedDateTime = $carbonDateTime->format('Y-m-d\TH:i:s');
         $formattedDateTime = $carbonDateTime->format('H:i:s');
         return $formattedDateTime;
+    }
+
+    public function done()
+    {
+
+        $today = Carbon::now();
+        DB::beginTransaction();
+
+        try {
+            // Cari dan update data PermintaanPersediaan berdasarkan ID
+            $data = Tempat::whereDate('created_at', $today)->get();
+            if ($data) {
+                foreach ($data as $key => $value) {
+                    $value->status = 'SELESAI';
+                    $value->save();
+                }
+            }
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollback();
+        }
     }
 }

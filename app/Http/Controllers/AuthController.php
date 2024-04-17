@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -22,11 +23,16 @@ class AuthController extends Controller
 
         $credentials = request(['nip', 'password']);
         if (!Auth::attempt($credentials)) {
+
+
             return response([
                 'success'   => false,
                 'message' => ['These credentials do not match our records.']
             ], 404);
         }
+
+        $user->last_login = Carbon::now();
+        $user->save();
 
         $token = $user->createToken('Api-token')->plainTextToken;
 
@@ -38,7 +44,6 @@ class AuthController extends Controller
         ];
         return response($response, 201);
     }
-
 
     public function register(Request $request)
     {
@@ -94,6 +99,26 @@ class AuthController extends Controller
             // Rollback transaksi jika terjadi kesalahan
             DB::rollback();
             // Berikan respons error
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
+    }
+
+    public function index(Request $request)
+    {
+        $perPage = $request->input('limit', 5);
+        $name = $request->input('query');
+        try {
+            // Mengambil data inventaris dengan paginasi
+            $user = User::when($name, function ($query, $name) {
+                return $query->where('nip', 'like', '%' . $name . '%')
+                    ->orWhere('name', 'like', '%' . $name . '%');
+            })
+                ->orderBy('created_at', 'desc')
+                ->latest()
+                ->paginate($perPage);
+
+            return response()->json(['data' => $user], 200);
+        } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
     }

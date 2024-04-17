@@ -60,6 +60,14 @@ class PermintaanLayananBmnController extends BaseController
                 'status' => $data->status ?? 'ORDER',
             ]);
 
+            if ($result) {
+
+                $shorten = PesanController::shorten('/#/user/bmn/permintaan/' . $ticketNumber . '/output');
+                $pesan = 'Permintaan layanan BMN Nomor Tiket ' . $ticketNumber . ' berhasil dibuat, silahkan menunggu Informasi selanjutnya ' . $shorten . ' (klik link untuk melihat tiket)';
+
+                PesanController::kirimPesan($data->no_wa, $pesan);
+            }
+
             DB::commit();
             return response()->json(['data' => $result], 200);
         } catch (\Exception $e) {

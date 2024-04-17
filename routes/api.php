@@ -83,8 +83,9 @@ Route::resource('bmn', BmnController::class);
 Route::middleware('auth:sanctum')->group(function () {
     Route::resource('dashboard', DashboardController::class);
     Route::resource('auth/user', AuthController::class)->only([
-        'update'
+        'update',
     ]);
+    Route::resource('/users', AuthController::class);
     Route::get('/auth/user', [AuthController::class, 'user'])->name('user');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/report/inventory', [ReportController::class, 'reportInventory']);
