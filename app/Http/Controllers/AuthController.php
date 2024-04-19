@@ -32,6 +32,7 @@ class AuthController extends Controller
         }
 
         $user->last_login = Carbon::now();
+        $user->last_ip_login = $request->ip();
         $user->save();
 
         $token = $user->createToken('Api-token')->plainTextToken;
@@ -120,6 +121,56 @@ class AuthController extends Controller
             return response()->json(['data' => $user], 200);
         } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
+        }
+    }
+
+    public function cekValidUser(Request $request)
+    {
+        $name = $request->input('query');
+        $user = User::where('nip', $name)->first();
+        if ($user) {
+            return true;
+        }
+        return "false";
+    }
+
+    public function store(Request $request)
+    {
+
+        $request->validate([
+            'name' => 'required',
+            'nip' => 'required',
+            'password' => 'required',
+        ]);
+
+        $password = Hash::make($request->password);
+
+        $user = User::create([
+            'nip' => $request->nip,
+            'name' =>  $request->name,
+            'password' => $password,
+
+        ]);
+        $response = [
+            'success'   => true,
+            'message'   => 'User berhasil dibuat'
+        ];
+        return response($response, 200);
+    }
+
+    public function destroy($id)
+    {
+        try {
+            // Cari dan hapus data bmn berdasarkan ID
+            $result =  User::where('id', $id)->first();
+            if ($result) {
+                $result->delete();
+            }
+            // Berikan respons sukses
+            return response()->json(['message' => 'Data berhasil dihapus'], 200);
+        } catch (\Exception $e) {
+            // Berikan respons error jika data tidak ditemukan
+            return response()->json(['message' => 'Data tidak ditemukan'], 404);
         }
     }
 }

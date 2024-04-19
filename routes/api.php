@@ -71,13 +71,16 @@ Route::put('/permintaan-layanan-bmn/done-balik/{id}', [PermintaanLayananBmnContr
 Route::put('/peminjaman-bmn/done/{id}', [PeminjamanBmnController::class, 'updateDone']);
 
 Route::get('/bmn/cek-nup', [BmnController::class, 'cekNup']);
+Route::get('/users/cek-username', [AuthController::class, 'cekValidUser']);
+
 Route::get(
     'ptj-lampiran/{id}',
     [PtjLampiranController::class, 'download']
 );
 
-Route::resource('arsip', ArsipController::class);
 
+
+Route::resource('arsip', ArsipController::class);
 
 Route::resource('bmn', BmnController::class);
 Route::middleware('auth:sanctum')->group(function () {
