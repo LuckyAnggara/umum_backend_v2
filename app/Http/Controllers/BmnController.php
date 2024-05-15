@@ -14,13 +14,17 @@ class BmnController extends BaseController
         $perPage = $request->input('limit', 5);
         $name = $request->input('query');
         $sewa = $request->input('sewa');
-
-
+        $mobil = $request->input('mobil');
 
         try {
             // Mengambil data inventaris dengan paginasi
-            $bmn = Bmn::when($sewa, function ($query, $sewa) {
+            $bmn = Bmn::with('pinjam')->when($sewa, function ($query, $sewa) {
                 return $query->where('sewa', $sewa);
+            })->when($mobil, function ($query, $mobil) {
+                return $query->where('mobil_dinas', $mobil);
+            })->when($name, function ($query, $name) {
+                return $query->where('nama', 'like', '%' . $name . '%')
+                    ->orWhere('nup', 'like', '%' . $name . '%');
             })
 
                 ->orderBy('created_at', 'desc')

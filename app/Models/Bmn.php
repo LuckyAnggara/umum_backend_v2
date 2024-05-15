@@ -19,9 +19,16 @@ class Bmn extends Model
         'sewa',
         'tahun_perolehan',
         'image',
+        'mobil_dinas',
+        'pinjam_id'
     ];
 
     protected $casts = [
-        // 'sewa' => 'boolean',
+        'mobil_dinas' => 'boolean',
     ];
+
+    public function pinjam()
+    {
+        return  $this->hasOne(PeminjamanBmn::class, 'id', 'pinjam_id');
+    }
 }
