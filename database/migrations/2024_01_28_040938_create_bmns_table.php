@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('sewa')->default('tersedia');
             $table->string('tahun_perolehan')->nullable();
             $table->string('image')->nullable();
+            $table->boolean('status')->default(false);
             $table->timestamps();
             $table->softDeletes();
         });

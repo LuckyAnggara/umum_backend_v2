@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Bmn;
+use App\Models\DetailPeminjamanBmn;
 use App\Models\PeminjamanBmn;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -38,14 +39,65 @@ class PeminjamanBmnController extends BaseController
         }
     }
 
+    // public function store(Request $request)
+    // {
+    //     // Mulai transaksi database
+    //     $data = json_decode($request->getContent());
+    //     DB::beginTransaction();
+    //     try {
+    //         $ticketNumber = PeminjamanBmn::generateTicketNumber();
+
+    //         $result = PeminjamanBmn::create([
+    //             'tiket' => $ticketNumber,
+    //             'nup' => $data->nup,
+    //             'jenis_layanan' => $data->jenis_layanan,
+    //             'nip' => $data->nip,
+    //             'nama_peminta' => $data->nama_peminta,
+    //             'catatan' => $data->catatan ?? null,
+    //             'penerima' => $data->penerima ?? null,
+    //             'unit' => $data->unit ?? null,
+    //             'ttd' => $data->ttd ?? null,
+    //             'no_wa' => $data->no_wa,
+    //             'tanggal_diterima' => $data->tanggal_diterima ?? null,
+    //             'tanggal_pengembalian' => Carbon::parse($data->tanggal_pengembalian)->toDateTimeString() ?? null,
+    //             'status' => $data->status ?? 'VERIFIKASI ADMIN',
+    //         ]);
+
+    //         if ($result) {
+    //             $bmn = Bmn::where('nup', $data->nup)->first();
+
+    //             if ($bmn) {
+    //                 $bmn->sewa = 'ANTRIAN PINJAM';
+    //                 $bmn->save();
+    //             }
+
+
+    //             $shorten = PesanController::shorten('/#/user/bmn/peminjaman/' . $ticketNumber . '/output');
+    //             $pesan = 'Permintaan peminjaman BMN pengajuan di tanggal ' . $result->created_at . ' dengan Nomor Tiket *' . $ticketNumber . '* berhasil dibuat, silahkan menunggu Informasi selanjutnya ' . $shorten . ' (klik link untuk melihat tiket)';
+    //             PesanController::kirimPesan($data->no_wa, $pesan);
+    //         }
+
+    //         DB::commit();
+    //         return response()->json(['data' => $result], 200);
+    //     } catch (\Exception $e) {
+    //         DB::rollBack();
+    //         return response()->json(['message' => $e->getMessage()], 500);
+    //     }
+    // }
+
+
     public function store(Request $request)
     {
+        $request->validate([
+            'nama' => 'required|string',
+            'detail' => 'required|array',
+        ]);
         // Mulai transaksi database
         $data = json_decode($request->getContent());
         DB::beginTransaction();
         try {
-            $ticketNumber = PeminjamanBmn::generateTicketNumber();
 
+            $ticketNumber = PeminjamanBmn::generateTicketNumber();
             $result = PeminjamanBmn::create([
                 'tiket' => $ticketNumber,
                 'nup' => $data->nup,
@@ -63,19 +115,21 @@ class PeminjamanBmnController extends BaseController
             ]);
 
             if ($result) {
-                $bmn = Bmn::where('nup', $data->nup)->first();
-
-                if ($bmn) {
-                    $bmn->sewa = 'ANTRIAN PINJAM';
-                    $bmn->save();
+                foreach ($data->detail as $key => $value) {
+                    DetailPeminjamanBmn::create([
+                        'peminjaman_bmn_id' => $result->id,
+                        'bmn_id' => $value->id,
+                        'checked' => true,
+                    ]);
                 }
 
-
+                $catatan = 'Permintaan peminjaman BMN baru telah dibuat';
                 $shorten = PesanController::shorten('/#/user/bmn/peminjaman/' . $ticketNumber . '/output');
-                $pesan = 'Permintaan peminjaman BMN pengajuan di tanggal ' . $result->created_at . ' dengan Nomor Tiket *' . $ticketNumber . '* berhasil dibuat, silahkan menunggu Informasi selanjutnya ' . $shorten . ' (klik link untuk melihat tiket)';
+                $pesan = 'Permintaan Peminjaman BMN  Nomor Tiket ' . $ticketNumber . ' berhasil dibuat, silahkan menunggu Informasi selanjutnya ' . $shorten . ' (klik link untuk melihat tiket)';
+
+                LogPermintaanPersediaanController::createLogPermintaan($result->id, 'ORDER', $catatan, $data->nama);
                 PesanController::kirimPesan($data->no_wa, $pesan);
             }
-
             DB::commit();
             return response()->json(['data' => $result], 200);
         } catch (\Exception $e) {
