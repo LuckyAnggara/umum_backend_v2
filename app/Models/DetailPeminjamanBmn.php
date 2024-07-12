@@ -12,8 +12,6 @@ class DetailPeminjamanBmn extends Model
     protected $fillable = [
         'peminjaman_bmn_id',
         'bmn_id',
-        'checked',
-        'checked',
     ];
 
     protected $casts = [
@@ -21,7 +19,7 @@ class DetailPeminjamanBmn extends Model
         'checked' => 'boolean',
     ];
 
-    public function persediaan()
+    public function bmn()
     {
         return $this->hasOne(Bmn::class, 'id', 'bmn_id');
     }

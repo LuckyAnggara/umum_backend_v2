@@ -23,8 +23,6 @@ class AuthController extends Controller
 
         $credentials = request(['nip', 'password']);
         if (!Auth::attempt($credentials)) {
-
-
             return response([
                 'success'   => false,
                 'message' => ['These credentials do not match our records.']

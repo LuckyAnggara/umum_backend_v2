@@ -10,29 +10,43 @@ class PeminjamanBmn extends Model
 {
     use HasFactory;
 
+    // protected $fillable = [
+    //     'tiket',
+    //     'nup',
+    //     'jenis_layanan',
+    //     'unit',
+    //     'nip',
+    //     'nama_peminta',
+    //     'catatan',
+    //     'penerima',
+    //     'ttd',
+    //     'no_wa',
+    //     'tanggal_diterima', 'tanggal_pengembalian',
+    //     'status',
+    //     'tanggal_terima_pengembalian',
+    //     'ttd_pengembalian',
+    //     'penerima_pengembalian',
+    //     'status_pengembalian'
+    // ];
+
     protected $fillable = [
         'tiket',
-        'nup',
-        'jenis_layanan',
+        'nama',
         'unit',
         'nip',
-        'nama_peminta',
+        'status',
         'catatan',
         'penerima',
         'ttd',
         'no_wa',
-        'tanggal_diterima', 'tanggal_pengembalian',
-        'status',
-        'tanggal_terima_pengembalian',
-        'ttd_pengembalian',
-        'penerima_pengembalian',
-        'status_pengembalian'
+        'tanggal_diterima',
+        'tanggal_kembali',
     ];
 
     protected $casts = [
         'created_at' => 'datetime:d F Y',
         'tanggal_diterima' => 'datetime:d F Y',
-        'tanggal_pengembalian' => 'datetime:d F Y',
+        'tanggal_kembali' => 'datetime:d F Y',
     ];
 
     public static function generateTicketNumber()
@@ -49,5 +63,10 @@ class PeminjamanBmn extends Model
     public function bmn()
     {
         return  $this->hasOne(Bmn::class, 'nup', 'nup');
+    }
+
+    public function detail()
+    {
+        return  $this->hasMany(DetailPeminjamanBmn::class, 'peminjaman_bmn_id', 'id');
     }
 }
