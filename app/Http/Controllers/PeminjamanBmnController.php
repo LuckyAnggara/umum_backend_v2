@@ -207,27 +207,27 @@ class PeminjamanBmnController extends BaseController
         $data = json_decode($request->getContent());
         DB::beginTransaction();
         try {
-            $result = PeminjamanBmn::with('bmn')->findOrFail($id);
+            $result = PeminjamanBmn::findOrFail($id);
             $result->update([
                 'status' => $data->status,
-                'tanggal_diterima' => Carbon::createFromFormat('d F Y', $data->tanggalPenerimaan)->format('Y-m-d'),
-                'penerima' => $data->name,
-                'ttd' => $data->image,
+                'tanggal_kembali' => Carbon::createFromFormat('d F Y', $data->tanggalPenerimaan)->format('Y-m-d'),
+                // 'penerima' => $data->name,
+                // 'ttd' => $data->image,
             ]);
 
             if ($result) {
-                $detail = Bmn::where('nup', $result->nup)->first();
-                $detail->update([
-                    'sewa' => 'di pinjam'
-                ]);
-                $pesan = 'BMN pengajuan Nomor Tiket ' .  $result->tiket . ' di tanggal ' . $result->created_at . ' telah diterima oleh ' . $data->name;
-                PesanController::kirimPesan($result->no_wa, $pesan);
-            } else {
-                $result->update([
-                    'status' => 'PENDING'
-                ]);
-            }
+                $detail = DetailPeminjamanBmn::where('peminjaman_bmn_id', $result->id)->get();
+                foreach ($detail as $key => $bmn) {
+                    $detailBmn = Bmn::findOrFail($bmn->bmn_id);
+                    $detailBmn->update([
+                        'keterangan' => 'Tersedia',
+                        'status' => false,
+                    ]);
+                }
 
+                $pesan = 'BMN pengajuan Nomor Tiket ' .  $result->tiket . ' di tanggal ' . $result->created_at . ' telah dikenbalikan ';
+                PesanController::kirimPesan($result->no_wa, $pesan);
+            }
             // Commit transaksi jika berhasil
             DB::commit();
             // Berikan respons sukses
@@ -239,6 +239,45 @@ class PeminjamanBmnController extends BaseController
             return response()->json(['message' => $e->getMessage()], 500);
         }
     }
+
+    // UPDATE DONE VERSI LAMA
+    // public function updateDone(Request $request, $id)
+    // {
+    //     $data = json_decode($request->getContent());
+    //     DB::beginTransaction();
+    //     try {
+    //         $result = PeminjamanBmn::with('bmn')->findOrFail($id);
+    //         $result->update([
+    //             'status' => $data->status,
+    //             'tanggal_diterima' => Carbon::createFromFormat('d F Y', $data->tanggalPenerimaan)->format('Y-m-d'),
+    //             'penerima' => $data->name,
+    //             'ttd' => $data->image,
+    //         ]);
+
+    //         if ($result) {
+    //             $detail = Bmn::where('nup', $result->nup)->first();
+    //             $detail->update([
+    //                 'sewa' => 'di pinjam'
+    //             ]);
+    //             $pesan = 'BMN pengajuan Nomor Tiket ' .  $result->tiket . ' di tanggal ' . $result->created_at . ' telah diterima oleh ' . $data->name;
+    //             PesanController::kirimPesan($result->no_wa, $pesan);
+    //         } else {
+    //             $result->update([
+    //                 'status' => 'PENDING'
+    //             ]);
+    //         }
+
+    //         // Commit transaksi jika berhasil
+    //         DB::commit();
+    //         // Berikan respons sukses
+    //         return response()->json(['data' => $result, 'message' => 'Data berhasil diperbarui'], 200);
+    //     } catch (\Exception $e) {
+    //         // Rollback transaksi jika terjadi kesalahan
+    //         DB::rollback();
+    //         // Berikan respons error
+    //         return response()->json(['message' => $e->getMessage()], 500);
+    //     }
+    // }
 
     public function update(Request $request, $id)
     {
@@ -254,7 +293,7 @@ class PeminjamanBmnController extends BaseController
                 $result->status = 'BELUM KEMBALI';
                 foreach ($result->detail as $key => $detail) {
                     $bmn = Bmn::findOrFail($detail->bmn_id);
-                    $bmn->keterangan = 'Sedang di pinjam oleh ' . $detail->unit;
+                    $bmn->keterangan = 'Sedang di pinjam oleh ' . $result->unit;
                     $bmn->status = true;
                     $bmn->save();
                 }
