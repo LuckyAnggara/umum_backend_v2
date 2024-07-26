@@ -20,8 +20,6 @@ class Agenda extends Model
         'status',
     ];
 
-
-
     protected $appends = ['title', 'start', 'end'];
 
     public function getTitleAttribute()
@@ -31,12 +29,12 @@ class Agenda extends Model
 
     public function getStartAttribute()
     {
-        return $this->tanggal . ' ' .$this->jam_mulai;
+        return $this->tanggal . ' ' . $this->jam_mulai;
     }
 
     public function getEndAttribute()
     {
-        return $this->tanggal . ' ' .$this->jam_akhir;
+        return $this->tanggal . ' ' . $this->jam_akhir;
     }
     public function lampiran()
     {
