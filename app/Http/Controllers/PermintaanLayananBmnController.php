@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\PermintaanLayananBmn;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class PermintaanLayananBmnController extends BaseController
@@ -58,6 +59,7 @@ class PermintaanLayananBmnController extends BaseController
                 'no_wa' => $data->no_wa,
                 'tanggal_diterima' => $data->tanggal_diterima ?? null,
                 'status' => $data->status ?? 'ORDER',
+                'user_id' => Auth::id(),
             ]);
 
             if ($result) {

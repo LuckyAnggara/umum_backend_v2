@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Tempat;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class TempatController extends BaseController
@@ -46,6 +47,7 @@ class TempatController extends BaseController
                 'no_wa' => $data->no_wa,
                 'status' => 'BELUM SELESAI',
                 'kegiatan' => $data->kegiatan,
+                'user_id' => Auth::id(),
             ]);
 
             $pesan = 'Booking kegiatan *' . $result->kegiatan . '* bertempat *' . $result->ruangan . '* di tanggal *' . $result->tanggal . '*  Jam ' . $result->jam_mulai . ' - ' . $result->jam_akhir . ' berhasil di buat';

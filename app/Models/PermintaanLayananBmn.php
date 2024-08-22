@@ -22,13 +22,20 @@ class PermintaanLayananBmn extends Model
         'ttd',
         'no_wa',
         'tanggal_diterima',
-        'status'
+        'status',
+        'user_id'
+
     ];
 
     protected $casts = [
         'created_at' => 'datetime:d F Y',
         'tanggal_diterima' => 'datetime:d F Y',
     ];
+    protected $appends = ['tipe'];
+    public function getTipeAttribute()
+    {
+        return  'LAYANAN BMN';
+    }
 
     public static function generateTicketNumber()
     {

@@ -6,6 +6,7 @@ use App\Models\Agenda;
 use App\Models\AgendaLampiran;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -15,21 +16,20 @@ class AgendaController extends BaseController
     {
         $pimpinan = $request->input('query');
         $date = $request->input('date');
-          $startDate = $request->input('start-date');
+        $startDate = $request->input('start-date');
         $endDate = $request->input('end-date');
-        
+
 
         try {
             // Mengambil data inventaris dengan paginasi
             $agenda = Agenda::with('lampiran')->where('pimpinan', $pimpinan)->when($date, function ($query, $date) {
                 return $query->whereDate('tanggal', $date);
-            })->
-                   when($startDate && $endDate, function ($query) use ($startDate, $endDate) {
-              
+            })->when($startDate && $endDate, function ($query) use ($startDate, $endDate) {
+
                 return $query->whereBetween('tanggal', [$startDate, $endDate]);
             })
-          
-            ->get();
+
+                ->get();
             return response()->json(['data' => $agenda], 200);
         } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
@@ -51,6 +51,7 @@ class AgendaController extends BaseController
                 'pimpinan' => $request->pimpinan,
                 'tempat' => $request->tempat,
                 'status' => 'BELUM SELESAI',
+                'user_id' => Auth::id(),
             ]);
 
             if ($result) {

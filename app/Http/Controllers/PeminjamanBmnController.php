@@ -7,6 +7,7 @@ use App\Models\DetailPeminjamanBmn;
 use App\Models\PeminjamanBmn;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class PeminjamanBmnController extends BaseController
@@ -160,6 +161,7 @@ class PeminjamanBmnController extends BaseController
                 'tanggal_kembali' => Carbon::parse($data->tanggal_kembali)->toDateTimeString() ?? null,
                 'catatan' => $data->catatan,
                 'status' => 'ORDER',
+                'user_id' => Auth::id(),
             ]);
 
             if ($result) {

@@ -18,14 +18,22 @@ class Agenda extends Model
         'pimpinan',
         'tempat',
         'status',
+        'user_id'
+
     ];
 
-    protected $appends = ['title', 'start', 'end'];
+    protected $appends = ['title', 'start', 'end', 'duration', 'tipe'];
 
     public function getTitleAttribute()
     {
         return $this->kegiatan;
     }
+
+    public function getTipeAttribute()
+    {
+        return  'AGENDA';
+    }
+
 
     public function getStartAttribute()
     {
@@ -35,6 +43,11 @@ class Agenda extends Model
     public function getEndAttribute()
     {
         return $this->tanggal . ' ' . $this->jam_akhir;
+    }
+
+    public function getDurationAttribute()
+    {
+        return "02:00";
     }
     public function lampiran()
     {

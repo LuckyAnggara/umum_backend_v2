@@ -1,5 +1,6 @@
 <?php
 
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -41,6 +42,7 @@ class PeminjamanBmn extends Model
         'no_wa',
         'tanggal_diterima',
         'tanggal_kembali',
+        'user_id'
     ];
 
     protected $casts = [
@@ -48,6 +50,11 @@ class PeminjamanBmn extends Model
         'tanggal_diterima' => 'datetime:d F Y',
         'tanggal_kembali' => 'datetime:d F Y',
     ];
+    protected $appends = ['tipe'];
+    public function getTipeAttribute()
+    {
+        return  'PEMINJAMAN BMN';
+    }
 
     public static function generateTicketNumber()
     {

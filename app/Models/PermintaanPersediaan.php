@@ -21,12 +21,15 @@ class PermintaanPersediaan extends Model
         'ttd',
         'no_wa',
         'tanggal_diterima',
+        'user_id'
+
     ];
 
     protected $casts = [
         'created_at' => 'datetime:d F Y',
         'tanggal_diterima' => 'datetime:d F Y',
     ];
+    protected $appends = ['tipe'];
 
     public static function generateTicketNumber()
     {
@@ -37,6 +40,11 @@ class PermintaanPersediaan extends Model
         // Menggabungkan timestamp dan bagian unik untuk membentuk nomor tiket
         $ticketNumber = $timestamp . $uniquePart;
         return $ticketNumber;
+    }
+
+    public function getTipeAttribute()
+    {
+        return  'PERSEDIAAN';
     }
 
     public function detail()

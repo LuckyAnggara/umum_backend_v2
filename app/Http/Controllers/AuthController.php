@@ -3,6 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Inventory;
+use App\Models\PeminjamanBmn;
+use App\Models\PermintaanLayananBmn;
+use App\Models\PermintaanPersediaan;
+use App\Models\Tempat;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -19,7 +24,25 @@ class AuthController extends Controller
             'password' => 'required',
         ]);
 
+        $isAdmin = $request->input('isAdmin', false);
+
         $user = User::where('nip', $request->nip)->first();
+
+        if ($isAdmin) {
+            if ($user->role !== 'ADMIN') {
+                return response([
+                    'success'   => false,
+                    'message' => ['User not admin.']
+                ], 404);
+            }
+        } else {
+            if ($user->role !== 'USER') {
+                return response([
+                    'success'   => false,
+                    'message' => ['Not credentials user.']
+                ], 404);
+            }
+        }
 
         $credentials = request(['nip', 'password']);
         if (!Auth::attempt($credentials)) {
@@ -169,6 +192,27 @@ class AuthController extends Controller
         } catch (\Exception $e) {
             // Berikan respons error jika data tidak ditemukan
             return response()->json(['message' => 'Data tidak ditemukan'], 404);
+        }
+    }
+
+    public function layanan()
+    {
+        try {
+            // Mengambil data inventaris dengan paginasi
+            $permintaanPersediaan = PermintaanPersediaan::where('user_id', Auth::id())->limit(10)->get();
+            $peminjamanBmn = PeminjamanBmn::where('user_id', Auth::id())->limit(10)->get();
+            $layananBmn  = PermintaanLayananBmn::where('user_id', Auth::id())->limit(10)->get();
+            $tempat = Tempat::where('user_id', Auth::id())->limit(10)->get();
+
+            $data = [
+                'persediaan' => $permintaanPersediaan,
+                'peminjamanBmn' => $peminjamanBmn,
+                'layananBmn' => $layananBmn,
+                'tempat' => $tempat
+            ];
+            return response()->json(['data' => $data], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
         }
     }
 }

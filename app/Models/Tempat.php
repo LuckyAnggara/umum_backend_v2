@@ -22,26 +22,31 @@ class Tempat extends Model
         'jumlah_peserta',
         'no_wa',
         'status',
+        'user_id'
+
     ];
 
 
 
-   protected $appends = ['title', 'start', 'end'];
+    protected $appends = ['title', 'start', 'end', 'tipe    '];
 
     public function getTitleAttribute()
     {
         return $this->kegiatan;
     }
 
-       public function getStartAttribute()
+    public function getTipeAttribute()
     {
-        return $this->tanggal . ' ' .$this->jam_mulai;
+        return 'TEMPAT';
+    }
+
+    public function getStartAttribute()
+    {
+        return $this->tanggal . ' ' . $this->jam_mulai;
     }
 
     public function getEndAttribute()
     {
-        return $this->tanggal . ' ' .$this->jam_akhir;
+        return $this->tanggal . ' ' . $this->jam_akhir;
     }
-
-  
 }

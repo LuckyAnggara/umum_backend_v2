@@ -58,6 +58,7 @@ class PermintaanPersediaanController extends Controller
                 'no_wa' => $data->no_wa,
                 'catatan' => $data->catatan,
                 'status' => 'ORDER',
+                'user_id' => Auth::id(),
             ]);
 
             if ($result) {

@@ -39,10 +39,12 @@ Route::get('/show-image/{id}', [InventoryController::class, 'showImage']);
 
 Route::get('/inventory/get', [InventoryController::class, 'index']);
 Route::resource('permintaan-persediaan', PermintaanPersediaanController::class)->only([
-    'store', 'show',
+    'store',
+    'show',
 ]);
 Route::resource('ptj', PtjController::class)->only([
-    'store', 'show',
+    'store',
+    'show',
 ]);
 
 Route::get('/permintaan-persediaan/get-status/{tiket}', [PermintaanPersediaanController::class, 'getStatus']);
@@ -50,14 +52,16 @@ Route::resource('tempat', TempatController::class);
 Route::resource('agenda', AgendaController::class);
 
 Route::resource('permintaan-layanan-bmn', PermintaanLayananBmnController::class)->only([
-    'store', 'show',
+    'store',
+    'show',
 ]);
 Route::resource('rate-layanan', RateController::class)->only([
     'store',
 ]);
 
 Route::resource('peminjaman-bmn', PeminjamanBmnController::class)->only([
-    'store', 'show',
+    'store',
+    'show',
 ]);
 Route::get('/peminjaman-bmn/get-status/{tiket}', [PeminjamanBmnController::class, 'getStatus']);
 
@@ -93,25 +97,33 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/report/inventory', [ReportController::class, 'reportInventory']);
     Route::get('/kirim-pesan', [PesanController::class, 'kirim']);
+    Route::get('/user/layanan', [AuthController::class, 'layanan']);
 
     Route::resource('permintaan-persediaan', PermintaanPersediaanController::class)->only([
-        'index', 'update'
+        'index',
+        'update'
     ]);
 
     Route::resource('ptj', PtjController::class)->only([
-        'index', 'update', 'destroy'
+        'index',
+        'update',
+        'destroy'
     ]);
 
     Route::resource('permintaan-layanan-bmn', PermintaanLayananBmnController::class)->only([
-        'index', 'update'
+        'index',
+        'update'
     ]);
 
     Route::resource('peminjaman-bmn', PeminjamanBmnController::class)->only([
-        'index', 'update', 'destroy'
+        'index',
+        'update',
+        'destroy'
     ]);
 
     Route::resource('bmn', BmnController::class)->only([
-        'store', 'update'
+        'store',
+        'update'
     ]);
 
 
