@@ -38,10 +38,7 @@ Route::post('/register', [AuthController::class, 'register'])->name('register');
 Route::get('/show-image/{id}', [InventoryController::class, 'showImage']);
 
 Route::get('/inventory/get', [InventoryController::class, 'index']);
-Route::resource('permintaan-persediaan', PermintaanPersediaanController::class)->only([
-    'store',
-    'show',
-]);
+
 Route::resource('ptj', PtjController::class)->only([
     'store',
     'show',
@@ -90,6 +87,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resource('dashboard', DashboardController::class);
     Route::resource('auth/user', AuthController::class)->only([
         'update',
+    ]);
+    Route::resource('permintaan-persediaan', PermintaanPersediaanController::class)->only([
+        'store',
+        'show',
     ]);
     Route::resource('/users', AuthController::class);
     Route::get('/auth/user', [AuthController::class, 'user'])->name('user');

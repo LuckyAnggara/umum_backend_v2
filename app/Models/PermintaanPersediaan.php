@@ -22,7 +22,6 @@ class PermintaanPersediaan extends Model
         'no_wa',
         'tanggal_diterima',
         'user_id'
-
     ];
 
     protected $casts = [
