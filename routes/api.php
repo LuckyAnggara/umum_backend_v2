@@ -48,8 +48,7 @@ Route::resource('ptj', PtjController::class)->only([
 ]);
 
 Route::get('/permintaan-persediaan/get-status/{tiket}', [PermintaanPersediaanController::class, 'getStatus']);
-Route::resource('tempat', TempatController::class);
-Route::resource('agenda', AgendaController::class);
+
 
 Route::resource('permintaan-layanan-bmn', PermintaanLayananBmnController::class)->only([
     'store',
@@ -103,6 +102,8 @@ Route::middleware('auth:sanctum')->group(function () {
         'index',
         'update'
     ]);
+    Route::resource('tempat', TempatController::class);
+    Route::resource('agenda', AgendaController::class);
 
     Route::resource('ptj', PtjController::class)->only([
         'index',

@@ -176,8 +176,9 @@ class PeminjamanBmnController extends BaseController
                 }
 
                 $catatan = 'Permintaan persediaan baru telah dibuat';
-                $shorten = PesanController::shorten('/#/user/persediaan/permintaan/' . $ticketNumber . '/output');
-                $pesan = 'Permintaan Persediaan Nomor Tiket ' . $ticketNumber . ' berhasil dibuat, silahkan menunggu Informasi selanjutnya ' . $shorten . ' (klik link untuk melihat tiket)';
+                // $shorten = PesanController::shorten('/#/user/persediaan/permintaan/' . $ticketNumber . '/output');
+                // $pesan = 'Permintaan Persediaan Nomor Tiket ' . $ticketNumber . ' berhasil dibuat, silahkan menunggu Informasi selanjutnya ' . $shorten . ' (klik link untuk melihat tiket)';
+                $pesan = 'Permintaan Persediaan Nomor Tiket ' . $ticketNumber . ' berhasil dibuat, silahkan menunggu Informasi selanjutnya ';
 
                 LogPermintaanPersediaanController::createLogPermintaan($result->id, 'ORDER', $catatan, $data->nama);
                 PesanController::kirimPesan($data->no_wa, $pesan);

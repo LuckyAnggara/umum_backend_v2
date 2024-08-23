@@ -33,8 +33,6 @@ class TempatController extends BaseController
         DB::beginTransaction();
 
         try {
-
-
             $result = Tempat::create([
                 'ruangan' => $data->ruangan,
                 'tanggal' =>  Carbon::parse($request->tanggal)->format('Y-m-d'),

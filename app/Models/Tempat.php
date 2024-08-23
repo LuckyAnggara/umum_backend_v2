@@ -23,7 +23,6 @@ class Tempat extends Model
         'no_wa',
         'status',
         'user_id'
-
     ];
 
 
