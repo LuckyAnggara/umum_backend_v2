@@ -112,6 +112,8 @@ class AuthController extends Controller
             $user = User::findOrFail(Auth::id());
             $user->update([
                 'name' => $request->name,
+                'unit' =>  $request->unit,
+                'role' =>  $request->role,
             ]);
             // Commit transaksi jika berhasil
             DB::commit();
@@ -161,6 +163,8 @@ class AuthController extends Controller
         $request->validate([
             'name' => 'required',
             'nip' => 'required',
+            'unit' => 'required',
+            'role' => 'required',
             'password' => 'required',
         ]);
 
@@ -169,6 +173,8 @@ class AuthController extends Controller
         $user = User::create([
             'nip' => $request->nip,
             'name' =>  $request->name,
+            'unit' =>  $request->unit,
+            'role' =>  $request->role,
             'password' => $password,
 
         ]);
