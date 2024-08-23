@@ -24,6 +24,7 @@ class Arsip extends Model
         'no_box',
         'no_folder',
         'jenis_media',
+        'user_id'
     ];
 
     protected $casts = [

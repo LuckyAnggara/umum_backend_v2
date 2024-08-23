@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('no_wa')->nullable();
             $table->text('kegiatan');
             $table->string('status')->default('BELUM SELESAI');
+            $table->integer('user_id');
             $table->timestamps();
         });
     }

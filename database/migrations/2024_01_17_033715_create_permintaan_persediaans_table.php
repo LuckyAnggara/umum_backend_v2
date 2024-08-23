@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('no_wa')->nullable();
             $table->date('tanggal_diterima')->nullable();
             $table->text('ttd')->nullable();
+            $table->integer('user_id');
             $table->timestamps();
         });
     }

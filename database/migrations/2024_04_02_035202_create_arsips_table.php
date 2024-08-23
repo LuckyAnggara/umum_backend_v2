@@ -27,6 +27,7 @@ return new class extends Migration
             $table->string('no_box')->nullable();
             $table->string('no_folder')->nullable();
             $table->string('jenis_media');
+            $table->integer('user_id');
             $table->timestamps();
         });
     }

@@ -30,6 +30,7 @@ return new class extends Migration
             $table->date('tanggal_terima_pengembalian')->nullable();
             $table->text('ttd_pengembalian')->nullable();
             $table->string('penerima_pengembalian')->nullable();
+            $table->integer('user_id');
             $table->timestamps();
         });
     }

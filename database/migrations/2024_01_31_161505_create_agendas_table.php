@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('pimpinan');
             $table->string('tempat');
             $table->string('status')->default('BELUM SELESAI');
+            $table->integer('user_id');
             $table->timestamps();
         });
     }
