@@ -28,21 +28,21 @@ class AuthController extends Controller
 
         $user = User::where('nip', $request->nip)->first();
 
-        if ($isAdmin) {
-            if ($user->role !== 'ADMIN') {
-                return response([
-                    'success'   => false,
-                    'message' => ['User not admin.']
-                ], 404);
-            }
-        } else {
-            if ($user->role !== 'USER') {
-                return response([
-                    'success'   => false,
-                    'message' => ['Not credentials user.']
-                ], 404);
-            }
-        }
+        // if ($isAdmin) {
+        //     if ($user->role !== 'ADMIN') {
+        //         return response([
+        //             'success'   => false,
+        //             'message' => ['User not admin.']
+        //         ], 404);
+        //     }
+        // } else {
+        //     if ($user->role !== 'USER') {
+                // return response([
+                //     'success'   => false,
+                //     'message' => ['Not credentials user.']
+                // ], 404);
+        //     }
+        // }
 
         $credentials = request(['nip', 'password']);
         if (!Auth::attempt($credentials)) {

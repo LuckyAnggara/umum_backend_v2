@@ -27,7 +27,7 @@ class Tempat extends Model
 
 
 
-    protected $appends = ['title', 'start', 'end', 'tipe    '];
+    protected $appends = ['title', 'start', 'end', 'tipe'];
 
     public function getTitleAttribute()
     {

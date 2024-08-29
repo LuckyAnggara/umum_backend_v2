@@ -13,6 +13,7 @@ use App\Http\Controllers\PermintaanPersediaanController;
 use App\Http\Controllers\PesanController;
 use App\Http\Controllers\PtjController;
 use App\Http\Controllers\PtjLampiranController;
+use App\Http\Controllers\PegawaiController;
 use App\Http\Controllers\RateController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\TempatController;
@@ -36,6 +37,7 @@ Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/register', [AuthController::class, 'register'])->name('register');
 
 Route::get('/show-image/{id}', [InventoryController::class, 'showImage']);
+Route::get('/get-pegawai', [PegawaiController::class, 'searchSimpeg']);
 
 Route::get('/inventory/get', [InventoryController::class, 'index']);
 
@@ -77,7 +79,10 @@ Route::get(
     'ptj-lampiran/{id}',
     [PtjLampiranController::class, 'download']
 );
-
+Route::get(
+    'dashboard/user-data',
+    [DashboardController::class, 'getDashboardUser']
+);
 
 
 Route::resource('arsip', ArsipController::class);

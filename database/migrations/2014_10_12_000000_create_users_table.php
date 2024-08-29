@@ -15,13 +15,13 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('nip');
-            $table->string('unit');
+            $table->string('unit')->nullable();
             $table->string('role');
             $table->string('email')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->date('last_login')->nullable();
-            $table->string('last_login_ip')->nullable();
+            $table->string('last_ip_login')->nullable();
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();

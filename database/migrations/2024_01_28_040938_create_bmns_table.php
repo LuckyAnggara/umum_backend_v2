@@ -22,7 +22,6 @@ return new class extends Migration
             $table->string('tahun_perolehan')->nullable();
             $table->string('image')->nullable();
             $table->boolean('status')->default(false);
-            $table->integer('user_id');
             $table->timestamps();
             $table->softDeletes();
         });
