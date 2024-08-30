@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\BaseController;
+use App\Models\Agenda;
 use App\Models\Inventory;
 use App\Models\Item;
 use App\Models\MutasiPersediaan;
@@ -51,5 +52,85 @@ class ReportController extends BaseController
         // ]);
 
         // return $pdf->download('laporan persediaan.pdf');
+    }
+
+    public function reportAgenda(Request $request)
+    {
+        $fromDate = $request->input('start');
+        $toDate = $request->input('end');
+
+        if ($fromDate && $toDate) {
+            $fromDate = Carbon::createFromFormat('Y-m-d', $fromDate)->startOfDay();
+            $toDate = Carbon::createFromFormat('Y-m-d', $toDate)->endOfDay();
+        } else {
+            $fromDate = Carbon::now()->startOfMonth();
+            $toDate = Carbon::now();
+        }
+        $agenda = Agenda::whereBetween('tanggal', [$fromDate, $toDate])->get();
+  $dateArray = [];
+$currentDate = $fromDate->copy();
+while ($currentDate->lte($toDate)) {
+    $dateArray[] = $currentDate->toDateString();
+    $currentDate->addDay();
+}
+
+$transformed = collect($dateArray)->map(function ($date) use ($agenda) {
+    $details = $agenda->filter(function ($item) use ($date) {
+        return $item->tanggal == $date;
+    })->map(function ($item) {
+        return [
+            'id' => $item->id,
+            'kegiatan' => $item->kegiatan,
+            'jam_mulai' => $item->jam_mulai,
+            'jam_akhir' => $item->jam_akhir,
+            'pimpinan' => $item->pimpinan,
+            'tempat' => $item->tempat,
+            'status' => $item->status,
+            'title' => $item->title,
+            'start' => $item->start,
+            'end' => $item->end,
+            'duration' => $item->duration,
+            'tipe' => $item->tipe
+        ];
+    })->values()->toArray();  // Ensures `details` is an array
+    
+    return [
+        'tanggal' => Carbon::parse($date)->format('d F Y'),
+        'detail' => $details
+    ];
+});
+
+$transformed = $transformed->map(function($item) {
+    $groupedDetails = collect($item['detail'])->groupBy('pimpinan')->map(function ($activities, $pimpinan) {
+        return [
+            'pimpinan' => $pimpinan,
+            'kegiatan' => $activities->map(function ($activity) {
+                return [
+                    'id' => $activity['id'],
+                    'kegiatan' => $activity['kegiatan'],
+                    'jam_mulai' => $activity['jam_mulai'],
+                    'jam_akhir' => $activity['jam_akhir'],
+                    'tempat' => $activity['tempat'],
+                    'status' => $activity['status'],
+                    'title' => $activity['title'],
+                    'start' => $activity['start'],
+                    'end' => $activity['end'],
+                    'duration' => $activity['duration'],
+                    'tipe' => $activity['tipe'],
+                ];
+            })->toArray()
+        ];
+    })->values()->toArray();
+
+    $item['detail'] = $groupedDetails;
+
+    return $item;
+});
+
+        return view('reportagenda', [
+            'data' => $transformed->toJson(),
+            'fromDate' => Carbon::parse($fromDate)->format('d F Y'),
+            'toDate' => Carbon::parse($toDate)->format('d F Y'),
+        ]);
     }
 }

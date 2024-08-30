@@ -14,13 +14,11 @@ return new class extends Migration
         Schema::create('peminjaman_bmns', function (Blueprint $table) {
             $table->id();
             $table->string('tiket');
-            $table->string('nup');
-            $table->string('jenis_layanan');
             $table->string('nip')->nullable();
-            $table->date('tanggal_pengembalian')->nullable();
+            $table->date('tanggal_kembali')->nullable();
             $table->string('status_pengembalian')->default('BELUM KEMBALI');
             $table->string('status')->default('VERIFIKASI ADMIN');
-            $table->string('nama_peminta')->nullable();
+            $table->string('nama')->nullable();
             $table->string('unit')->nullable();
             $table->string('catatan')->nullable();
             $table->string('penerima')->nullable();

@@ -210,12 +210,12 @@ class PeminjamanBmnController extends BaseController
         $data = json_decode($request->getContent());
         DB::beginTransaction();
         try {
-            $result = PeminjamanBmn::findOrFail($id);
+            $result = PeminjamanBmn::with('detail.bmn')->findOrFail($id);
             $result->update([
                 'status' => $data->status,
                 'tanggal_kembali' => Carbon::createFromFormat('d F Y', $data->tanggalPenerimaan)->format('Y-m-d'),
-                // 'penerima' => $data->name,
-                // 'ttd' => $data->image,
+                'penerima' => $data->name,
+                'ttd' => $data->image,
             ]);
 
             if ($result) {
@@ -288,12 +288,13 @@ class PeminjamanBmnController extends BaseController
         DB::beginTransaction();
         try {
             // Cari dan update data PermintaanPersediaan berdasarkan ID
-            $result = PeminjamanBmn::with('detail')->findOrFail($id);
+            $result = PeminjamanBmn::with('detail.bmn')->findOrFail($id);
 
             if ($data->status == 'APPROVE') {
                 $pesan = 'Peminjaman BMN pengajuan Nomor Tiket ' .  $result->tiket . ' di tanggal ' . $result->created_at . ' di Terima';
                 PesanController::kirimPesan($result->no_wa, $pesan);
-                $result->status = 'BELUM KEMBALI';
+                $result->status = 'APPROVE';
+                $result->status_pengembalian = 'BELUM KEMBALI';
                 foreach ($result->detail as $key => $detail) {
                     $bmn = Bmn::findOrFail($detail->bmn_id);
                     $bmn->keterangan = 'Sedang di pinjam oleh ' . $result->unit;
@@ -303,8 +304,6 @@ class PeminjamanBmnController extends BaseController
             } else if ($data->status == 'REJECT') {
                 $pesan = 'Peminjaman BMN pengajuan Nomor Tiket ' .  $result->tiket . ' di tanggal ' . $result->created_at . ' di Tolak';
                 PesanController::kirimPesan($result->no_wa, $pesan);
-                $result->status = $data->status;
-            } else if ($data->status == 'DONE') {
                 $result->status = $data->status;
             }
             $result->save();
@@ -319,6 +318,7 @@ class PeminjamanBmnController extends BaseController
             return response()->json(['message' => $e->getMessage()], 500);
         }
     }
+
 
     public function getStatus($tiket)
     {

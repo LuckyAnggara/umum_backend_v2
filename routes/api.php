@@ -53,12 +53,12 @@ Route::resource('permintaan-layanan-bmn', PermintaanLayananBmnController::class)
     'store',
     'show',
 ]);
+
 Route::resource('rate-layanan', RateController::class)->only([
     'store',
 ]);
 
 Route::resource('peminjaman-bmn', PeminjamanBmnController::class)->only([
-    'store',
     'show',
 ]);
 Route::get('/peminjaman-bmn/get-status/{tiket}', [PeminjamanBmnController::class, 'getStatus']);
@@ -86,6 +86,11 @@ Route::get(
 
 
 Route::resource('arsip', ArsipController::class);
+ Route::resource('permintaan-persediaan', PermintaanPersediaanController::class)->only([
+        'show',
+    ]);
+    Route::get('/report/agenda', [ReportController::class, 'reportAgenda']);
+
 
 Route::resource('bmn', BmnController::class);
 Route::middleware('auth:sanctum')->group(function () {
@@ -95,8 +100,10 @@ Route::middleware('auth:sanctum')->group(function () {
     ]);
     Route::resource('permintaan-persediaan', PermintaanPersediaanController::class)->only([
         'store',
-        'show',
     ]);
+    Route::resource('peminjaman-bmn', PeminjamanBmnController::class)->only([
+    'store',
+]);
     Route::resource('/users', AuthController::class);
     Route::get('/auth/user', [AuthController::class, 'user'])->name('user');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
