@@ -21,6 +21,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'nip',
+        'unit_id',
         'unit',
         'email',
         'password',
@@ -52,4 +53,9 @@ class User extends Authenticatable
     protected $casts = [
         'password' => 'hashed',
     ];
+
+        public function unit()
+    {
+        return $this->hasOne(Unit::class, 'id', 'unit_id');
+    }
 }

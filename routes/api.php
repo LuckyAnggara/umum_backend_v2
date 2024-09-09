@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BmnController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InventoryController;
+use App\Http\Controllers\MakController;
 use App\Http\Controllers\MutasiPersediaanController;
 use App\Http\Controllers\PeminjamanBmnController;
 use App\Http\Controllers\PermintaanLayananBmnController;
@@ -14,6 +15,8 @@ use App\Http\Controllers\PesanController;
 use App\Http\Controllers\PtjController;
 use App\Http\Controllers\PtjLampiranController;
 use App\Http\Controllers\PegawaiController;
+use App\Http\Controllers\PerjadinController;
+use App\Http\Controllers\PerjadinDetailController;
 use App\Http\Controllers\RateController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\TempatController;
@@ -32,7 +35,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/register', [AuthController::class, 'register'])->name('register');
 
@@ -41,28 +43,16 @@ Route::get('/get-pegawai', [PegawaiController::class, 'searchSimpeg']);
 
 Route::get('/inventory/get', [InventoryController::class, 'index']);
 
-Route::resource('ptj', PtjController::class)->only([
-    'store',
-    'show',
-]);
+Route::resource('ptj', PtjController::class)->only(['store', 'show']);
 
 Route::get('/permintaan-persediaan/get-status/{tiket}', [PermintaanPersediaanController::class, 'getStatus']);
 
+Route::resource('permintaan-layanan-bmn', PermintaanLayananBmnController::class)->only(['store', 'show']);
 
-Route::resource('permintaan-layanan-bmn', PermintaanLayananBmnController::class)->only([
-    'store',
-    'show',
-]);
+Route::resource('rate-layanan', RateController::class)->only(['store']);
 
-Route::resource('rate-layanan', RateController::class)->only([
-    'store',
-]);
-
-Route::resource('peminjaman-bmn', PeminjamanBmnController::class)->only([
-    'show',
-]);
+Route::resource('peminjaman-bmn', PeminjamanBmnController::class)->only(['show']);
 Route::get('/peminjaman-bmn/get-status/{tiket}', [PeminjamanBmnController::class, 'getStatus']);
-
 
 Route::get('/permintaan-layanan-bmn/get-status/{tiket}', [PermintaanLayananBmnController::class, 'getStatus']);
 Route::get('/bmn/show-nup/{nup}', [BmnController::class, 'showNup']);
@@ -75,35 +65,21 @@ Route::put('/peminjaman-bmn/done/{id}', [PeminjamanBmnController::class, 'update
 Route::get('/bmn/cek-nup', [BmnController::class, 'cekNup']);
 Route::get('/users/cek-username', [AuthController::class, 'cekValidUser']);
 
-Route::get(
-    'ptj-lampiran/{id}',
-    [PtjLampiranController::class, 'download']
-);
-Route::get(
-    'dashboard/user-data',
-    [DashboardController::class, 'getDashboardUser']
-);
-
+Route::get('ptj-lampiran/{id}', [PtjLampiranController::class, 'download']);
+Route::get('dashboard/user-data', [DashboardController::class, 'getDashboardUser']);
 
 Route::resource('arsip', ArsipController::class);
- Route::resource('permintaan-persediaan', PermintaanPersediaanController::class)->only([
-        'show',
-    ]);
-    Route::get('/report/agenda', [ReportController::class, 'reportAgenda']);
-
+Route::resource('permintaan-persediaan', PermintaanPersediaanController::class)->only(['show']);
+Route::get('/report/agenda', [ReportController::class, 'reportAgenda']);
+Route::get('/report/text-agenda', [ReportController::class, 'reportTextAgenda']);
 
 Route::resource('bmn', BmnController::class);
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::resource('dashboard', DashboardController::class);
-    Route::resource('auth/user', AuthController::class)->only([
-        'update',
-    ]);
-    Route::resource('permintaan-persediaan', PermintaanPersediaanController::class)->only([
-        'store',
-    ]);
-    Route::resource('peminjaman-bmn', PeminjamanBmnController::class)->only([
-    'store',
-]);
+    Route::resource('auth/user', AuthController::class)->only(['update']);
+    Route::resource('permintaan-persediaan', PermintaanPersediaanController::class)->only(['store']);
+    Route::resource('peminjaman-bmn', PeminjamanBmnController::class)->only(['store']);
     Route::resource('/users', AuthController::class);
     Route::get('/auth/user', [AuthController::class, 'user'])->name('user');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
@@ -111,44 +87,27 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/kirim-pesan', [PesanController::class, 'kirim']);
     Route::get('/user/layanan', [AuthController::class, 'layanan']);
 
-    Route::resource('permintaan-persediaan', PermintaanPersediaanController::class)->only([
-        'index',
-        'update'
-    ]);
+    Route::resource('permintaan-persediaan', PermintaanPersediaanController::class)->only(['index', 'update']);
     Route::resource('tempat', TempatController::class);
     Route::resource('agenda', AgendaController::class);
 
-    Route::resource('ptj', PtjController::class)->only([
-        'index',
-        'update',
-        'destroy'
-    ]);
+    Route::resource('ptj', PtjController::class)->only(['index', 'update', 'destroy']);
 
-    Route::resource('permintaan-layanan-bmn', PermintaanLayananBmnController::class)->only([
-        'index',
-        'update'
-    ]);
+    Route::resource('permintaan-layanan-bmn', PermintaanLayananBmnController::class)->only(['index', 'update']);
 
-    Route::resource('peminjaman-bmn', PeminjamanBmnController::class)->only([
-        'index',
-        'update',
-        'destroy'
-    ]);
+    Route::resource('peminjaman-bmn', PeminjamanBmnController::class)->only(['index', 'update', 'destroy']);
 
-    Route::resource('bmn', BmnController::class)->only([
-        'store',
-        'update'
-    ]);
-
+    Route::resource('bmn', BmnController::class)->only(['store', 'update']);
 
     Route::put('/permintaan-persediaan/undo/{id}', [PermintaanPersediaanController::class, 'updateUndo']);
     Route::resource('inventory', InventoryController::class);
 
     Route::resource('/persediaan/mutasi', MutasiPersediaanController::class);
+    Route::resource('/keuangan/perjadin', PerjadinController::class);
+    Route::resource('/keuangan/perjadin-detail', PerjadinDetailController::class);
+    Route::put('/keuangan/perjadin/update-status/{id}',[PerjadinController::class, 'updateStatus']);
+    Route::resource('/keuangan/mak', MakController::class);
 
     Route::get('/persediaan/cek-nama', [InventoryController::class, 'cekNama']);
-    Route::post(
-        'persediaan/upload-image',
-        [InventoryController::class, 'imageUpload']
-    );
+    Route::post('persediaan/upload-image', [InventoryController::class, 'imageUpload']);
 });

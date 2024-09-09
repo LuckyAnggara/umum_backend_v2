@@ -19,7 +19,6 @@ class Agenda extends Model
         'tempat',
         'status',
         'user_id'
-
     ];
 
     protected $appends = ['title', 'start', 'end', 'duration', 'tipe'];

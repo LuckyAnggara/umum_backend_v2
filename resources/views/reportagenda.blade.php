@@ -3,150 +3,27 @@
 
 <head>
     <title>Agenda Pimpinan</title>
+    <link href="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.css" rel="stylesheet" />
 </head>
-<style type="text/css">
-    body {
-        font-family: 'Roboto Condensed', sans-serif;
-    }
 
-    .m-0 {
-        margin: 0px;
-    }
-
-    .mb-5 {
-        margin-bottom: 5px;
-    }
-
-    .p-0 {
-        padding: 0px;
-    }
-
-    .pt-5 {
-        padding-top: 5px;
-    }
-
-    .mt-10 {
-        margin-top: 10px;
-    }
-
-    .mt-25 {
-        margin-top: 25px;
-    }
-
-    .mb-25 {
-        margin-bottom: 25px;
-    }
-
-    .mb-75 {
-        margin-bottom: 75px;
-    }
-
-    .mx-auto {
-        margin: auto;
-    }
-
-    .text-center {
-        text-align: center !important;
-    }
-
-    .w-100 {
-        width: 100%;
-    }
-
-    .w-50 {
-        width: 50%;
-    }
-
-    .w-85 {
-        width: 85%;
-    }
-
-    .w-15 {
-        width: 15%;
-    }
-
-
-    .gray-color {
-        color: #5D5D5D;
-    }
-
-    .text-bold {
-        font-weight: bold;
-    }
-
-    .border {
-        border: 1px solid black;
-    }
-
-    table tr,
-    th,
-    td {
-        border: 1px solid #d2d2d2;
-        border-collapse: collapse;
-        padding: 7px 8px;
-    }
-
-    table tr th {
-        background: #F4F4F4;
-        font-size: 15px;
-    }
-
-    table tr td {
-        font-size: 13px;
-    }
-
-    table {
-        border-collapse: collapse;
-    }
-
-    .box-text p {
-        line-height: 10px;
-    }
-
-    .float-left {
-        float: left;
-    }
-
-    .float-right {
-        float: right;
-    }
-
-    .center {
-        text-align: center;
-    }
-
-    .total-part {
-        font-size: 16px;
-        line-height: 12px;
-    }
-
-    .total-right p {
-        padding-right: 20px;
-    }
-
-    .item-center {
-        align-items: center;
-    }
-</style>
 
 <body>
-    <div class="head-title">
-        <h1 class="m-0 p-0 text-center">Agenda Pimpinan</h1>
+    <div class="px-6 py-6 text-center">
+        <h1 class="text-3xl font-bold">Agenda Pimpinan</h1>
     </div>
 
-    <div class="add-detail mt-10">
-        <div class="w-100 float-left mt-10">
-            <p class="text-bold w-100 m-0 pt-5">Tanggal Data - <span class="gray-color">{{ $fromDate }} -
+    <div class="px-6">
+        <div class="">
+            <p class="">Tanggal Data : <span class="gray-color">{{ $fromDate }} -
                     {{ $toDate }} </span></p>
         </div>
         <div style="clear: both;"></div>
     </div>
-    {{ $data }}
-    <div class="table-section bill-tb w-100 mx-auto mt-10">
-        <table class="w-100 mt-10 table">
-            <thead>
+    <div class="relative overflow-x-auto p-6 m-4 shadow-lg rounded-lg bg-gray-100">
+          <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                    <thead class="text-center text-xs text-gray-200 uppercase bg-gray-500 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
-                    <th style="width:5%">Tanggal</th>
+                    <th style="width:8%">Tanggal</th>
                     <th style="width:10%">Inspektur Jenderal</th>
                     <th style="width:10%">Sekretaris Inspektorat Jenderal</th>
                     <th style="width:10%">Inspektur Wilayah I</th>
@@ -159,31 +36,35 @@
             </thead>
             <tbody>
                 @foreach (json_decode($data) as $key => $item)
-                    <tr>
+                     <tr class="border-b dark:border-gray-700">
                         <td>{{ $item->tanggal }}</td>
-                        @if (count($item->detail) > 0)
-                            @foreach ($item->detail as $key => $detail)
-                                @if ($detail->pimpinan == 1)
-                                    <td>
-                                        <ol>
-                                            @foreach ($detail->kegiatan as $key => $kegiatan)
-                                                <li>{{ $kegiatan->kegiatan }}</li>
-                                            @endforeach
-                                        </ol>
-                                    </td>
+                        @foreach ($item->detail as $pim)
+                            <td class="px-1">
+                                @if (count($pim->kegiatan) > 0)
+                                <div class="flex flex-col space-y-4">
+                                     @foreach ($pim->kegiatan as $key => $kegiatan)
+                                       <div class="border-b-2"><span> {{$key + 1}}</span>
+                                            {{ $kegiatan->kegiatan }} di {{ $kegiatan->tempat }} pada jam
+                                                {{ $kegiatan->jam_mulai }} - {{ $kegiatan->jam_akhir }}
+                                                </div>
+                                        @endforeach
+                                </div>
+                                    {{-- <ol class="mt-2 list-inside list-decimal space-y-1 ps-5 justify-start">
+
+                                       
+                                    </ol> --}}
                                 @else
-                                    <td></td>
-                                @break
-                            @endif
+                                    
+                                @endif
+                            </td>
                         @endforeach
-
-
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
-</div>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
 
 </body>
+<script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
 
 </html>

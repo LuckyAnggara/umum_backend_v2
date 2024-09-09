@@ -27,8 +27,9 @@ class DashboardController extends BaseController
 
             $layanan = $this->getLayanan($date);
             $rate = $this->getRate($date);
+            $jumlahRate = $this->getJumlahRespondenRate($date);
 
-            return response()->json(['tempat' => $tempat, 'rate' => $rate, 'agenda' => $agenda, 'layanan' => $layanan, 'arsip' => $arsip], 200);
+            return response()->json(['tempat' => $tempat, 'rate' => $rate, 'jumlahRate'=> $jumlahRate, 'agenda' => $agenda, 'layanan' => $layanan, 'arsip' => $arsip], 200);
         } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
@@ -38,6 +39,12 @@ class DashboardController extends BaseController
     {
         $rate = Rate::whereMonth('created_at', Carbon::createFromFormat('Y-m-d', $date)->format('m'))->get();
         return $rate->avg('value');
+    }
+
+    function getJumlahRespondenRate($date)
+    {
+        $rate = Rate::whereMonth('created_at', Carbon::createFromFormat('Y-m-d', $date)->format('m'))->get();
+        return $rate->count();
     }
 
     function getLayanan($date)

@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('nip');
             $table->string('unit')->nullable();
+            $table->integer('unit_id');
             $table->string('role');
             $table->string('email')->nullable();
             $table->timestamp('email_verified_at')->nullable();
