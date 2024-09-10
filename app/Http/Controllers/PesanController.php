@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\ProcessPesan;
 use App\Models\Tempat;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -9,33 +10,111 @@ use Illuminate\Support\Facades\Http;
 
 class PesanController extends Controller
 {
-    static function kirimPesan($no_wa, $pesan)
+    public function test()
     {
+        // PesanController::reminder();
+        $today = Carbon::now();
+        // return $today->format('d F Y');
 
-        $header = array(
-            "Content-Type: application/json",
-            "Authorization: fbec06eb35b86ac0184853a4fabcd747"
-        );
+        $data = Tempat::whereDate(
+            'created_at',
+            $today
+        )->get();
 
-        $no_wa = PesanController::formatWa($no_wa);
-        $data = array(
-            "device" => "888662421399",
-            "phone" => $no_wa,
-            "message" => $pesan,
-        );
+        if ($data) {
+            foreach ($data as $key => $value) {
+                sleep(5);
+                // $foundRoom = $collection->firstWhere('id', $value->ruangan);
+                $pesan = 'Selamat Pagi, Hari ini ' . $today->format('d F Y') . ' ada Kegiatan *' . $value->kegiatan . '* bertampat di    Jam ' . Carbon::parse($value->jam_mulai)->format('h:i') . ' - ' . Carbon::parse($value->jam_akhir)->format('h:i');
+                // PesanController::kirimPesan($value->no_wa, $pesan, 20);
 
-        $param_post = json_encode($data, JSON_PRETTY_PRINT);
-        $post        = curl_init("https://api.alatwa.com/send/text");
-        curl_setopt($post, CURLOPT_HTTPHEADER, $header);
-        curl_setopt($post, CURLOPT_POST, 1);
-        curl_setopt($post, CURLOPT_POSTFIELDS, $param_post);
-        curl_setopt($post, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($post, CURLOPT_CONNECTTIMEOUT, 0);
-        curl_setopt($post, CURLOPT_TIMEOUT, 5);
-        $response = curl_exec($post);
+                return $pesan;
+            }
+        }
+    }
 
-        return  $response;
-        curl_close($post);
+    // FONTAL
+    // static function kirimPesan($no_wa, $pesan)
+    // {
+
+    //     $header = array(
+    //         "Content-Type: application/json",
+    //         "Authorization: fbec06eb35b86ac0184853a4fabcd747"
+    //     );
+
+    //     $no_wa = PesanController::formatWa($no_wa);
+    //     $data = array(
+    //         "device" => "888662421399",
+    //         "phone" => $no_wa,
+    //         "message" => $pesan,
+    //     );
+
+    //     $param_post = json_encode($data, JSON_PRETTY_PRINT);
+    //     $post        = curl_init("https://api.alatwa.com/send/text");
+    //     curl_setopt($post, CURLOPT_HTTPHEADER, $header);
+    //     curl_setopt($post, CURLOPT_POST, 1);
+    //     curl_setopt($post, CURLOPT_POSTFIELDS, $param_post);
+    //     curl_setopt($post, CURLOPT_RETURNTRANSFER, true);
+    //     curl_setopt($post, CURLOPT_CONNECTTIMEOUT, 0);
+    //     curl_setopt($post, CURLOPT_TIMEOUT, 5);
+    //     $response = curl_exec($post);
+
+    //     return  $response;
+    //     curl_close($post);
+    // }
+
+    // ALAT WA
+    static function kirimPesan($no_wa, $pesan, $delay = 5)
+    {
+        ProcessPesan::dispatch($no_wa, $pesan)
+            ->delay(now()->addSeconds($delay));
+        // try {
+        //     $dataSending = array();
+        //     $dataSending["api_key"] = 'PZRWB4JG5LTLT2ZV';
+        //     $dataSending["number_key"] = 'n74BlBzROOvfHNwk';
+        //     $dataSending["phone_no"] = PesanController::formatWa($no_wa);
+        //     $dataSending["message"] = $pesan;
+        //     $response = Http::withOptions([
+        //         'verify' => false,
+        //         'timeout' => 0,
+        //     ])->withHeaders([
+        //         'Content-Type: application/json'
+        //     ])
+        //         ->send('POST', 'https://api.watzap.id/v1/send_message', [
+        //             'body' => json_encode($dataSending)
+        //         ])->json();
+
+        //     return true;
+        // } catch (\Exception $e) {
+        //     return response()->json(['message' => $e->getMessage()], 500);
+        // }
+
+
+        //   $dataSending = Array();
+        //     $dataSending["api_key"] = 'PZRWB4JG5LTLT2ZV';
+        //     $dataSending["number_key"] ='kKOzvBMutColefBl'; 
+        //     $dataSending["phone_no"] = $no_wa;
+        //     $dataSending["message"] = $pesan;
+        //     $curl = curl_init();
+        //     curl_setopt_array($curl, array(
+        //     CURLOPT_URL => 'https://api.watzap.id/v1/send_message',
+        //     CURLOPT_RETURNTRANSFER => true,
+        //     CURLOPT_ENCODING => '',
+        //     CURLOPT_MAXREDIRS => 10,
+        //     CURLOPT_TIMEOUT => 0,
+        //     CURLOPT_FOLLOWLOCATION => true,
+        //     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        //     CURLOPT_CUSTOMREQUEST => 'POST',
+        //     CURLOPT_POSTFIELDS => json_encode($dataSending),
+        //     CURLOPT_HTTPHEADER => array(
+        //         'Content-Type: application/json'
+        //     ),
+        //     ));
+        //     $response = curl_exec($curl);
+        //     curl_close($curl);
+
+        //     // return $response;
+        //     echo $response;
     }
 
     static function formatWa($no_wa)
@@ -60,31 +139,41 @@ class PesanController extends Controller
 
     static function shorten($url)
     {
-        $header = array(
-            "api-key: 73IZOwsYpSDSxMolipru6BV0WizX9eSH6Lj7wFUzl27n5",
-            "Accept: application/json",
-            "Content-Type: application/json"
-        );
 
-        $data = array(
-            "url" => env('FRONTEND_URL') . $url,
-        );
+        try {
+            $response = Http::withOptions([
+                'verify' => false,
+                'timeout' => 0,
+            ])->withHeaders([
+                "api-key" => "MkYDs0DGqXMDsUCL2LUwi7sNiElg0RIzMWoog818rCuMR",
+                "Accept" => "application/json",
+                "Content-Type" => "application/json"
+            ])
+                ->post('https://shrtlnk.dev/api/v2/link', [
+                    "url" => env('FRONTEND_URL') . $url,
+                ])->json();
 
-        $param_post = json_encode($data, JSON_PRETTY_PRINT);
-        $post        = curl_init("https://shrtlnk.dev/api/v2/link");
-        curl_setopt($post, CURLOPT_HTTPHEADER, $header);
-        curl_setopt($post, CURLOPT_POST, 1);
-        curl_setopt($post, CURLOPT_POSTFIELDS, $param_post);
-        curl_setopt($post, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($post, CURLOPT_CONNECTTIMEOUT, 0);
-        curl_setopt($post, CURLOPT_TIMEOUT, 5);
-        $response = curl_exec($post);
-        curl_close($post);
-        $data = json_decode($response);
-        return $data->shrtlnk;
+            return $response['shrtlnk'];
+        } catch (\Exception $e) {
+            return false;
+        }
+
+
+
+        // $post        = curl_init("https://shrtlnk.dev/api/v2/link");
+        // curl_setopt($post, CURLOPT_HTTPHEADER, $header);
+        // curl_setopt($post, CURLOPT_POST, 1);
+        // curl_setopt($post, CURLOPT_POSTFIELDS, $param_post);
+        // curl_setopt($post, CURLOPT_RETURNTRANSFER, true);
+        // curl_setopt($post, CURLOPT_CONNECTTIMEOUT, 0);
+        // curl_setopt($post, CURLOPT_TIMEOUT, 5);
+        // $response = curl_exec($post);
+        // curl_close($post);
+        // $data = json_decode($response);
+        // return $data;
     }
 
-    static function remainder()
+    static function reminder()
     {
         $rooms = [
             [
@@ -103,7 +192,6 @@ class PesanController extends Controller
 
         // Konversi array menjadi Collection
         $collection = collect($rooms);
-
         $today = Carbon::now();
         $data = Tempat::whereDate('created_at', $today)->get();
 
@@ -112,8 +200,41 @@ class PesanController extends Controller
 
                 $foundRoom = $collection->firstWhere('id', $value->ruangan);
 
-                $pesan = 'Remainder Kegiatan *' . $value->kegiatan . '* bertampat di *' . $foundRoom['label'] . '* di tanggal *' . $value->tanggal . '*  Jam ' . $value->jam_mulai . ' - ' . $value->jam_akhir;
+                $pesan = 'Selamat Pagi, Hari ini ' . $today . ' ada Kegiatan *' . $value->kegiatan . '* bertampat di *' . $foundRoom['label'] . '* di tanggal *' . $value->tanggal . '*  Jam ' . $value->jam_mulai . ' - ' . $value->jam_akhir;
                 PesanController::kirimPesan($value->no_wa, $pesan);
+            }
+        }
+    }
+
+
+    static function reminderPimpinan()
+    {
+        $rooms = [
+            [
+                'id' => 1,
+                'label' => 'Auditorium'
+            ],
+            [
+                'id' => 2,
+                'label' => 'Ruang Rapat Inspektur Jenderal'
+            ],
+            [
+                'id' => 3,
+                'label' => 'Ruang Rapat Sekretaris Inspektorat Jenderal'
+            ],
+        ];
+
+        // Konversi array menjadi Collection
+        $collection = collect($rooms);
+        $today = Carbon::now();
+        $data = Tempat::whereDate('created_at', $today)->get();
+
+        if ($data) {
+            foreach ($data as $key => $value) {
+                sleep(5);
+                $foundRoom = $collection->firstWhere('id', $value->ruangan);
+                $pesan = 'Selamat Pagi, Hari ini ' . $today->format('d F Y') . ' ada Kegiatan *' . $value->kegiatan . '* bertampat di *' . $foundRoom['label'] . '* di tanggal *' . $value->tanggal . '*  Jam ' . $value->jam_mulai . ' - ' . $value->jam_akhir;
+                PesanController::kirimPesan($value->no_wa, $pesan, 20);
             }
         }
     }

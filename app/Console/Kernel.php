@@ -15,8 +15,8 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         $schedule->call(function () {
-            PesanController::remainder();
-        })->dailyAt('07:00')
+            PesanController::reminder();
+        })->dailyAt('06:00')
             ->timezone('Asia/Jakarta');
 
         $schedule->call(function () {

@@ -48,7 +48,24 @@ class TempatController extends BaseController
                 'user_id' => Auth::id(),
             ]);
 
-            $pesan = 'Booking kegiatan *' . $result->kegiatan . '* bertempat *' . $result->ruangan . '* di tanggal *' . $result->tanggal . '*  Jam ' . $result->jam_mulai . ' - ' . $result->jam_akhir . ' berhasil di buat';
+            $rooms = [
+                [
+                    "id" => '1',
+                    "label" => 'AUDITORIUM',
+                ],
+                [
+                    "id" => '2',
+                    "label" => 'RUANG RAPAT INSPEKTUR JENDERAL',
+                ],
+                [
+                    "id" => '3',
+                    "label" => 'RUANG RAPAT SEKRETARIS INSPEKTORAT JENDERAL',
+                ],
+            ];
+            $collection = collect($rooms);
+            $foundRoom = $collection->firstWhere('id', $result->ruangan);
+
+            $pesan = 'Permintaan layanan peminjaman Ruangan Rapat untuk Kegiatan *' . $result->kegiatan . '* bertempat *' . $foundRoom['label']  . '* di tanggal *' . $result->tanggal . '*  Jam ' . $result->jam_mulai . ' - ' . $result->jam_akhir . ' berhasil di buat';
 
             PesanController::kirimPesan($data->no_wa, $pesan);
             DB::commit();
@@ -101,7 +118,7 @@ class TempatController extends BaseController
         return $formattedDateTime;
     }
 
-    public function done()
+    static function done()
     {
 
         $today = Carbon::now();

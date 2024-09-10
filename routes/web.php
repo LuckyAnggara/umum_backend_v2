@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PesanController;
 use App\Http\Controllers\TemplateController;
 use Illuminate\Support\Facades\Route;
 
@@ -19,8 +20,6 @@ Route::get('/', function () {
 });
 
 
-Route::get('/download-word', function () {
-    return view('welcome');
-});
+   Route::get('/test-pesan', [PesanController::class, 'test']);
 
 Route::get('/download-word', [TemplateController::class, 'generateDocx']);
