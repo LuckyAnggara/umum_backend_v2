@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('perjadin_detail_pesawats', function (Blueprint $table) {
             $table->id();
-            $table->integer('perjadin_detail_id');
-            $table->string('keterangan');
+            $table->foreignUlid('perjadin_detail_id');
+            $table->string('keterangan')->nullable();
             $table->double('biaya');
             $table->double('realisasi_biaya');
             $table->string('notes', 255)->nullable();

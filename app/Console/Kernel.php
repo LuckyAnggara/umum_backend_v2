@@ -16,7 +16,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->call(function () {
             PesanController::reminder();
-        })->dailyAt('06:00')
+        })->dailyAt('22:36')
             ->timezone('Asia/Jakarta');
 
         $schedule->call(function () {

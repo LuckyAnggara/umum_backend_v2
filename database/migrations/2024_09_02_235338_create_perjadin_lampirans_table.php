@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('perjadin_lampirans', function (Blueprint $table) {
             $table->id();
-            $table->string('perjadin_id');
+            $table->foreignUlid('perjadin_id');
             $table->string('file_name');
             $table->string('lampiran');
             $table->timestamps();

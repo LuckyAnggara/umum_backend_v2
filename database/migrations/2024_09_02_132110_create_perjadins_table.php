@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('perjadins', function (Blueprint $table) {
-            $table->id();
+            $table->ulid('id')->primary();
             $table->string('tahun_anggaran');
             $table->string('no_st');
             $table->date('tanggal_st');
@@ -24,8 +24,9 @@ return new class extends Migration
             $table->double('total_anggaran')->default(0);
             $table->double('total_realisasi')->default(0);
             $table->date('tanggal_verifikasi')->nullable();
+            $table->date('tanggal_verifikasi_ptj')->nullable();
             $table->boolean('ptj')->default(0);
-            $table->enum('status',['PERENCANAAN','VERIFIKASI','PERTANGGUNG JAWABAN','SELESAI']);
+            $table->enum('status', ['PERENCANAAN', 'VERIFIKASI', 'PERTANGGUNG JAWABAN', 'VERFIKASI PTJ', 'SELESAI']);
             $table->integer('user_id');
             $table->timestamps();
         });

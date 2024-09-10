@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('perjadin_detail_hotels', function (Blueprint $table) {
             $table->id();
-            $table->integer('perjadin_detail_id');
-            $table->string('keterangan');
+            $table->foreignUlid('perjadin_detail_id');
+            $table->string('keterangan')->nullable();
             $table->integer('hari');
             $table->integer('realisasi_hari');
             $table->double('biaya');

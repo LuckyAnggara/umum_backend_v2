@@ -93,7 +93,7 @@ class PerjadinController extends BaseController
                         'peran' => $detail->peran,
                         'tanggal_awal' => Carbon::parse($detail->tanggal_awal)->format('Y-m-d'),
                         'tanggal_akhir' => Carbon::parse($detail->tanggal_akhir)->format('Y-m-d'),
-                        'jumlah_hari' => $detail->jumlah_hari,
+                        'jumlah_hari' => $detail->jumlah_hari ?? 0,
                     ]);
 
                     // STORE HOTEL

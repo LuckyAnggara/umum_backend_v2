@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('perjadin_detail_lampirans', function (Blueprint $table) {
-           $table->id();
-            $table->string('perjadin_detail_id');
-            $table->enum('type',['HOTEL','UH','PESAWAT','REP','DARAT']);
+            $table->id();
+            $table->foreignUlid('perjadin_detail_id');
+            $table->enum('type', ['HOTEL', 'UH', 'PESAWAT', 'REP', 'DARAT']);
             $table->string('file_name');
             $table->string('lampiran');
             $table->timestamps();

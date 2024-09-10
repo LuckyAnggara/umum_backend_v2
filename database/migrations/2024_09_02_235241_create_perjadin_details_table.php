@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('perjadin_details', function (Blueprint $table) {
-            $table->id();
-            $table->integer('perjadin_id');
+            $table->ulid('id')->primary();
+            $table->foreignUlid('perjadin_id');
             $table->string('no_sppd')->nullable();
             $table->string('tanggal_sppd')->nullable();
             $table->string('nip');
@@ -27,7 +27,7 @@ return new class extends Migration
             $table->integer('ppk')->nullable();
             $table->integer('bendahara')->nullable();
             $table->integer('jumlah_hari')->default(0);
-             $table->enum('status',['BELUM LENGKAP','LENGKAP'])->default('BELUM LENGKAP');
+            $table->enum('status', ['BELUM LENGKAP', 'LENGKAP'])->default('BELUM LENGKAP');
             $table->timestamps();
         });
     }

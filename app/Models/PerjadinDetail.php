@@ -2,16 +2,28 @@
 
 namespace App\Models;
 
-use Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Str;
 
 class PerjadinDetail extends Model
 {
-    use HasFactory;
+    use HasFactory, HasUlids;
+    // protected $keyType = 'string';
+    // public $incrementing = false;
 
     protected $fillable = ['perjadin_id', 'tanggal_sppd', 'no_sppd', 'nip', 'nama', 'jabatan', 'pangkat', 'unit', 'peran', 'tanggal_awal', 'tanggal_akhir', 'jumlah_hari', 'status', 'ppk', 'bendahara', 'tanggal_kuitansi'];
+
+
+    // public static function booted()
+    // {
+    //     static::creating(function ($model) {
+    //         $model->id = Str::ulid();
+    //     });
+    // }
 
     public function hotel()
     {
@@ -55,7 +67,7 @@ class PerjadinDetail extends Model
     {
         return $this->hasMany(PerjadinDetailRep::class, 'perjadin_detail_id', 'id');
     }
-        public function lampiran()
+    public function lampiran()
     {
         return  $this->hasMany(PerjadinDetailLampiran::class, 'perjadin_detail_id', 'id');
     }

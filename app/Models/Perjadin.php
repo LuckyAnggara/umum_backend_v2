@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Perjadin extends Model
 {
-    use HasFactory;
+    use HasFactory, HasUlids;
 
     protected $fillable = [
         'tahun_anggaran',
@@ -31,9 +33,18 @@ class Perjadin extends Model
         'tanggal_st' => 'datetime:d F Y',
         'tanggal_awal' => 'datetime:d F Y',
         'tanggal_akhir' => 'datetime:d F Y',
-        'ptj'=> 'boolean',
+        'ptj' => 'boolean',
     ];
 
+    // protected $keyType = 'string';
+    // public $incrementing = false;
+
+    // public static function booted()
+    // {
+    //     static::creating(function ($model) {
+    //         $model->id = Str::ulid();
+    //     });
+    // }
 
     public function detail()
     {
@@ -45,7 +56,7 @@ class Perjadin extends Model
         return  $this->hasMany(PerjadinLampiran::class, 'perjadin_id', 'id');
     }
 
-        public function mak()
+    public function mak()
     {
         return $this->hasOne(Mak::class, 'id', 'mak_id');
     }

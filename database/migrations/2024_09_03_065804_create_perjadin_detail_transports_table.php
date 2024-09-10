@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('perjadin_detail_transports', function (Blueprint $table) {
             $table->id();
-            $table->integer('perjadin_detail_id');
+            $table->foreignUlid('perjadin_detail_id');
             $table->string('tipe');
-            $table->string('keterangan');
+            $table->string('keterangan')->nullable();
             $table->double('biaya');
             $table->double('realisasi_biaya');
             $table->string('notes', 255)->nullable();

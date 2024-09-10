@@ -193,15 +193,16 @@ class PesanController extends Controller
         // Konversi array menjadi Collection
         $collection = collect($rooms);
         $today = Carbon::now();
-        $data = Tempat::whereDate('created_at', $today)->get();
+        $data = Tempat::whereDate('tanggal', $today)->get();
 
         if ($data) {
             foreach ($data as $key => $value) {
 
                 $foundRoom = $collection->firstWhere('id', $value->ruangan);
+                sleep(5);
 
-                $pesan = 'Selamat Pagi, Hari ini ' . $today . ' ada Kegiatan *' . $value->kegiatan . '* bertampat di *' . $foundRoom['label'] . '* di tanggal *' . $value->tanggal . '*  Jam ' . $value->jam_mulai . ' - ' . $value->jam_akhir;
-                PesanController::kirimPesan($value->no_wa, $pesan);
+                $pesan = 'Selamat Pagi, Hari ini ' . Carbon::now()->format('d F Y') . ' ada Kegiatan *' . $value->kegiatan . '* bertampat di *' . $foundRoom['label'] . '*  pada pukul ' . Carbon::parse($value->jam_mulai)->format('H:i') . ' - ' . Carbon::parse($value->jam_akhir)->format('H:i');
+                PesanController::kirimPesan($value->no_wa, $pesan, 5);
             }
         }
     }
@@ -228,13 +229,12 @@ class PesanController extends Controller
         $collection = collect($rooms);
         $today = Carbon::now();
         $data = Tempat::whereDate('created_at', $today)->get();
-
+        $today = $today->format('d F Y');
         if ($data) {
             foreach ($data as $key => $value) {
-                sleep(5);
                 $foundRoom = $collection->firstWhere('id', $value->ruangan);
-                $pesan = 'Selamat Pagi, Hari ini ' . $today->format('d F Y') . ' ada Kegiatan *' . $value->kegiatan . '* bertampat di *' . $foundRoom['label'] . '* di tanggal *' . $value->tanggal . '*  Jam ' . $value->jam_mulai . ' - ' . $value->jam_akhir;
-                PesanController::kirimPesan($value->no_wa, $pesan, 20);
+                $pesan = 'Selamat Pagi, Hari ini ' . Carbon::now()->format('d F Y') . ' ada Kegiatan *' . $value->kegiatan . '* bertampat di *' . $foundRoom['label'] . '*  pada pukul ' . $value->jam_mulai . ' - ' . $value->jam_akhir;
+                PesanController::kirimPesan($value->no_wa, $pesan, 5);
             }
         }
     }

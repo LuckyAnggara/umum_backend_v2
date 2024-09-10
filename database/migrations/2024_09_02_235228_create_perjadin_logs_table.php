@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('perjadin_logs', function (Blueprint $table) {
             $table->id();
-            $table->integer('perjadin_id');
+            $table->foreignUlid('perjadin_id');
             $table->string('status')->nullable();
             $table->text('catatan')->nullable();
             $table->string('user_id');
