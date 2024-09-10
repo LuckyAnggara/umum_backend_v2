@@ -164,7 +164,7 @@ class PerjadinController extends BaseController
     public function show($id)
     {
         try {
-            $result = Perjadin::where('id', $id)->with('mak', 'detail.hotel', 'detail.transport', 'detail.uang_harian', 'detail.representatif', 'detail.ppk','detail.bendahara', 'lampiran')->first();
+            $result = Perjadin::where('id', $id)->with('mak', 'detail.hotel', 'detail.transport', 'detail.uang_harian', 'detail.representatif', 'detail.ppk', 'detail.bendahara', 'lampiran')->first();
             return $this->sendResponse($result, 'Ada');
         } catch (\Exception $e) {
             return $this->sendError($e->getMessage(), 'Error');
@@ -175,9 +175,12 @@ class PerjadinController extends BaseController
     // BELUM BERES
     public function update(Request $request, $id)
     {
+        $umum = json_decode($request->input('umum'));
+        $editDetail = json_decode($request->input('editDetail'));
+
         DB::beginTransaction();
         try {
-            $perjadin = Perjadin::findOrFail($id);
+            $perjadin = Perjadin::where('id', $id)->with('detail')->first();
             // return Storage::url($inventory->image);
             $perjadin->update([
                 'tahun_anggaran' => $umum->tahun_anggaran,
@@ -194,7 +197,87 @@ class PerjadinController extends BaseController
                 'user_id' => Auth::id(),
             ]);
 
-            // return $request->file_lama[0];
+            if ($editDetail) {
+                foreach ($perjadin->detail as $key => $value) {
+                    $value->delete();
+                }
+                foreach ($umum->detail as $key => $detail) {
+
+                    // if ($detail->id) {
+                    //     $details = PerjadinDetail::findOrFail($detail->id);
+                    //     $details->update([
+                    //         'tanggal_sppd' => Carbon::parse($umum->tanggal_st)->format('Y-m-d'),
+                    //         'nip' => $detail->nip,
+                    //         'nama' => $detail->nama,
+                    //         'jabatan' => $detail->jabatan,
+                    //         'pangkat' => $detail->pangkat,
+                    //         'unit' => $detail->unit,
+                    //         'peran' => $detail->peran,
+                    //         'tanggal_awal' => Carbon::parse($detail->tanggal_awal)->format('Y-m-d'),
+                    //         'tanggal_akhir' => Carbon::parse($detail->tanggal_akhir)->format('Y-m-d'),
+                    //         'jumlah_hari' => $detail->jumlah_hari,
+                    //     ]);
+                    // } else {
+                    $details = PerjadinDetail::create([
+                        'perjadin_id' => $perjadin->id,
+                        'tanggal_sppd' => Carbon::parse($umum->tanggal_st)->format('Y-m-d'),
+                        'nip' => $detail->nip,
+                        'nama' => $detail->nama,
+                        'jabatan' => $detail->jabatan,
+                        'pangkat' => $detail->pangkat,
+                        'unit' => $detail->unit,
+                        'peran' => $detail->peran,
+                        'tanggal_awal' => Carbon::parse($detail->tanggal_awal)->format('Y-m-d'),
+                        'tanggal_akhir' => Carbon::parse($detail->tanggal_akhir)->format('Y-m-d'),
+                        'jumlah_hari' => $detail->jumlah_hari,
+                    ]);
+                    // }
+
+                    // STORE HOTEL
+                    foreach ($detail->hotel as $key => $hotel) {
+                        $hot = PerjadinDetailHotel::create([
+                            'perjadin_detail_id' => $details->id,
+                            'keterangan' => $hotel->keterangan,
+                            'hari' => $hotel->hari,
+                            'realisasi_hari' => $hotel->hari,
+                            'biaya' => $hotel->biaya,
+                            'realisasi_biaya' => 0,
+                        ]);
+                    }
+                    // STORE TRANSPORT
+                    foreach ($detail->transport as $key => $transport) {
+                        $pes = PerjadinDetailTransport::create([
+                            'perjadin_detail_id' => $details->id,
+                            'keterangan' => $transport->keterangan,
+                            'tipe' => $transport->tipe,
+                            'biaya' => $transport->biaya,
+                            'realisasi_biaya' => 0,
+                        ]);
+                    }
+                    // STORE UH
+                    foreach ($detail->uang_harian as $key => $uang_harian) {
+                        $dar = PerjadinDetailUh::create([
+                            'perjadin_detail_id' => $details->id,
+                            'keterangan' => $uang_harian->keterangan,
+                            'hari' => $uang_harian->hari,
+                            'realisasi_hari' => $hotel->hari,
+                            'biaya' => $uang_harian->biaya,
+                            'realisasi_biaya' => 0,
+                        ]);
+                    }
+                    // STORE REPRESENTATIF
+                    foreach ($detail->representatif as $key => $representatif) {
+                        $dar = PerjadinDetailRep::create([
+                            'perjadin_detail_id' => $details->id,
+                            'keterangan' => $representatif->keterangan,
+                            'hari' => $representatif->hari,
+                            'realisasi_hari' => $hotel->hari,
+                            'biaya' => $representatif->biaya,
+                            'realisasi_biaya' => 0,
+                        ]);
+                    }
+                }
+            }
 
             if ($request->jumlah_lampiran_delete > 0) {
                 for ($i = 0; $i < $request->jumlah_lampiran_delete; $i++) {
@@ -211,14 +294,16 @@ class PerjadinController extends BaseController
                 for ($i = 0; $i < $request->jumlah_lampiran; $i++) {
                     $file_path = $request->file[$i]->store('perjadin/perencanaan', 'public');
                     $detail = PerjadinLampiran::create([
-                        'perjadin_id' => $result->id,
+                        'perjadin_id' => $perjadin->id,
                         'file_name' => $request->file[$i]->getClientOriginalName(),
                         'lampiran' => $file_path,
                     ]);
                 }
             }
+            $catatan = 'Perjalanan Dinas telah di di perbaharui';
+            PerjadinLogController::createLogPerjadin($perjadin->id, 'PEMBAHARUAN', $catatan);
 
-            $result = Perjadin::where('id', $id)->with('mak', 'detail.hotel', 'detail.transport', 'detail.uang_harian', 'detail.representatif', 'detail.ppk','detail.bendahara', 'lampiran')->first();
+            $result = Perjadin::where('id', $id)->with('mak', 'detail.hotel', 'detail.transport', 'detail.uang_harian', 'detail.representatif', 'detail.ppk', 'detail.bendahara', 'lampiran')->first();
             DB::commit();
             return $this->sendResponse($result, 'Data berhasil di perbaharui');
         } catch (\Exception $e) {
@@ -255,8 +340,8 @@ class PerjadinController extends BaseController
                         'bendahara' => $data->bendahara->id,
                     ]);
                 }
-                       
-                $result = Perjadin::where('id', $id)->with('mak', 'detail.hotel', 'detail.transport', 'detail.uang_harian', 'detail.representatif', 'lampiran','detail.ppk','detail.bendahara',)->first();
+
+                $result = Perjadin::where('id', $id)->with('mak', 'detail.hotel', 'detail.transport', 'detail.uang_harian', 'detail.representatif', 'lampiran', 'detail.ppk', 'detail.bendahara',)->first();
             }
             PerjadinLogController::createLogPerjadin($perjadin->id, $request->status, $request->catatan);
 
