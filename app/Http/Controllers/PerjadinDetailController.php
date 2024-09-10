@@ -50,7 +50,7 @@ class PerjadinDetailController extends BaseController
     public function store(Request $request)
     {
         $umum = json_decode($request->input('umum'));
-
+        // return $umum;
         DB::beginTransaction();
 
         try {
@@ -71,46 +71,52 @@ class PerjadinDetailController extends BaseController
             }
 
             // STORE HOTEL
-            foreach ($umum->hotel as $key => $hotel) {
+            foreach ($umum->hotel as $key => $value) {
                 $hot = PerjadinDetailHotel::create([
                     'perjadin_detail_id' => $umum->id,
-                    'keterangan' => $hotel->keterangan,
-                    'hari' => $hotel->hari,
-                    'realisasi_hari' => $hotel->hari,
-                    'biaya' => $hotel->biaya,
-                    'realisasi_biaya' => 0,
+                    'keterangan' => $value->keterangan,
+                    'hari' => $value->hari,
+                    'realisasi_hari' => $value->realisasi_hari,
+                    'biaya' => $value->biaya,
+                    'realisasi_biaya' => $value->realisasi_biaya,
+                    'notes' => $value->notes
                 ]);
             }
             // STORE TRANSPORT
-            foreach ($umum->transport as $key => $transport) {
+            foreach ($umum->transport as $key => $value) {
                 $pes = PerjadinDetailTransport::create([
                     'perjadin_detail_id' => $umum->id,
-                    'keterangan' => $transport->keterangan,
-                    'tipe' => $transport->tipe,
-                    'biaya' => $transport->biaya,
-                    'realisasi_biaya' => 0,
+                    'keterangan' => $value->keterangan,
+                    'tipe' => $value->tipe,
+                    'biaya' => $value->biaya,
+                    'realisasi_biaya' => $value->realisasi_biaya,
+                    'notes' => $value->notes
                 ]);
             }
             // STORE UH
-            foreach ($umum->uang_harian as $key => $uang_harian) {
+            foreach ($umum->uang_harian as $key => $value) {
                 $dar = PerjadinDetailUh::create([
                     'perjadin_detail_id' => $umum->id,
-                    'keterangan' => $uang_harian->keterangan,
-                    'hari' => $uang_harian->hari,
-                    'realisasi_hari' => $hotel->hari,
-                    'biaya' => $uang_harian->biaya,
-                    'realisasi_biaya' => 0,
+                    'keterangan' => $value->keterangan,
+                    'hari' => $value->hari,
+                    'realisasi_hari' => $value->realisasi_hari,
+                    'biaya' => $value->biaya,
+                    'realisasi_biaya'
+                    => $value->realisasi_biaya,
+                    'notes' => $value->notes
                 ]);
             }
             // STORE REPRESENTATIF
-            foreach ($umum->representatif as $key => $representatif) {
+            foreach ($umum->representatif as $key => $value) {
                 $dar = PerjadinDetailRep::create([
                     'perjadin_detail_id' => $umum->id,
-                    'keterangan' => $representatif->keterangan,
-                    'hari' => $representatif->hari,
-                    'realisasi_hari' => $hotel->hari,
-                    'biaya' => $representatif->biaya,
-                    'realisasi_biaya' => 0,
+                    'keterangan' => $value->keterangan,
+                    'hari' => $value->hari,
+                    'realisasi_hari' => $value->realisasi_hari,
+                    'biaya' => $value->biaya,
+                    'realisasi_biaya'
+                    => $value->realisasi_biaya,
+                    'notes' => $value->notes
                 ]);
             }
             // for ($i = 0; $i < $request->jumlah_lampiran; $i++) {
