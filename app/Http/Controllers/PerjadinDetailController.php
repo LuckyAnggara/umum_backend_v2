@@ -47,9 +47,13 @@ class PerjadinDetailController extends BaseController
     //     }
     // }
 
+
+    /// STORE REALISASI
     public function store(Request $request)
     {
         $umum = json_decode($request->input('umum'));
+
+        // return $request;
         // return $umum;
         DB::beginTransaction();
 
@@ -119,14 +123,53 @@ class PerjadinDetailController extends BaseController
                     'notes' => $value->notes
                 ]);
             }
-            // for ($i = 0; $i < $request->jumlah_lampiran; $i++) {
-            //     $file_path = $request->file[$i]->store('perjadin/ptj', 'public');
-            //     $detail = PerjadinDetailLampiran::create([
-            //         'perjadin_detail_id' => $umum->id,
-            //         'file_name' => $request->file[$i]->getClientOriginalName(),
-            //         'lampiran' => $file_path,
-            //     ]);
-            // }
+            if ($request->jumlah_lampiran_uh > 0) {
+                for ($i = 0; $i < $request->jumlah_lampiran_uh; $i++) {
+                    $file_path = $request->file_uh[$i]->store('perjadin/ptj/uh', 'public');
+                    $lampiran = PerjadinDetailLampiran::create([
+                        'perjadin_detail_id' => $umum->id,
+                        'type' => 'UH',
+                        'file_name' => $umum->no_sppd . ' - ' . $request->file_uh[$i]->getClientOriginalName(),
+                        'lampiran' => $file_path,
+                    ]);
+                }
+            }
+            if ($request->jumlah_lampiran_hotel > 0) {
+                for ($i = 0; $i < $request->jumlah_lampiran_hotel; $i++) {
+                    $file_path = $request->file_hotel[$i]->store('perjadin/ptj/hotel', 'public');
+                    $lampiran = PerjadinDetailLampiran::create([
+                        'perjadin_detail_id' => $umum->id,
+                        'type' => 'HOTEL',
+                        'file_name' => $umum->no_sppd . ' - ' . $request->file_hotel[$i]->getClientOriginalName(),
+                        'lampiran' => $file_path,
+                    ]);
+                }
+            }
+            if ($request->jumlah_lampiran_transport > 0) {
+                for ($i = 0; $i < $request->jumlah_lampiran_transport; $i++) {
+                    $file_path = $request->file_transport[$i]->store('perjadin/ptj/transport', 'public');
+                    $lampiran = PerjadinDetailLampiran::create([
+                        'perjadin_detail_id' => $umum->id,
+                        'type' => 'TRANSPORT',
+                        'file_name' => $umum->no_sppd . ' - ' . $request->file_transport[$i]->getClientOriginalName(),
+                        'lampiran' => $file_path,
+                    ]);
+                }
+            }
+            if ($request->jumlah_lampiran_rep > 0) {
+                for ($i = 0; $i < $request->jumlah_lampiran_rep; $i++) {
+                    $file_path = $request->file_rep[$i]->store('perjadin/ptj/rep', 'public');
+                    $lampiran = PerjadinDetailLampiran::create([
+                        'perjadin_detail_id' => $umum->id,
+                        'type' => 'REP',
+                        'file_name' => $umum->no_sppd . ' - ' . $request->file_rep[$i]->getClientOriginalName(),
+                        'lampiran' => $file_path,
+                    ]);
+                }
+            }
+
+
+
 
             // $catatan = 'Perencanaan Perjalanan Dinas telah di Buat';
             // PerjadinLogController::createLogPerjadin($umum->perjadin_id, 'Pertanggung Jawaban', $catatan);

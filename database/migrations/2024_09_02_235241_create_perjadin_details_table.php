@@ -27,7 +27,7 @@ return new class extends Migration
             $table->integer('ppk')->nullable();
             $table->integer('bendahara')->nullable();
             $table->integer('jumlah_hari')->default(0);
-            $table->enum('status', ['BELUM LENGKAP', 'LENGKAP'])->default('BELUM LENGKAP');
+            $table->enum('status', ['UNVERIFIED', 'VERIFIED'])->default('UNVERIFIED');
             $table->timestamps();
         });
     }

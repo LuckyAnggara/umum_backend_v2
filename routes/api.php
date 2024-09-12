@@ -16,6 +16,7 @@ use App\Http\Controllers\PtjController;
 use App\Http\Controllers\PtjLampiranController;
 use App\Http\Controllers\PegawaiController;
 use App\Http\Controllers\PerjadinController;
+use App\Http\Controllers\PerjadinDetailCatatanController;
 use App\Http\Controllers\PerjadinDetailController;
 use App\Http\Controllers\RateController;
 use App\Http\Controllers\ReportController;
@@ -105,7 +106,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resource('/persediaan/mutasi', MutasiPersediaanController::class);
     Route::resource('/keuangan/perjadin', PerjadinController::class);
     Route::resource('/keuangan/perjadin-detail', PerjadinDetailController::class);
-    Route::put('/keuangan/perjadin/update-status/{id}',[PerjadinController::class, 'updateStatus']);
+    Route::resource('keuangan/perjadin-detail/catatan', PerjadinDetailCatatanController::class);
+
+    Route::put('/keuangan/perjadin/update-status/{id}', [PerjadinController::class, 'updateStatus']);
     Route::resource('/keuangan/mak', MakController::class);
 
     Route::get('/persediaan/cek-nama', [InventoryController::class, 'cekNama']);
