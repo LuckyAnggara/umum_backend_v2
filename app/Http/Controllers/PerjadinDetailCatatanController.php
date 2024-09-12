@@ -32,7 +32,7 @@ class PerjadinDetailCatatanController extends Controller
     {
         DB::beginTransaction();
         try {
-            $result = PerjadinDetailCatatan::with('user')->where('perjadin_detail_id', $id)->get();
+            $result = PerjadinDetailCatatan::with('user')->where('perjadin_detail_id', $id)->orderBy('id', 'DESC')->get();
             return response()->json(['data' => $result], 200);
         } catch (\Exception $e) {
             DB::rollBack();
