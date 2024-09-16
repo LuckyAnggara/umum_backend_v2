@@ -21,6 +21,7 @@ use App\Http\Controllers\PerjadinDetailController;
 use App\Http\Controllers\RateController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\TempatController;
+use App\Http\Controllers\TemplateController;
 use App\Models\MutasiPersediaan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -75,6 +76,10 @@ Route::get('/report/agenda', [ReportController::class, 'reportAgenda']);
 Route::get('/report/text-agenda', [ReportController::class, 'reportTextAgenda']);
 
 Route::resource('bmn', BmnController::class);
+
+
+// TEMPLATE SPTJM
+Route::get('/download-sptjm/{id}', [TemplateController::class, 'sptjmDocx']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::resource('dashboard', DashboardController::class);

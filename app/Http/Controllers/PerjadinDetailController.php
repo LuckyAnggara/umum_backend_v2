@@ -12,6 +12,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class PerjadinDetailController extends BaseController
 {
@@ -83,7 +84,8 @@ class PerjadinDetailController extends BaseController
                     'realisasi_hari' => $value->realisasi_hari,
                     'biaya' => $value->biaya,
                     'realisasi_biaya' => $value->realisasi_biaya,
-                    'notes' => $value->notes
+                    'notes' => $value->notes,
+                    'bukti' => $value->bukti
                 ]);
             }
             // STORE TRANSPORT
@@ -94,7 +96,8 @@ class PerjadinDetailController extends BaseController
                     'tipe' => $value->tipe,
                     'biaya' => $value->biaya,
                     'realisasi_biaya' => $value->realisasi_biaya,
-                    'notes' => $value->notes
+                    'notes' => $value->notes,
+                    'bukti' => $value->bukti
                 ]);
             }
             // STORE UH
@@ -107,7 +110,8 @@ class PerjadinDetailController extends BaseController
                     'biaya' => $value->biaya,
                     'realisasi_biaya'
                     => $value->realisasi_biaya,
-                    'notes' => $value->notes
+                    'notes' => $value->notes,
+                    'bukti' => $value->bukti
                 ]);
             }
             // STORE REPRESENTATIF
@@ -120,7 +124,8 @@ class PerjadinDetailController extends BaseController
                     'biaya' => $value->biaya,
                     'realisasi_biaya'
                     => $value->realisasi_biaya,
-                    'notes' => $value->notes
+                    'notes' => $value->notes,
+                    'bukti' => $value->bukti
                 ]);
             }
             if ($request->jumlah_lampiran_uh > 0) {
@@ -167,7 +172,28 @@ class PerjadinDetailController extends BaseController
                     ]);
                 }
             }
+            if ($request->jumlah_lampiran_lainnya > 0) {
+                for ($i = 0; $i < $request->jumlah_lampiran_lainnya; $i++) {
+                    $file_path = $request->file_lainnya[$i]->store('perjadin/ptj/lainnya', 'public');
+                    $lampiran = PerjadinDetailLampiran::create([
+                        'perjadin_detail_id' => $umum->id,
+                        'type' => 'LAINNYA',
+                        'file_name' => $umum->no_sppd . ' - ' . $request->file_lainnya[$i]->getClientOriginalName(),
+                        'lampiran' => $file_path,
+                    ]);
+                }
+            }
 
+            if ($request->jumlah_lampiran_delete > 0) {
+                for ($i = 0; $i < $request->jumlah_lampiran_delete; $i++) {
+                    $lampiranId = $request->file_delete[$i];
+                    $file = PerjadinDetailLampiran::findOrFail($lampiranId);
+                    if ($file) {
+                        Storage::disk('public')->delete($file->lampiran);
+                        $file->delete();
+                    }
+                }
+            }
 
 
 

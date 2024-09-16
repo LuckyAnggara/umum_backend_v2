@@ -20,6 +20,6 @@ Route::get('/', function () {
 });
 
 
-   Route::get('/test-pesan', [PesanController::class, 'test']);
+Route::get('/test-pesan', [PesanController::class, 'test']);
 
-Route::get('/download-word', [TemplateController::class, 'generateDocx']);
+Route::get('/download-word', [TemplateController::class, 'sptjmDocx']);

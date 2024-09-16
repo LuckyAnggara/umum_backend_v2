@@ -17,7 +17,7 @@ class PerjadinDetailCatatan extends Model
     ];
 
     protected $casts = [
-        'created_at' => 'datetime:d F Y',
+        'created_at' => 'datetime:d F Y H:i',
     ];
 
     public function user()

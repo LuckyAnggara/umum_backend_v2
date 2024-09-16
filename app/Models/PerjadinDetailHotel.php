@@ -16,5 +16,10 @@ class PerjadinDetailHotel extends Model
         'biaya',
         'realisasi_biaya',
         'notes',
+        'bukti',
+    ];
+
+    protected $casts = [
+        'bukti' => 'boolean',
     ];
 }

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('keterangan')->nullable();
             $table->double('biaya');
             $table->double('realisasi_biaya');
+            $table->boolean('bukti');
             $table->string('notes', 255)->nullable();
             $table->timestamps();
         });
