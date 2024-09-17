@@ -19,7 +19,7 @@ return new class extends Migration
             $table->integer('realisasi_hari');
             $table->double('biaya');
             $table->double('realisasi_biaya');
-            $table->boolean('bukti');
+            $table->boolean('bukti')->default(false);
             $table->string('notes', 255)->nullable();
             $table->timestamps();
         });

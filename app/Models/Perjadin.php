@@ -18,6 +18,7 @@ class Perjadin extends Model
         'tanggal_awal',
         'tanggal_akhir',
         'nama_kegiatan',
+        'provinsi_id',
         'tempat_kegiatan',
         'mak_id',
         'total_anggaran',
@@ -64,5 +65,11 @@ class Perjadin extends Model
     public function user()
     {
         return $this->hasOne(User::class, 'id', 'user_id');
+    }
+
+
+    public function provinsi()
+    {
+        return $this->hasOne(Provinsi::class, 'id', 'provinsi_id');
     }
 }

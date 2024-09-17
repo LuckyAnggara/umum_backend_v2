@@ -18,6 +18,7 @@ use App\Http\Controllers\PegawaiController;
 use App\Http\Controllers\PerjadinController;
 use App\Http\Controllers\PerjadinDetailCatatanController;
 use App\Http\Controllers\PerjadinDetailController;
+use App\Http\Controllers\ProvinsiController;
 use App\Http\Controllers\RateController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\TempatController;
@@ -55,6 +56,7 @@ Route::resource('rate-layanan', RateController::class)->only(['store']);
 
 Route::resource('peminjaman-bmn', PeminjamanBmnController::class)->only(['show']);
 Route::get('/peminjaman-bmn/get-status/{tiket}', [PeminjamanBmnController::class, 'getStatus']);
+Route::get('/provinsi', [ProvinsiController::class, 'index']);
 
 Route::get('/permintaan-layanan-bmn/get-status/{tiket}', [PermintaanLayananBmnController::class, 'getStatus']);
 Route::get('/bmn/show-nup/{nup}', [BmnController::class, 'showNup']);

@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
         $this->call(PpkSeeder::class);
         $this->call(UnitSeeder::class);
         $this->call(MakSeeder::class);
+        $this->call(ProvinsiSeeder::class);
         // $this->call(InventorySeeder::class);
         // $this->call(BmnSeeder::class);
         // \App\Models\User::factory(1)->create(

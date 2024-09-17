@@ -73,6 +73,7 @@ class PerjadinController extends BaseController
                 'tanggal_akhir' => Carbon::parse($umum->tanggal_akhir)->format('Y-m-d'),
                 'nama_kegiatan' => $umum->nama_kegiatan,
                 'tempat_kegiatan' => $umum->tempat_kegiatan,
+                'provinsi_id' => $umum->provinsi_id,
                 'mak_id' => $umum->mak->id,
                 'total_anggaran' => $umum->total_anggaran,
                 'total_realisasi' => 0,
@@ -164,7 +165,7 @@ class PerjadinController extends BaseController
     public function show($id)
     {
         try {
-            $result = Perjadin::where('id', $id)->with('mak', 'detail.hotel', 'detail.transport', 'detail.uang_harian', 'detail.representatif', 'detail.ppk', 'detail.bendahara', 'lampiran')->first();
+            $result = Perjadin::where('id', $id)->with('mak', 'detail.hotel', 'detail.transport', 'detail.uang_harian', 'detail.representatif', 'detail.ppk', 'detail.bendahara', 'lampiran', 'provinsi')->first();
             return $this->sendResponse($result, 'Ada');
         } catch (\Exception $e) {
             return $this->sendError($e->getMessage(), 'Error');
@@ -303,7 +304,7 @@ class PerjadinController extends BaseController
             $catatan = 'Perjalanan Dinas telah di di perbaharui';
             PerjadinLogController::createLogPerjadin($perjadin->id, 'PEMBAHARUAN', $catatan);
 
-            $result = Perjadin::where('id', $id)->with('mak', 'detail.hotel', 'detail.transport', 'detail.uang_harian', 'detail.representatif', 'detail.ppk', 'detail.bendahara', 'lampiran')->first();
+            $result = Perjadin::where('id', $id)->with('mak', 'detail.hotel', 'detail.transport', 'detail.uang_harian', 'detail.representatif', 'detail.ppk', 'detail.bendahara', 'lampiran', 'provinsi')->first();
             DB::commit();
             return $this->sendResponse($result, 'Data berhasil di perbaharui');
         } catch (\Exception $e) {
@@ -341,7 +342,7 @@ class PerjadinController extends BaseController
                     ]);
                 }
 
-                $result = Perjadin::where('id', $id)->with('mak', 'detail.hotel', 'detail.transport', 'detail.uang_harian', 'detail.representatif', 'lampiran', 'detail.ppk', 'detail.bendahara',)->first();
+                $result = Perjadin::where('id', $id)->with('mak', 'detail.hotel', 'detail.transport', 'detail.uang_harian', 'detail.representatif', 'lampiran', 'detail.ppk', 'detail.bendahara', 'provinsi')->first();
             }
             PerjadinLogController::createLogPerjadin($perjadin->id, $request->status, $request->catatan);
 

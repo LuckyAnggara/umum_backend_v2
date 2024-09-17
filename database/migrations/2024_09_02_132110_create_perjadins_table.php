@@ -20,6 +20,7 @@ return new class extends Migration
             $table->date('tanggal_akhir');
             $table->string('nama_kegiatan');
             $table->string('tempat_kegiatan');
+            $table->integer('provinsi_id');
             $table->integer('mak_id');
             $table->double('total_anggaran')->default(0);
             $table->double('total_realisasi')->default(0);
