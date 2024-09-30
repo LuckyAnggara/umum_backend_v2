@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\PerjadinDetail;
+use App\Models\PerjadinDetailCatatan;
 use App\Models\PerjadinDetailRep;
 use App\Models\PerjadinDetailTransport;
 use App\Models\PerjadinDetailUh;
@@ -10,6 +11,7 @@ use App\Models\PerjadinDetailHotel;
 use App\Models\PerjadinDetailLampiran;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -266,6 +268,29 @@ class PerjadinDetailController extends BaseController
             }
             DB::commit();
             $result = PerjadinDetail::where('id', $id)->with('hotel', 'transport', 'uang_harian', 'representatif', 'master.mak', 'ppk', 'bendahara', 'lampiran')->first();
+            return $this->sendResponse($result, 'Data berhasil di perbaharui');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $this->sendError($e->getMessage(), 'Error');
+        }
+    }
+
+    public function updateStatus(Request $request, $id)
+    {
+        $data = json_decode($request->getContent());
+        DB::beginTransaction();
+        try {
+            $perjadin = PerjadinDetail::findOrFail($id);
+            $perjadin->update([
+                'status' => $request->status,
+            ]);
+            $catatan = PerjadinDetailCatatan::create([
+                'catatan' => $data->catatan,
+                'perjadin_detail_id' => $id,
+                'user_id' => Auth::id(),
+            ]);
+            $result = PerjadinDetail::where('id', $id)->with('hotel', 'transport', 'uang_harian', 'representatif', 'master.mak', 'ppk', 'bendahara', 'lampiran')->first();
+            DB::commit();
             return $this->sendResponse($result, 'Data berhasil di perbaharui');
         } catch (\Exception $e) {
             DB::rollBack();

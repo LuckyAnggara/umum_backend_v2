@@ -26,7 +26,8 @@ class Perjadin extends Model
         'status',
         'ptj',
         'tanggal_verifikasi',
-        'user_id'
+        'user_id',
+        'unit_id'
     ];
 
     protected $casts = [
@@ -66,8 +67,10 @@ class Perjadin extends Model
     {
         return $this->hasOne(User::class, 'id', 'user_id');
     }
-
-
+    public function unit()
+    {
+        return $this->hasOne(Unit::class, 'id', 'unit_id');
+    }
     public function provinsi()
     {
         return $this->hasOne(Provinsi::class, 'id', 'provinsi_id');

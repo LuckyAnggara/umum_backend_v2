@@ -24,6 +24,7 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\TempatController;
 use App\Http\Controllers\TemplateController;
 use App\Models\MutasiPersediaan;
+use App\Models\PerjadinDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -116,6 +117,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resource('keuangan/perjadin-detail/catatan', PerjadinDetailCatatanController::class);
 
     Route::put('/keuangan/perjadin/update-status/{id}', [PerjadinController::class, 'updateStatus']);
+    Route::put('/keuangan/perjadin-detail/update-status/{id}', [PerjadinDetailController::class, 'updateStatus']);
     Route::resource('/keuangan/mak', MakController::class);
 
     Route::get('/persediaan/cek-nama', [InventoryController::class, 'cekNama']);

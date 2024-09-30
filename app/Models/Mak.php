@@ -9,7 +9,7 @@ class Mak extends Model
 {
     use HasFactory;
 
-    
+
     protected $fillable = [
         'tahun_anggaran',
         'unit_id',
@@ -17,4 +17,14 @@ class Mak extends Model
         'keterangan',
         'anggaran',
     ];
+
+    public function unit()
+    {
+        return $this->hasOne(Unit::class, 'id', 'unit_id');
+    }
+
+    public function detail()
+    {
+        return $this->hasMany(MakDetail::class, 'mak_id', 'id');
+    }
 }

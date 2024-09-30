@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\MakDetail;
 use App\Models\Perjadin;
 use App\Models\PerjadinDetail;
 use App\Models\PerjadinDetailDarat;
@@ -29,15 +30,19 @@ class PerjadinController extends BaseController
         $perPage = $request->input('limit', 5);
         $isAdmin = $request->input('is-admin', false);
         $status = $request->input('status');
+        $unit = $request->input('unit');
 
         try {
             // Mengambil data inventaris dengan paginasi
-            $agenda = Perjadin::with('user.unit')
+            $agenda = Perjadin::with('user', 'unit')
                 ->when($name, function ($query, $name) {
                     return $query
                         ->where('nama_kegiatan', 'like', '%' . $name . '%')
                         ->orWhere('tempat_kegiatan', 'like', '%' . $name . '%')
                         ->orWhere('no_st', 'like', '%' . $name . '%');
+                })->when($unit, function ($query, $unit) {
+                    return $query
+                        ->where('unit_id', $unit);
                 })
                 ->when($status, function ($query, $status) {
                     return $query->where('status', $status);
@@ -79,6 +84,7 @@ class PerjadinController extends BaseController
                 'total_realisasi' => 0,
                 'status' => 'PERENCANAAN',
                 'user_id' => Auth::id(),
+                'unit_id' => Auth::user()->unit_id,
             ]);
 
             if ($result) {
@@ -150,6 +156,11 @@ class PerjadinController extends BaseController
                     ]);
                 }
 
+                // BUAT DETAIL DI MAK
+                $mak = MakDetailController::createMakDetail($result, 'PERJADIN', 'BELUM');
+
+
+
                 $catatan = 'Perencanaan Perjalanan Dinas telah di Buat';
                 PerjadinLogController::createLogPerjadin($result->id, 'PERENCANAAN', $catatan);
             }
@@ -197,6 +208,24 @@ class PerjadinController extends BaseController
                 'status' => 'PERENCANAAN',
                 'user_id' => Auth::id(),
             ]);
+
+
+            // UBAH DETAIL MAK
+
+            $mak = MakDetail::where('TYPE', 'PERJADIN')->where('kegiatan_id', $id)->first();
+            $mak->delete();
+
+            // BUAT DETAIL DI MAK
+            $mak = MakDetailController::createMakDetail([
+                'mak_id' => $umum->mak->id,
+                'type' => 'PERJADIN',
+                'kegiatan_id' => $id,
+                'nama_kegiatan' => $umum->nama_kegiatan,
+                'total_anggaran' => $umum->total_anggaran,
+                'total_realisasi' => 0,
+                'status_realisasi' => 'BELUM',
+            ]);
+
 
             if ($editDetail) {
                 foreach ($perjadin->detail as $key => $value) {
@@ -324,6 +353,7 @@ class PerjadinController extends BaseController
                     'status' => $request->status,
                 ]);
                 $result = Perjadin::with('user.unit')->where('id', $id)->first();
+                $catatan = $request->catatan;
             } elseif ($data->status == 'PERTANGGUNG JAWABAN') {
                 $perjadin = Perjadin::with('detail')->where('id', $id)->first();
                 $perjadin->update([
@@ -341,10 +371,30 @@ class PerjadinController extends BaseController
                         'bendahara' => $data->bendahara->id,
                     ]);
                 }
+                $catatan = $request->catatan;
+                $result = Perjadin::where('id', $id)->with('mak', 'detail.hotel', 'detail.transport', 'detail.uang_harian', 'detail.representatif', 'lampiran', 'detail.ppk', 'detail.bendahara', 'provinsi')->first();
+            } elseif ($data->status == 'SELESAI') {
+                $perjadin = Perjadin::with('detail')->where('id', $id)->first();
+                $perjadin->update([
+                    'status' => $data->status,
+                    'total_realisasi' => $data->total_realisasi,
 
+                ]);
+
+                $mak = MakDetail::where('TYPE', 'PERJADIN')->where('kegiatan_id', $id)->first();
+                if ($mak) {
+                    $mak->update([
+                        'status_realisasi' => 'SUDAH',
+                        'total_realisasi' => $data->total_realisasi,
+
+                    ]);
+                }
+
+
+                $catatan = 'SPD telah selesai di pertanggung jawabkan';
                 $result = Perjadin::where('id', $id)->with('mak', 'detail.hotel', 'detail.transport', 'detail.uang_harian', 'detail.representatif', 'lampiran', 'detail.ppk', 'detail.bendahara', 'provinsi')->first();
             }
-            PerjadinLogController::createLogPerjadin($perjadin->id, $request->status, $request->catatan);
+            PerjadinLogController::createLogPerjadin($perjadin->id, $request->status, $catatan);
 
             DB::commit();
             return $this->sendResponse($result, 'Data berhasil di perbaharui');
@@ -359,37 +409,45 @@ class PerjadinController extends BaseController
         try {
             // Cari dan hapus data bmn berdasarkan ID
             $result = Perjadin::with('mak', 'detail.hotel', 'detail.transport', 'detail.uang_harian', 'detail.representatif', 'lampiran')->where('id', $id)->first();
-            if (count($result->lampiran) > 0) {
-                foreach ($result->lampiran as $key => $lampiran) {
-                    Storage::disk('public')->delete($lampiran->lampiran);
+            if ($result) {
+                if (count($result->lampiran) > 0) {
+                    foreach ($result->lampiran as $key => $lampiran) {
+                        Storage::disk('public')->delete($lampiran->lampiran);
+                    }
                 }
-            }
-            if (count($result->detail) > 0) {
-                foreach ($result->detail as $key => $detail) {
-                    if ($detail->hotel) {
-                        foreach ($detail->hotel as $key => $hotel) {
-                            $hotel->delete();
+                if (count($result->detail) > 0) {
+                    foreach ($result->detail as $key => $detail) {
+                        if ($detail->hotel) {
+                            foreach ($detail->hotel as $key => $hotel) {
+                                $hotel->delete();
+                            }
                         }
-                    }
-                    if ($detail->transport) {
-                        foreach ($detail->transport as $key => $transport) {
-                            $transport->delete();
+                        if ($detail->transport) {
+                            foreach ($detail->transport as $key => $transport) {
+                                $transport->delete();
+                            }
                         }
-                    }
-                    if ($detail->uh) {
-                        foreach ($detail->uh as $key => $uh) {
-                            $uh->delete();
+                        if ($detail->uh) {
+                            foreach ($detail->uh as $key => $uh) {
+                                $uh->delete();
+                            }
                         }
-                    }
-                    if ($detail->rep) {
-                        foreach ($detail->rep as $key => $rep) {
-                            $rep->delete();
+                        if ($detail->rep) {
+                            foreach ($detail->rep as $key => $rep) {
+                                $rep->delete();
+                            }
                         }
+                        $detail->delete();
                     }
-                    $detail->delete();
                 }
+
+                $mak = MakDetail::where('TYPE', 'PERJADIN')->where('kegiatan_id', $id)->first();
+                if ($mak) {
+                    $mak->delete();
+                }
+                $result->delete();
             }
-            $result->delete();
+
             // Berikan respons sukses
             return response()->json(['message' => 'Data berhasil dihapus'], 200);
         } catch (\Exception $e) {
