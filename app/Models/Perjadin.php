@@ -27,7 +27,12 @@ class Perjadin extends Model
         'ptj',
         'tanggal_verifikasi',
         'user_id',
-        'unit_id'
+        'unit_id',
+        'pengusul',
+        'kapokja',
+        'nip_pengusul',
+        'nip_kapokja',
+        'tanggal_rab',
     ];
 
     protected $casts = [
@@ -35,6 +40,7 @@ class Perjadin extends Model
         'tanggal_st' => 'datetime:d F Y',
         'tanggal_awal' => 'datetime:d F Y',
         'tanggal_akhir' => 'datetime:d F Y',
+        'tanggal_rab' => 'datetime:d F Y',
         'ptj' => 'boolean',
     ];
 
@@ -56,6 +62,10 @@ class Perjadin extends Model
     public function lampiran()
     {
         return  $this->hasMany(PerjadinLampiran::class, 'perjadin_id', 'id');
+    }
+    public function log()
+    {
+        return  $this->hasMany(PerjadinLog::class, 'perjadin_id', 'id');
     }
 
     public function mak()

@@ -176,7 +176,7 @@ class PerjadinController extends BaseController
     public function show($id)
     {
         try {
-            $result = Perjadin::where('id', $id)->with('mak', 'detail.hotel', 'detail.transport', 'detail.uang_harian', 'detail.representatif', 'detail.ppk', 'detail.bendahara', 'lampiran', 'provinsi')->first();
+            $result = Perjadin::where('id', $id)->with('mak', 'log', 'detail.hotel', 'detail.transport', 'detail.uang_harian', 'detail.representatif', 'detail.ppk', 'detail.bendahara', 'lampiran', 'provinsi')->first();
             return $this->sendResponse($result, 'Ada');
         } catch (\Exception $e) {
             return $this->sendError($e->getMessage(), 'Error');
@@ -216,15 +216,8 @@ class PerjadinController extends BaseController
             $mak->delete();
 
             // BUAT DETAIL DI MAK
-            $mak = MakDetailController::createMakDetail([
-                'mak_id' => $umum->mak->id,
-                'type' => 'PERJADIN',
-                'kegiatan_id' => $id,
-                'nama_kegiatan' => $umum->nama_kegiatan,
-                'total_anggaran' => $umum->total_anggaran,
-                'total_realisasi' => 0,
-                'status_realisasi' => 'BELUM',
-            ]);
+
+            $mak = MakDetailController::createMakDetail($perjadin, 'PERJADIN', 'BELUM');
 
 
             if ($editDetail) {
@@ -333,7 +326,7 @@ class PerjadinController extends BaseController
             $catatan = 'Perjalanan Dinas telah di di perbaharui';
             PerjadinLogController::createLogPerjadin($perjadin->id, 'PEMBAHARUAN', $catatan);
 
-            $result = Perjadin::where('id', $id)->with('mak', 'detail.hotel', 'detail.transport', 'detail.uang_harian', 'detail.representatif', 'detail.ppk', 'detail.bendahara', 'lampiran', 'provinsi')->first();
+            $result = Perjadin::where('id', $id)->with('mak', 'log', 'detail.hotel', 'detail.transport', 'detail.uang_harian', 'detail.representatif', 'detail.ppk', 'detail.bendahara', 'lampiran', 'provinsi')->first();
             DB::commit();
             return $this->sendResponse($result, 'Data berhasil di perbaharui');
         } catch (\Exception $e) {
@@ -354,6 +347,17 @@ class PerjadinController extends BaseController
                 ]);
                 $result = Perjadin::with('user.unit')->where('id', $id)->first();
                 $catatan = $request->catatan;
+            } else  if ($request->status == 'RAB') {
+                $perjadin = Perjadin::findOrFail($id);
+                $perjadin->update([
+                    'pengusul' => $request->pengusul,
+                    'kapokja' => $request->kapokja,
+                    'nip_pengusul' => $request->nip_pengusul,
+                    'nip_kapokja' => $request->nip_kapokja,
+                    'tanggal_rab' => Carbon::parse($request->tanggal_rab)->format('Y-m-d'),
+                ]);
+                $result = Perjadin::with('user.unit')->where('id', $id)->first();
+                $catatan = 'melakukan perubahan Data pada RAB';
             } elseif ($data->status == 'PERTANGGUNG JAWABAN') {
                 $perjadin = Perjadin::with('detail')->where('id', $id)->first();
                 $perjadin->update([
@@ -373,7 +377,7 @@ class PerjadinController extends BaseController
                 }
                 $catatan = $request->catatan;
                 $result = Perjadin::where('id', $id)->with('mak', 'detail.hotel', 'detail.transport', 'detail.uang_harian', 'detail.representatif', 'lampiran', 'detail.ppk', 'detail.bendahara', 'provinsi')->first();
-            } elseif ($data->status == 'SELESAI') {
+            } else if ($data->status == 'SELESAI') {
                 $perjadin = Perjadin::with('detail')->where('id', $id)->first();
                 $perjadin->update([
                     'status' => $data->status,
@@ -397,6 +401,38 @@ class PerjadinController extends BaseController
             PerjadinLogController::createLogPerjadin($perjadin->id, $request->status, $catatan);
 
             DB::commit();
+            return $this->sendResponse($result, 'Data berhasil di perbaharui');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $this->sendError($e->getMessage(), 'Error');
+        }
+    }
+
+
+    public function updateLampiran(Request $request, $id)
+    {
+        $data = json_decode($request->getContent());
+        DB::beginTransaction();
+        try {
+            $perjadin = Perjadin::findOrFail($id);
+            $catatan = 'Lampiran telah ditambahkan';
+            $status = 'Update';
+
+            if ($request->jumlah_lampiran > 0) {
+                for ($i = 0; $i < $request->jumlah_lampiran; $i++) {
+                    $file_path = $request->file[$i]->store('perjadin/perencanaan', 'public');
+                    $detail = PerjadinLampiran::create([
+                        'perjadin_id' => $perjadin->id,
+                        'file_name' => $request->file[$i]->getClientOriginalName(),
+                        'lampiran' => $file_path,
+                    ]);
+                }
+            }
+
+            PerjadinLogController::createLogPerjadin($perjadin->id, $status, $catatan);
+            DB::commit();
+            $result = Perjadin::where('id', $id)->with('mak', 'log', 'detail.hotel', 'detail.transport', 'detail.uang_harian', 'detail.representatif', 'detail.ppk', 'detail.bendahara', 'lampiran', 'provinsi')->first();
+
             return $this->sendResponse($result, 'Data berhasil di perbaharui');
         } catch (\Exception $e) {
             DB::rollBack();

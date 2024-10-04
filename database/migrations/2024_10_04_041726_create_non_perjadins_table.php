@@ -11,29 +11,24 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('perjadins', function (Blueprint $table) {
+        Schema::create('non_perjadins', function (Blueprint $table) {
             $table->ulid('id')->primary();
             $table->string('tahun_anggaran');
-            $table->string('no_st');
-            $table->date('tanggal_st');
-            $table->date('tanggal_awal');
-            $table->date('tanggal_akhir');
-            $table->string('nama_kegiatan');
-            $table->string('tempat_kegiatan');
-            $table->integer('provinsi_id');
+            $table->date('nomor_transaksi');
+            $table->date('tanggal_transaksi');
+            $table->string('uraian');
             $table->integer('mak_id');
             $table->double('total_anggaran')->default(0);
             $table->double('total_realisasi')->default(0);
             $table->date('tanggal_verifikasi')->nullable();
             $table->date('tanggal_verifikasi_ptj')->nullable();
-            $table->boolean('ptj')->default(0);
             $table->enum('status', ['PERENCANAAN', 'VERIFIKASI', 'PERTANGGUNG JAWABAN', 'VERFIKASI PTJ', 'SELESAI']);
             $table->integer('user_id');
             $table->integer('unit_id')->nullable();
-            $table->string('kapokja')->nullable();
-            $table->integer('nip_kapokja')->nullable();
-            $table->string('pengusul')->nullable();
-            $table->integer('nip_pengusul')->nullable();
+            $table->integer('ppk')->nullable();
+            $table->integer('bendahara')->nullable();
+            $table->string('penerima')->nullable();
+            $table->string('nip_penerima')->nullable();
             $table->timestamps();
         });
     }
@@ -43,6 +38,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('perjadins');
+        Schema::dropIfExists('non_perjadins');
     }
 };
