@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('non_perjadins', function (Blueprint $table) {
             $table->ulid('id')->primary();
             $table->string('tahun_anggaran');
-            $table->date('nomor_transaksi');
+            $table->string('nomor_transaksi');
             $table->date('tanggal_transaksi');
             $table->string('uraian');
             $table->integer('mak_id');
@@ -22,7 +22,7 @@ return new class extends Migration
             $table->double('total_realisasi')->default(0);
             $table->date('tanggal_verifikasi')->nullable();
             $table->date('tanggal_verifikasi_ptj')->nullable();
-            $table->enum('status', ['PERENCANAAN', 'VERIFIKASI', 'PERTANGGUNG JAWABAN', 'VERFIKASI PTJ', 'SELESAI']);
+            $table->enum('status', ['PENGAJUAN', 'VERIFIKASI', 'SELESAI']);
             $table->integer('user_id');
             $table->integer('unit_id')->nullable();
             $table->integer('ppk')->nullable();

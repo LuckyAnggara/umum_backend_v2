@@ -8,6 +8,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\MakController;
 use App\Http\Controllers\MutasiPersediaanController;
+use App\Http\Controllers\NonPerjadinController;
 use App\Http\Controllers\PeminjamanBmnController;
 use App\Http\Controllers\PermintaanLayananBmnController;
 use App\Http\Controllers\PermintaanPersediaanController;
@@ -119,6 +120,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/keuangan/perjadin/update-lampiran/{id}', [PerjadinController::class, 'updateLampiran']);
     Route::put('/keuangan/perjadin/update-status/{id}', [PerjadinController::class, 'updateStatus']);
     Route::put('/keuangan/perjadin-detail/update-status/{id}', [PerjadinDetailController::class, 'updateStatus']);
+
+    Route::resource('/keuangan/non-perjadin', NonPerjadinController::class);
+
     Route::resource('/keuangan/mak', MakController::class);
 
     Route::get('/persediaan/cek-nama', [InventoryController::class, 'cekNama']);
