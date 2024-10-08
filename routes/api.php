@@ -122,6 +122,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/keuangan/perjadin-detail/update-status/{id}', [PerjadinDetailController::class, 'updateStatus']);
 
     Route::resource('/keuangan/non-perjadin', NonPerjadinController::class);
+    Route::put('/keuangan/non-perjadin/update-status/{id}', [NonPerjadinController::class, 'updateStatus']);
 
     Route::resource('/keuangan/mak', MakController::class);
 

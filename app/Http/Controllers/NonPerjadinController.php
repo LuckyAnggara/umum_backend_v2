@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\MakDetail;
 use App\Models\NonPerjadin;
 use App\Models\NonPerjadinLampiran;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class NonPerjadinController extends BaseController
 {
@@ -114,7 +116,6 @@ class NonPerjadinController extends BaseController
         }
     }
 
-
     public function show($id)
     {
         try {
@@ -122,6 +123,69 @@ class NonPerjadinController extends BaseController
             return $this->sendResponse($result, 'Ada');
         } catch (\Exception $e) {
             return $this->sendError($e->getMessage(), 'Error');
+        }
+    }
+    public function updateStatus(Request $request, $id)
+    {
+        $data = json_decode($request->getContent());
+        DB::beginTransaction();
+        try {
+            if ($request->status == 'VERIFIKASI') {
+                $nonPerjadin = NonPerjadin::findOrFail($id);
+                $nonPerjadin->update([
+                    'status' => $request->status,
+                ]);
+                $result = NonPerjadin::with('user', 'unit', 'mak.detail', 'lampiran')->where('id', $id)->first();
+                $catatan = $request->catatan;
+            } else if ($data->status == 'SELESAI') {
+                $nonPerjadin = NonPerjadin::with('user', 'unit', 'mak.detail', 'lampiran')->where('id', $id)->first();
+                $nonPerjadin->update([
+                    'status' => $data->status,
+                    'total_realisasi' => $data->total_realisasi,
+                ]);
+                $mak = MakDetail::where('TYPE', 'NON PERJADIN')->where('kegiatan_id', $id)->first();
+                if ($mak) {
+                    $mak->update([
+                        'status_realisasi' => 'SUDAH',
+                        'total_realisasi' => $data->total_realisasi,
+                    ]);
+                }
+                $catatan = 'Transaksi telah selesai di pertanggung jawabkan';
+                $result = NonPerjadin::with('user', 'unit', 'mak.detail', 'lampiran')->where('id', $id)->first();
+            }
+            NonPerjadinLogController::createLog($nonPerjadin->id, $request->status, $catatan);
+
+            DB::commit();
+            return $this->sendResponse($result, 'Data berhasil di perbaharui');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return $this->sendError($e->getMessage(), 'Error');
+        }
+    }
+
+    public function destroy($id)
+    {
+        try {
+            // Cari dan hapus data bmn berdasarkan ID
+            $result = NonPerjadin::with('mak', 'lampiran')->where('id', $id)->first();
+            if ($result) {
+                if (count($result->lampiran) > 0) {
+                    foreach ($result->lampiran as $key => $lampiran) {
+                        Storage::disk('public')->delete($lampiran->lampiran);
+                    }
+                }
+                $mak = MakDetail::where('TYPE', 'NON PERJADIN')->where('kegiatan_id', $id)->first();
+                if ($mak) {
+                    $mak->delete();
+                }
+                $result->delete();
+            }
+
+            // Berikan respons sukses
+            return response()->json(['message' => 'Data berhasil dihapus'], 200);
+        } catch (\Exception $e) {
+            // Berikan respons error jika data tidak ditemukan
+            return response()->json(['message' => $e->getMessage()], 404);
         }
     }
 }
