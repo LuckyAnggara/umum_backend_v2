@@ -15,7 +15,7 @@ class MakDetailController extends Controller
             'mak_id' => $data->mak_id,
             'type' => $tipe,
             'kegiatan_id' => $data->id,
-            'nama_kegiatan' => $data->nama_kegiatan,
+            'nama_kegiatan' => $tipe == 'PERJADIN' ? $data->nama_kegiatan : $data->uraian,
             'total_anggaran' => $data->total_anggaran,
             'total_realisasi' => 0,
             'status_realisasi' => $status

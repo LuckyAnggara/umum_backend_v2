@@ -7,6 +7,7 @@ use App\Http\Controllers\BmnController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\MakController;
+use App\Http\Controllers\MakNominatifController;
 use App\Http\Controllers\MutasiPersediaanController;
 use App\Http\Controllers\NonPerjadinController;
 use App\Http\Controllers\PeminjamanBmnController;
@@ -125,6 +126,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/keuangan/non-perjadin/update-status/{id}', [NonPerjadinController::class, 'updateStatus']);
 
     Route::resource('/keuangan/mak', MakController::class);
+    Route::resource('/keuangan/mak-nominatif', MakNominatifController::class);
 
     Route::get('/persediaan/cek-nama', [InventoryController::class, 'cekNama']);
     Route::post('persediaan/upload-image', [InventoryController::class, 'imageUpload']);

@@ -39,11 +39,11 @@ class NonPerjadin extends Model
 
     public function lampiran()
     {
-        return  $this->hasMany(PerjadinLampiran::class, 'perjadin_id', 'id');
+        return  $this->hasMany(NonPerjadinLampiran::class, 'non_perjadin_id', 'id');
     }
     public function log()
     {
-        return  $this->hasMany(PerjadinLog::class, 'perjadin_id', 'id');
+        return  $this->hasMany(NonPerjadinLog::class, 'non_perjadin_id', 'id');
     }
 
     public function mak()
