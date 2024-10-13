@@ -16,10 +16,10 @@ return new class extends Migration
             $table->integer('mak_id');
             $table->text('uraian');
             $table->enum('type', ['header', 'detail']);
-            $table->double('volume');
-            $table->double('harga');
-            $table->string('satuan');
-            $table->double('jumlah');
+            $table->double('volume')->default(0);
+            $table->double('harga')->default(0);
+            $table->string('satuan')->nullable();
+            $table->double('jumlah')->default(0);
             $table->timestamps();
         });
     }

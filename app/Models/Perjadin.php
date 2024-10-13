@@ -20,6 +20,7 @@ class Perjadin extends Model
         'nama_kegiatan',
         'provinsi_id',
         'tempat_kegiatan',
+        'tempat_kedudukan',
         'mak_id',
         'total_anggaran',
         'total_realisasi',
@@ -58,6 +59,7 @@ class Perjadin extends Model
     {
         return  $this->hasMany(PerjadinDetail::class, 'perjadin_id', 'id');
     }
+
 
     public function lampiran()
     {

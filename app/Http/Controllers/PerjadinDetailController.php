@@ -18,6 +18,51 @@ use Illuminate\Support\Facades\Storage;
 
 class PerjadinDetailController extends BaseController
 {
+    public function index(Request $request)
+    {
+        $name = $request->input('query');
+        $status = $request->input('status');
+        $startDate = $request->input('start-date');
+        $endDate = $request->input('end-date');
+        $perPage = $request->input('limit', 5);
+        $isAdmin = $request->input('is-admin', false);
+        $status = $request->input('status');
+        $unit = $request->input('unit');
+
+        try {
+            // Mengambil data inventaris dengan paginasi
+            $detail = PerjadinDetail::with('hotel', 'transport', 'uang_harian', 'representatif', 'master.unit', 'ppk', 'bendahara', 'lampiran')
+                ->when($name, function ($query, $name) {
+                    return $query
+                        ->whereHas('master', function ($q) use ($name) {
+                            $q->where('nama_kegiatan', 'like', '%' . $name . '%')
+                                ->orWhere('no_st', 'like', '%' . $name . '%');
+                        })
+                        ->orWhere('no_sppd', 'like', '%' . $name . '%')
+                        ->orWhere('nama', 'like', '%' . $name . '%')
+                        ->orWhere('nip', 'like', '%' . $name . '%');
+                })->when($unit, function ($query, $unit) {
+                    return $query
+                        ->whereHas('master', function ($q) use ($unit) {
+                            $q->where('unit_id', $unit);
+                        });
+                })
+                ->when($status, function ($query, $status) {
+                    return $query->where('status', $status);
+                })
+                ->when($isAdmin, function ($query) {
+                    return $query->where('user_id', Auth::id());
+                })
+                ->orderBy('created_at', 'desc')
+                ->latest()
+                ->paginate($perPage);
+
+            return response()->json(['data' => $detail], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
+    }
+
     public function show($id)
     {
         try {
@@ -29,28 +74,6 @@ class PerjadinDetailController extends BaseController
         }
     }
 
-    // public function update(Request $request, $id)
-    // {
-    //     $data = json_decode($request->getContent());
-    //     DB::beginTransaction();
-    //     try {
-    //         $perjadin = PerjadinDetail::findOrFail($id);
-    //         // return Storage::url($inventory->image);
-    //         $perjadin->update([
-    //             'ppk' => $data->ppk->id,
-    //             'bendahara'=> $data->bendahara->id,
-    //             'tanggal_kuitansi' => Carbon::parse($data->tanggal_kuitansi)->format('Y-m-d'),
-    //         ]);
-    //         $result = PerjadinDetail::where('id', $id)->with('hotel', 'transport', 'uang_harian', 'representatif', 'master.mak','ppk','bendahara' )->first();
-    //         DB::commit();
-    //         return $this->sendResponse($result, 'Data berhasil di perbaharui');
-    //     } catch (\Exception $e) {
-    //         DB::rollBack();
-    //         return $this->sendError($e->getMessage(), 'Error');
-    //     }
-    // }
-
-
     /// STORE REALISASI
     public function store(Request $request)
     {
@@ -61,7 +84,6 @@ class PerjadinDetailController extends BaseController
         DB::beginTransaction();
 
         try {
-
             // DELETE EXISTING
             $real = PerjadinDetail::where('id', $umum->id)->with('hotel', 'transport', 'uang_harian', 'representatif', 'master.mak', 'ppk', 'bendahara', 'lampiran')->first();
             foreach ($real->hotel as $key => $value) {

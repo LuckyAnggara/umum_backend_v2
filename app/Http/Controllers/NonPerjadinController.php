@@ -104,7 +104,7 @@ class NonPerjadinController extends BaseController
 
                 // BUAT DETAIL DI MAK
                 $mak = MakDetailController::createMakDetail($result, 'NON PERJADIN', 'BELUM');
-                $catatan = $umum->catatan;
+                $catatan = $umum->catatan ?? '';
                 NonPerjadinLogController::createLog($result->id, 'PENGAJUAN', $catatan);
             }
 
@@ -232,13 +232,19 @@ class NonPerjadinController extends BaseController
     {
         try {
             // Cari dan hapus data bmn berdasarkan ID
-            $result = NonPerjadin::with('mak', 'lampiran')->where('id', $id)->first();
+            $result = NonPerjadin::with('mak', 'lampiran', 'log')->where('id', $id)->first();
             if ($result) {
                 if (count($result->lampiran) > 0) {
                     foreach ($result->lampiran as $key => $lampiran) {
                         Storage::disk('public')->delete($lampiran->lampiran);
                     }
                 }
+                if (count($result->log) > 0) {
+                    foreach ($result->log as $key => $log) {
+                        $log->delete();
+                    }
+                }
+
                 $mak = MakDetail::where('TYPE', 'NON PERJADIN')->where('kegiatan_id', $id)->first();
                 if ($mak) {
                     $mak->delete();

@@ -18,7 +18,7 @@ class MakController extends BaseController
 
         try {
             // Mengambil data inventaris dengan paginasi
-            $mak = Mak::with('unit', 'detail')->when($name, function ($query, $name) {
+            $mak = Mak::with('unit', 'detail', 'nominatif.detail')->when($name, function ($query, $name) {
                 return $query
                     ->where('keterangan', 'like', '%' . $name . '%')
                     ->orWhere('kode_mak', 'like', '%' . $name . '%');

@@ -27,4 +27,8 @@ class Mak extends Model
     {
         return $this->hasMany(MakDetail::class, 'mak_id', 'id');
     }
+    public function nominatif()
+    {
+        return $this->hasMany(MakNominatif::class, 'mak_id', 'id');
+    }
 }
