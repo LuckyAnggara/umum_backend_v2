@@ -1,0 +1,382 @@
+No,Biaya,Daerah,Satuan,Nilai
+1,Penginapan,Aceh,OH,Es 1 : Rp4.420.000 Es 2 : Rp3.526.000  Es 3 / Gol. IV : Rp1.533.000 Gol I - III : Rp770.000
+2,Penginapan,Sumatra Utara,OH,Es 1 : Rp4.960.000 Es 2 : Rp2.195.000  Es 3 / Gol. IV : 1.100.000 Gol I - III : Rp699.000
+3,Penginapan,Riau,OH,Es 1 : Rp3.820.000 Es 2 : Rp3.119.000  Es 3 / Gol. IV : Rp 1.650.000 Gol I - III : Rp852.000
+4,Penginapan,Kepulauan Riau,OH,Es 1 : Rp5.344.000 Es 2 :Rp2.318.000  Es 3 / Gol. IV : Rp1.297.000 Gol I - III : Rp792.000
+5,Penginapan,Jambi,OH,Es 1 : Rp5.000.000 Es 2 : Rp4.102.000  Es 3 / Gol. IV : Rp 1.225.000 Gol I - III : Rp580.000
+6,Penginapan,Sumatra Barat,OH,Es 1 : Rp5.236.000 Es 2 : Rp3.332.000  Es 3 / Gol. IV : Rp1.353.000 Gol I - III : Rp701.000
+7,Penginapan,Sumatra Selatan,OH,Es 1 : Rp5.850.000 Es 2 : Rp3.083.000  Es 3 / Gol. IV : Rp1.955.000 Gol I - III : Rp861.000
+8,Penginapan,Lampung,OH,Es 1 : Rp4.491.000 Es 2 : Rp2.488.000  Es 3 / Gol. IV : Rp1.425.000 Gol I - III : Rp580.000
+9,Penginapan,Bengkulu,OH,Es 1 : Rp2.140.000 Es 2 : Rp 1.628.000  Es 3 / Gol. IV : Rp 1.546.000 Gol I - III : Rp692.000
+10,Penginapan,Bangka Belitung,OH,Es 1 : Rp3.827.000 Es 2 : Rp2.838.000  Es 3 / Gol. IV : Rp1.957.000 Gol I - III : Rp649.000
+11,Penginapan,Banten,OH,Es 1 : Rp5.725.000 Es 2 : Rp2.373.000 Es 3 / Gol. IV : Rp 1.204.000 Gol I - IIII : Rp724.000
+12,Penginapan,Jawa Barat,OH,Es 1 : Rp5.381.000 Es 2 : Rp2.755.000  Es 3 / Gol. IV : Rp 1.201.000 Gol I - IIII : Rp686.000
+13,Penginapan,D.K.I. Jakarta,OH,Es 1 : Rp8.720.000 Es 2 : Rp2.063.000 Es 3 / Gol. IV : Rp992.000 Gol I - IIII : Rp730.000
+14,Penginapan,Jawa Tengah,OH,Es 1 : Rp5.303.000 Es 2 : Rp 1.850.000  Es 3 / Gol. IV : Rp 1.201.000 Gol I - IIII : Rp750.000
+15,Penginapan,D.I. Yogyakarta,OH,Es 1 : Rp5.017.000 Es 2 : Rp2.695.000  Es 3 / Gol. IV : Rp 1.384.000 Gol I - IIII : Rp845.000
+16,Penginapan,Jawa Timur,OH,Es 1 : Rp4.449.000 Es 2 : Rp2.007.000  Es 3 / Gol. IV : Rp 1.153.000 Gol I - IIII : Rp814.000
+17,Penginapan,Bali,OH,Es 1 : Rp6.848.000 Es 2 : Rp2.433.000  Es 3 / Gol. IV : Rp 1.685.000 Gol I - IIII : Rp1.138.000
+18,Penginapan,Nusa Tenggara Barat,OH,Es 1 : Rp4.375.000 Es 2 : Rp2.648.000  Es 3 / Gol. IV : Rp1.418.000 Gol I - IIII : Rp907.000
+19,Penginapan,Nusa Tenggara Timur,OH,Es 1 : Rp3.750.000 Es 2 : Rp2.133.000  Es 3 / Gol. IV : Rp 1.355.000 Gol I - IIII : Rp688.000
+20,Penginapan,Kalimantan Barat,OH,Es 1 : Rp2.654.000 Es 2 : Rp1.923.000  Es 3 / Gol. IV : Rp 1.125.000 Gol I - IIII : Rp538.000
+21,Penginapan,Kalimantan Tengah,OH,Es 1 : Rp4.901.000 Es 2 : Rp3.391.000  Es 3 / Gol. IV : Rp1.160.000 Gol I - IIII : Rp659.000
+22,Penginapan,Kalimantan Selatan,OH,Es 1 : Rp4.797.000 Es 2 : Rp3.316.000  Es 3 / Gol. IV : Rp 1.500.000 Gol I - IIII : Rp697.000
+23,Penginapan,Kalimantan Timur,OH,Es 1 : Rp4.000.000 Es 2 : Rp2.188.000  Es 3 / Gol. IV : Rp 1.507.000 Gol I - IIII : Rp804.000
+24,Penginapan,Kalimantan Utara,OH,Es 1 : Rp4.000.000 Es 2 : Rp2.735.000  Es 3 / Gol. IV : Rp1.507.000 Gol I - IIII : Rp904.000
+25,Penginapan,Sulawesi Utara,OH,Es 1 : Rp4.919.000 Es 2 : Rp2.290.000  Es 3 / Gol. IV : Rp1.270.000 Gol I - IIII : Rp978.000
+26,Penginapan,Gorontalo,OH,Es 1 : Rp4.168.000 Es 2 : Rp3.107.000  Es 3 / Gol. IV : Rp 1.606.000 Gol I - IIII : Rp955.000
+27,Penginapan,Sulawesi Barat,OH,Es 1 : Rp4.076.000 Es 2 : Rp3.098.000  Es 3 / Gol. IV : Rp 1.344.000 Gol I - IIII : Rp704.000
+28,Penginapan,Sulawesi Selatan,OH,Es 1 : Rp4.820.000 Es 2 : Rp1.938.000  Es 3 / Gol. IV : Rp1.423.000 Gol I - IIII : Rp745.000
+29,Penginapan,Sulawesi Tengah,OH,Es 1 : Rp2.309.000 Es 2 : Rp2.027.000  Es 3 / Gol. IV : Rp1.679.000 Gol I - IIII : Rp951.000
+30,Penginapan,Sulawesi Tenggara,OH,Es 1 : Rp3.088.800 Es 2 : Rp2.574.000  Es 3 / Gol. IV : Rp1.297.000 Gol I - IIII : Rp786.000
+31,Penginapan,Maluku,OH,Es 1 : Rp3.467.000 Es 2 : Rp3.240.000  Es 3 / Gol. IV : Rp1.059.000 Gol I - IIII : Rp667.000
+32,Penginapan,Maluku Utara,OH,Es 1 : Rp4.611.600 Es 2 : Rp3.843.000  Es 3 / Gol. IV : Rp 1.160.000 Gol I - IIII : Rp605.000
+33,Penginapan,Papua,OH,Es 1 : Rp3.859.000 Es 2 : Rp3.318.000  Es 3 / Gol. IV : Rp2.521.000 Gol I - IIII : Rp1.038.000
+34,Penginapan,Papua Barat,OH,Es 1 : Rp3.872.000 Es 2 : Rp3.341.000  Es 3 / Gol. IV : Rp2.056.000 Gol I - IIII : Rp967.000
+35,Penginapan,Papua Barat Daya,OH,Es 1 : Rp3.872.000 Es 2 : Rp3.341.000  Es 3 / Gol. IV : Rp2.056.000 Gol I - IIII : Rp967.000
+36,Penginapan,Papua Tengah,OH,Es 1 : Rp3.859.000 Es 2 : Rp3.318.000  Es 3 / Gol. IV : Rp2.521.000 Gol I - IIII : Rp1.038.000
+37,Penginapan,Papua Selatan,OH,Es 1 : Rp5.673.000 Es 2 : Rp4.877.000  Es 3 / Gol. IV : Rp3.706.000 Gol I - IIII : Rp1.526.000
+38,Penginapan,Papua Pegunungan,OH,Es 1 : Rp5.711.000 Es 2 : Rp4. 911.000  Es 3 / Gol. IV : Rp3.731.000 Gol I - IIII : Rp1.536.000
+39,Halfday,Aceh,OP,Rp. 310.000
+40,Halfday,Sumatra Utara,OP,Rp. 279.000
+41,Halfday,Riau,OP,Rp. 219.000
+42,Halfday,Kepulauan Riau,OP,Rp. 241.000
+43,Halfday,Jambi,OP,Rp. 288.000
+44,Halfday,Sumatra Barat,OP,Rp. 180.000
+45,Halfday,Sumatra Selatan,OP,Rp. 290.000
+46,Halfday,Lampung,OP,Rp. 220.000
+47,Halfday,Bengkulu,OP,Rp. 268.000
+48,Halfday,Bangka Belitung,OP,Rp. 343.000
+49,Halfday,Banten,OP,Rp. 340.000
+50,Halfday,Jawa Barat,OP,Rp. 414.000
+51,Halfday,D.K.I. Jakarta,OP,Rp. 359.000
+52,Halfday,Jawa Tengah,OP,Rp. 255.000
+53,Halfday,D.I. Yogyakarta,OP,Rp. 262.000
+54,Halfday,Jawa Timur,OP,Rp. 338.000
+55,Halfday,Bali,OP,Rp. 362.000
+56,Halfday,Nusa Tenggara Barat,OP,Rp. 397.000
+57,Halfday,Nusa Tenggara Timur,OP,Rp. 339.000
+58,Halfday,Kalimantan Barat,OP,Rp. 277.000
+59,Halfday,Kalimantan Tengah,OP,Rp. 288.000
+60,Halfday,Kalimantan Selatan,OP,Rp. 250.000
+61,Halfday,Kalimantan Timur,OP,Rp. 241.000
+62,Halfday,Kalimantan Utara,OP,Rp. 260.000
+63,Halfday,Sulawesi Utara,OP,Rp. 269.000
+64,Halfday,Gorontalo,OP,Rp. 225.000
+65,Halfday,Sulawesi Barat,OP,Rp. 269.000
+66,Halfday,Sulawesi Selatan,OP,Rp. 280.000
+67,Halfday,Sulawesi Tengah,OP,Rp. 303.000
+68,Halfday,Sulawesi Tenggara,OP,Rp. 309.000
+69,Halfday,Maluku,OP,Rp. 265.000
+70,Halfday,Maluku Utara,OP,Rp. 254.000
+71,Halfday,Papua,OP,Rp. 321.000
+72,Halfday,Papua Barat,OP,Rp. 310.000
+73,Halfday,Papua Barat Daya,OP,Rp. 310.000
+74,Halfday,Papua Tengah,OP,Rp. 321.000
+75,Halfday,Papua Selatan,OP,Rp. 472.000
+76,Halfday,Papua Pegunungan,OP,Rp. 272.000
+77,Fullday,Aceh,OP,Rp. 397.000
+78,Fullday,Sumatra Utara,OP,Rp. 427.000
+79,Fullday,Riau,OP,Rp. 397.000
+80,Fullday,Kepulauan Riau,OP,Rp. 292.000
+81,Fullday,Jambi,OP,Rp. 367.000
+82,Fullday,Sumatra Barat,OP,Rp. 248.000
+83,Fullday,Sumatra Selatan,OP,Rp. 455.000
+84,Fullday,Lampung,OP,Rp. 290.000
+85,Fullday,Bengkulu,OP,Rp. 416.000
+86,Fullday,Bangka Belitung,OP,Rp. 416.000
+87,Fullday,Banten,OP,Rp. 425.000
+88,Fullday,Jawa Barat,OP,Rp. 498.000
+89,Fullday,D.K.I. Jakarta,OP,Rp. 455.000
+90,Fullday,Jawa Tengah,OP,Rp. 319.000
+91,Fullday,D.I. Yogyakarta,OP,Rp. 351.000
+92,Fullday,Jawa Timur,OP,Rp. 408.000
+93,Fullday,Bali,OP,Rp. 441.000
+94,Fullday,Nusa Tenggara Barat,OP,Rp. 420.000
+95,Fullday,Nusa Tenggara Timur,OP,Rp. 448.000
+96,Fullday,Kalimantan Barat,OP,Rp. 387.000
+97,Fullday,Kalimantan Tengah,OP,Rp. 365.000
+98,Fullday,Kalimantan Selatan,OP,Rp. 366.000
+99,Fullday,Kalimantan Timur,OP,Rp. 366.000
+100,Fullday,Kalimantan Utara,OP,Rp. 331.000
+101,Fullday,Sulawesi Utara,OP,Rp. 357.000
+102,Fullday,Gorontalo,OP,Rp. 289.000
+103,Fullday,Sulawesi Barat,OP,Rp. 404.000
+104,Fullday,Sulawesi Selatan,OP,Rp. 397.000
+105,Fullday,Sulawesi Tengah,OP,Rp. 422.000
+106,Fullday,Sulawesi Tenggara,OP,Rp. 369.000
+107,Fullday,Maluku,OP,Rp. 346.000
+108,Fullday,Maluku Utara,OP,Rp. 446.000
+109,Fullday,Papua,OP,Rp. 478.000
+110,Fullday,Papua Barat,OP,Rp. 421.000
+111,Fullday,Papua Barat Daya,OP,Rp. 421.000
+112,Fullday,Papua Tengah,OP,Rp. 478.000
+113,Fullday,Papua Selatan,OP,Rp. 703.000
+114,Fullday,Papua Pegunungan,OP,Rp. 703.000
+115,Fullboard,Aceh,OP,Rp. 948.000
+116,Fullboard,Sumatra Utara,OP,Rp. 764.000
+117,Fullboard,Riau,OP,Rp. 888.000
+118,Fullboard,Kepulauan Riau,OP,Rp. 807.000
+119,Fullboard,Jambi,OP,Rp. 1.110.000
+120,Fullboard,Sumatra Barat,OP,Rp. 696.000
+121,Fullboard,Sumatra Selatan,OP,Rp. 745.000
+122,Fullboard,Lampung,OP,Rp. 933.000
+123,Fullboard,Bengkulu,OP,Rp. 1.054.000
+124,Fullboard,Bangka Belitung,OP,Rp. 965.000
+125,Fullboard,Banten,OP,Rp. 1.051.000
+126,Fullboard,Jawa Barat,OP,Rp. 931.000
+127,Fullboard,D.K.I. Jakarta,OP,Rp. 1.197.000
+128,Fullboard,Jawa Tengah,OP,Rp. 770.000
+129,Fullboard,D.I. Yogyakarta,OP,Rp. 750.000
+130,Fullboard,Jawa Timur,OP,Rp. 1.381.000
+131,Fullboard,Bali,OP,Rp. 1.419.000
+132,Fullboard,Nusa Tenggara Barat,OP,Rp. 820.000
+133,Fullboard,Nusa Tenggara Timur,OP,Rp. 1.032.000
+134,Fullboard,Kalimantan Barat,OP,Rp. 774.000
+135,Fullboard,Kalimantan Tengah,OP,Rp. 1.272.000
+136,Fullboard,Kalimantan Selatan,OP,Rp. 809.000
+137,Fullboard,Kalimantan Timur,OP,Rp. 900.000
+138,Fullboard,Kalimantan Utara,OP,Rp. 874.000
+139,Fullboard,Sulawesi Utara,OP,Rp. 922.000
+140,Fullboard,Gorontalo,OP,Rp. 1.299.000
+141,Fullboard,Sulawesi Barat,OP,Rp. 1.006.000
+142,Fullboard,Sulawesi Selatan,OP,Rp. 1.307.000
+143,Fullboard,Sulawesi Tengah,OP,Rp. 1.095.000
+144,Fullboard,Sulawesi Tenggara,OP,Rp. 869.000
+145,Fullboard,Maluku,OP,Rp. 933.000
+146,Fullboard,Maluku Utara,OP,Rp. 803.000
+147,Fullboard,Papua,OP,Rp. 1.182.000
+148,Fullboard,Papua Barat,OP,Rp. 1.120.000
+149,Fullboard,Papua Barat Daya,OP,Rp. 1.120.000
+150,Fullboard,Papua Tengah,OP,Rp. 1.182.000
+151,Fullboard,Papua Selatan,OP,Rp. 1.738.000
+152,Fullboard,Papua Pegunungan,OP,Rp. 1.738.000
+153,Taksi Bandara,Aceh,OK,Rp. 127.000
+154,Taksi Bandara,Sumatra Utara,OK,Rp. 308.000
+155,Taksi Bandara,Riau,OK,Rp. 101.000
+156,Taksi Bandara,Kepulauan Riau,OK,Rp. 165.000
+157,Taksi Bandara,Jambi,OK,Rp. 147.000
+158,Taksi Bandara,Sumatra Barat,OK,Rp. 190.000
+159,Taksi Bandara,Sumatra Selatan,OK,Rp. 179.000
+160,Taksi Bandara,Lampung,OK,Rp. 168.000
+161,Taksi Bandara,Bengkulu,OK,Rp. 109.000
+162,Taksi Bandara,Bangka Belitung,OK,Rp. 97.000
+163,Taksi Bandara,Banten,OK,Rp. 536.000
+164,Taksi Bandara,Jawa Barat,OK,Rp. 200.000
+165,Taksi Bandara,D.K.I. Jakarta,OK,Rp. 256.000
+166,Taksi Bandara,Jawa Tengah,OK,Rp. 108.000
+167,Taksi Bandara,D.I. Yogyakarta,OK,Rp. 267.000
+168,Taksi Bandara,Jawa Timur,OK,Rp. 233.000
+169,Taksi Bandara,Bali,OK,Rp. 227.000
+170,Taksi Bandara,Nusa Tenggara Barat,OK,Rp. 231.000
+171,Taksi Bandara,Nusa Tenggara Timur,OK,Rp. 116.000
+172,Taksi Bandara,Kalimantan Barat,OK,Rp. 171.000
+173,Taksi Bandara,Kalimantan Tengah,OK,Rp. 134.000
+174,Taksi Bandara,Kalimantan Selatan,OK,Rp. 180.000
+175,Taksi Bandara,Kalimantan Timur,OK,Rp. 533.000
+176,Taksi Bandara,Kalimantan Utara,OK,Rp. 218.000
+177,Taksi Bandara,Sulawesi Utara,OK,Rp. 138.000
+178,Taksi Bandara,Gorontalo,OK,Rp. 265.000
+179,Taksi Bandara,Sulawesi Barat,OK,Rp. 313.000
+180,Taksi Bandara,Sulawesi Selatan,OK,Rp. 187.000
+181,Taksi Bandara,Sulawesi Tengah,OK,Rp. 187.000
+182,Taksi Bandara,Sulawesi Tenggara,OK,Rp. 171.000
+183,Taksi Bandara,Maluku,OK,Rp. 288.000
+184,Taksi Bandara,Maluku Utara,OK,Rp. 215.000
+185,Taksi Bandara,Papua,OK,Rp. 513.000
+186,Taksi Bandara,Papua Barat,OK,Rp. 236.000
+187,Taksi Bandara,Papua Barat Daya,OK,N/A
+188,Taksi Bandara,Papua Tengah,OK,N/A
+189,Taksi Bandara,Papua Selatan,OK,N/A
+190,Taksi Bandara,Papua Pegunungan,OK,N/A
+191,Tiket Pesawat,Aceh,OK,(Bisnis) : Rp. 7.519.000; (Ekonomi) : Rp. 4.492.000
+192,Tiket Pesawat,Sumatra Utara,OK,(Bisnis) : Rp. 7.252.000; (Ekonomi) : Rp. 3.808.000
+193,Tiket Pesawat,Riau,OK,(Bisnis) : Rp. 5.583.000; (Ekonomi) : Rp. 3.016.000
+194,Tiket Pesawat,Kepulauan Riau,OK,(Bisnis) : Rp. 4.867.000; (Ekonomi) : Rp. 2.888.000
+195,Tiket Pesawat,Jambi,OK,(Bisnis) : Rp. 4.065.000; (Ekonomi) : Rp. 2.460.000
+196,Tiket Pesawat,Sumatra Barat,OK,(Bisnis) : Rp. 5.530.000; (Ekonomi) : Rp. 2.952.000
+197,Tiket Pesawat,Sumatra Selatan,OK,(Bisnis) : Rp. 3.861.000; (Ekonomi) : Rp. 2.268.000
+198,Tiket Pesawat,Lampung,OK,(Bisnis) : Rp. 2.407.000; (Ekonomi) : Rp. 1.583.000
+199,Tiket Pesawat,Bengkulu,OK,(Bisnis) : Rp. 4.363.000; (Ekonomi) : Rp. 2.621.000
+200,Tiket Pesawat,Bangka Belitung,OK,(Bisnis) : Rp. 3.412.000; (Ekonomi) : Rp. 2.139.000
+201,Tiket Pesawat,Jawa Tengah,OK,(Bisnis) : Rp. 3.861.000; (Ekonomi) : Rp. 2.182.000
+202,Tiket Pesawat,D.I. Yogyakarta,OK,(Bisnis) : Rp. 4.107.000; (Ekonomi) : Rp. 2.268.000
+203,Tiket Pesawat,Jawa Tengah (Solo),OK,(Bisnis) : Rp. 3.861.000; (Ekonomi) : Rp. 2.342.000
+204,Tiket Pesawat,Jawa Timur,OK,(Bisnis) : Rp. 5.466.000; (Ekonomi) : Rp. 2.674.000
+205,Tiket Pesawat,Bali,OK,(Bisnis) : Rp. 5.305.000; (Ekonomi) : Rp. 3.262.000
+206,Tiket Pesawat,Nusa Tenggara Barat,OK,(Bisnis) : Rp. 5.316.000; (Ekonomi) : Rp. 3.230.000
+207,Tiket Pesawat,Nusa Tenggara Timur,OK,(Bisnis) : Rp. 9.413.000; (Ekonomi) : Rp. 5.081.000
+208,Tiket Pesawat,Kalimantan Barat,OK,(Bisnis) : Rp. 4.353.000; (Ekonomi) : Rp. 2.781.000
+209,Tiket Pesawat,Kalimantan Tengah,OK,(Bisnis) : Rp. 4.984.000; (Ekonomi) : Rp. 2.984.000
+210,Tiket Pesawat,Kalimantan Selatan,OK,(Bisnis) : Rp. 5.252.000; (Ekonomi) : Rp. 2.995.000
+211,Tiket Pesawat,Kalimantan Timur,OK,(Bisnis) : Rp. 7.412.000; (Ekonomi) : Rp. 3.797.000
+212,Tiket Pesawat,Kalimantan Utara,OK,(Bisnis) : Rp. 7.424.000; (Ekonomi) : Rp. 4.067.000
+213,Tiket Pesawat,Jawa Timur (Malang),OK,(Bisnis) : Rp. 4.599.000; (Ekonomi) : Rp. 2.695.000
+214,Tiket Pesawat,Sulawesi Utara,OK,(Bisnis) : Rp. 10.824.000; (Ekonomi) : Rp. 5.102.000
+215,Tiket Pesawat,Gorontalo,OK,(Bisnis) : Rp. 7.231.000; (Ekonomi) : Rp. 4.824.000
+216,Tiket Pesawat,Sulawesi Barat,OK,(Bisnis) : Rp. 7.295.000; (Ekonomi) : Rp. 4.867.000
+217,Tiket Pesawat,Sulawesi Selatan,OK,(Bisnis) : Rp. 7.444.000; (Ekonomi) : Rp. 3.829.000
+218,Tiket Pesawat,Sulawesi Tengah,OK,(Bisnis) : Rp. 9.348.000; (Ekonomi) : Rp. 5.113.000
+219,Tiket Pesawat,Sulawesi Tenggara,OK,(Bisnis) : Rp. 7.658.000; (Ekonomi) : Rp. 4.182.000
+220,Tiket Pesawat,Maluku,OK,(Bisnis) : Rp. 13.285.000; (Ekonomi) : Rp. 7.081.000
+221,Tiket Pesawat,Maluku Utara,OK,(Bisnis) : Rp. 10.001.000; (Ekonomi) : Rp. 6.664.000
+222,Tiket Pesawat,Papua,OK,(Bisnis) : Rp. 14.568.000; (Ekonomi) : Rp. 8.193.000
+223,Tiket Pesawat,Manokwari,OK,(Bisnis) : Rp. 16.226.000; (Ekonomi) : Rp. 10.824.000
+224,Tiket Pesawat,Biak,OK,(Bisnis) : Rp. 14.065.000; (Ekonomi) : Rp. 7.519.000
+225,Tiket Pesawat,Timika,OK,(Bisnis) : Rp. 13.830.000; (Ekonomi) : Rp. 7.487.000
+226,Tiket Pesawat,Papua Barat Daya,OK,N/A
+227,Tiket Pesawat,Papua Tengah,OK,N/A
+228,Tiket Pesawat,Papua Selatan,OK,N/A
+229,Tiket Pesawat,Papua Pegunungan,OK,N/A
+230,Uang Harian Luar Kota,Aceh,OH,Rp. 360.000
+231,Uang Harian Luar Kota,Sumatra Utara,OH,Rp. 370.000
+232,Uang Harian Luar Kota,Riau,OH,Rp. 370.000
+233,Uang Harian Luar Kota,Kepulauan Riau,OH,Rp. 370.000
+234,Uang Harian Luar Kota,Jambi,OH,Rp. 370.000
+235,Uang Harian Luar Kota,Sumatra Barat,OH,Rp. 380.000
+236,Uang Harian Luar Kota,Sumatra Selatan,OH,Rp. 380.000
+237,Uang Harian Luar Kota,Lampung,OH,Rp. 380.000
+238,Uang Harian Luar Kota,Bengkulu,OH,Rp. 380.000
+239,Uang Harian Luar Kota,Bangka Belitung,OH,Rp. 410.000
+240,Uang Harian Luar Kota,Banten,OH,Rp. 370.000
+241,Uang Harian Luar Kota,Jawa Barat,OH,Rp. 430.000
+242,Uang Harian Luar Kota,D.K.I. Jakarta,OH,Rp. 530.000
+243,Uang Harian Luar Kota,Jawa Tengah,OH,Rp. 370.000
+244,Uang Harian Luar Kota,D.I. Yogyakarta,OH,Rp. 420.000
+245,Uang Harian Luar Kota,Jawa Timur,OH,Rp. 410.000
+246,Uang Harian Luar Kota,Bali,OH,Rp. 480.000
+247,Uang Harian Luar Kota,Nusa Tenggara Barat,OH,Rp. 440.000
+248,Uang Harian Luar Kota,Nusa Tenggara Timur,OH,Rp. 430.000
+249,Uang Harian Luar Kota,Kalimantan Barat,OH,Rp. 380.000
+250,Uang Harian Luar Kota,Kalimantan Tengah,OH,Rp. 360.000
+251,Uang Harian Luar Kota,Kalimantan Selatan,OH,Rp. 380.000
+252,Uang Harian Luar Kota,Kalimantan Timur,OH,Rp. 430.000
+253,Uang Harian Luar Kota,Kalimantan Utara,OH,Rp. 430.000
+254,Uang Harian Luar Kota,Sulawesi Utara,OH,Rp. 370.000
+255,Uang Harian Luar Kota,Gorontalo,OH,Rp. 370.000
+256,Uang Harian Luar Kota,Sulawesi Barat,OH,Rp. 410.000
+257,Uang Harian Luar Kota,Sulawesi Selatan,OH,Rp. 430.000
+258,Uang Harian Luar Kota,Sulawesi Tengah,OH,Rp. 370.000
+259,Uang Harian Luar Kota,Sulawesi Tenggara,OH,Rp. 380.000
+260,Uang Harian Luar Kota,Maluku,OH,Rp. 380.000
+261,Uang Harian Luar Kota,Maluku Utara,OH,Rp. 430.000
+262,Uang Harian Luar Kota,Papua,OH,Rp. 580.000
+263,Uang Harian Luar Kota,Papua Barat,OH,Rp. 480.000
+264,Uang Harian Luar Kota,Papua Barat Daya,OH,Rp. 480.000
+265,Uang Harian Luar Kota,Papua Tengah,OH,Rp. 580.000
+266,Uang Harian Luar Kota,Papua Selatan,OH,Rp. 580.000
+267,Uang Harian Luar Kota,Papua Pegunungan,OH,Rp. 580.000
+268,Uang Harian Luar Kota (> 8 Jam),Aceh,OH,Rp. 140.000
+269,Uang Harian Luar Kota (> 8 Jam),Sumatra Utara,OH,Rp. 150.000
+270,Uang Harian Luar Kota (> 8 Jam),Riau,OH,Rp. 150.000
+271,Uang Harian Luar Kota (> 8 Jam),Kepulauan Riau,OH,Rp. 150.000
+272,Uang Harian Luar Kota (> 8 Jam),Jambi,OH,Rp. 150.000
+273,Uang Harian Luar Kota (> 8 Jam),Sumatra Barat,OH,Rp. 150.000
+274,Uang Harian Luar Kota (> 8 Jam),Sumatra Selatan,OH,Rp. 150.000
+275,Uang Harian Luar Kota (> 8 Jam),Lampung,OH,Rp. 150.000
+276,Uang Harian Luar Kota (> 8 Jam),Bengkulu,OH,Rp. 150.000
+277,Uang Harian Luar Kota (> 8 Jam),Bangka Belitung,OH,Rp. 160.000
+278,Uang Harian Luar Kota (> 8 Jam),Banten,OH,Rp. 150.000
+279,Uang Harian Luar Kota (> 8 Jam),Jawa Barat,OH,Rp. 170.000
+280,Uang Harian Luar Kota (> 8 Jam),D.K.I. Jakarta,OH,Rp. 210.000
+281,Uang Harian Luar Kota (> 8 Jam),Jawa Tengah,OH,Rp. 150.000
+282,Uang Harian Luar Kota (> 8 Jam),D.I. Yogyakarta,OH,Rp. 170.000
+283,Uang Harian Luar Kota (> 8 Jam),Jawa Timur,OH,Rp. 160.000
+284,Uang Harian Luar Kota (> 8 Jam),Bali,OH,Rp. 190.000
+285,Uang Harian Luar Kota (> 8 Jam),Nusa Tenggara Barat,OH,Rp. 180.000
+286,Uang Harian Luar Kota (> 8 Jam),Nusa Tenggara Timur,OH,Rp. 170.000
+287,Uang Harian Luar Kota (> 8 Jam),Kalimantan Barat,OH,Rp. 150.000
+288,Uang Harian Luar Kota (> 8 Jam),Kalimantan Tengah,OH,Rp. 140.000
+289,Uang Harian Luar Kota (> 8 Jam),Kalimantan Selatan,OH,Rp. 150.000
+290,Uang Harian Luar Kota (> 8 Jam),Kalimantan Timur,OH,Rp. 170.000
+291,Uang Harian Luar Kota (> 8 Jam),Kalimantan Utara,OH,Rp. 170.000
+292,Uang Harian Luar Kota (> 8 Jam),Sulawesi Utara,OH,Rp. 150.000
+293,Uang Harian Luar Kota (> 8 Jam),Gorontalo,OH,Rp. 150.000
+294,Uang Harian Luar Kota (> 8 Jam),Sulawesi Barat,OH,Rp. 160.000
+295,Uang Harian Luar Kota (> 8 Jam),Sulawesi Selatan,OH,Rp. 170.000
+296,Uang Harian Luar Kota (> 8 Jam),Sulawesi Tengah,OH,Rp. 150.000
+297,Uang Harian Luar Kota (> 8 Jam),Sulawesi Tenggara,OH,Rp. 150.000
+298,Uang Harian Luar Kota (> 8 Jam),Maluku,OH,Rp. 150.000
+299,Uang Harian Luar Kota (> 8 Jam),Maluku Utara,OH,Rp. 170.000
+300,Uang Harian Luar Kota (> 8 Jam),Papua,OH,Rp. 230.000
+301,Uang Harian Luar Kota (> 8 Jam),Papua Barat,OH,Rp. 190.000
+302,Uang Harian Luar Kota (> 8 Jam),Papua Barat Daya,OH,Rp. 190.000
+303,Uang Harian Luar Kota (> 8 Jam),Papua Tengah,OH,Rp. 230.000
+304,Uang Harian Luar Kota (> 8 Jam),Papua Selatan,OH,Rp. 230.000
+305,Uang Harian Luar Kota (> 8 Jam),Papua Pegunungan,OH,Rp. 230.000
+306,Uang Harian Meeting,Aceh,OH,Fullday / Halfday : Rp. 85.000; Fullboard : Rp. 120.000
+307,Uang Harian Meeting,Sumatra Utara,OH,Fullday / Halfday : Rp. 95.000; Fullboard : Rp. 130.000
+308,Uang Harian Meeting,Riau,OH,Fullday / Halfday : Rp. 85.000; Fullboard : Rp. 130.000
+309,Uang Harian Meeting,Kepulauan Riau,OH,Fullday / Halfday : Rp. 95.000; Fullboard : Rp. 130.000
+310,Uang Harian Meeting,Jambi,OH,Fullday / Halfday : Rp. 95.000; Fullboard : Rp. 130.000
+311,Uang Harian Meeting,Sumatra Barat,OH,Fullday / Halfday : Rp. 85.000; Fullboard : Rp. 120.000
+312,Uang Harian Meeting,Sumatra Selatan,OH,Fullday / Halfday : Rp. 85.000; Fullboard : Rp. 120.000
+313,Uang Harian Meeting,Lampung,OH,Fullday / Halfday : Rp. 95.000; Fullboard : Rp. 130.000
+314,Uang Harian Meeting,Bengkulu,OH,Fullday / Halfday : Rp. 95.000; Fullboard : Rp. 130.000
+315,Uang Harian Meeting,Bangka Belitung,OH,Fullday / Halfday : Rp. 95.000; Fullboard : Rp. 130.000
+316,Uang Harian Meeting,Banten,OH,Fullday / Halfday : Rp. 85.000; Fullboard : Rp. 120.000
+317,Uang Harian Meeting,Jawa Barat,OH,Fullday / Halfday : Rp. 105.000; Fullboard : Rp. 150.000
+318,Uang Harian Meeting,D.K.I. Jakarta,OH,Fullday / Halfday : Rp. 130.000; Fullboard : Rp. 180.000
+319,Uang Harian Meeting,Jawa Tengah,OH,Fullday / Halfday : Rp. 95.000; Fullboard : Rp. 130.000
+320,Uang Harian Meeting,D.I. Yogyakarta,OH,Fullday / Halfday : Rp. 100.000; Fullboard : Rp. 140.000
+321,Uang Harian Meeting,Jawa Timur,OH,Fullday / Halfday : Rp. 100.000; Fullboard : Rp. 140.000
+322,Uang Harian Meeting,Bali,OH,Fullday / Halfday : Rp. 115.000; Fullboard : Rp. 160.000
+323,Uang Harian Meeting,Nusa Tenggara Barat,OH,Fullday / Halfday : Rp. 105.000; Fullboard : Rp. 150.000
+324,Uang Harian Meeting,Nusa Tenggara Timur,OH,Fullday / Halfday : Rp. 100.000; Fullboard : Rp. 140.000
+325,Uang Harian Meeting,Kalimantan Barat,OH,Fullday / Halfday : Rp. 95.000; Fullboard : Rp. 130.000
+326,Uang Harian Meeting,Kalimantan Tengah,OH,Fullday / Halfday : Rp. 85.000; Fullboard : Rp. 120.000
+327,Uang Harian Meeting,Kalimantan Selatan,OH,Fullday / Halfday : Rp. 95.000; Fullboard : Rp. 130.000
+328,Uang Harian Meeting,Kalimantan Timur,OH,Fullday / Halfday : Rp. 105.000; Fullboard : Rp. 150.000
+329,Uang Harian Meeting,Kalimantan Utara,OH,Fullday / Halfday : Rp. 105.000; Fullboard : Rp. 150.000
+330,Uang Harian Meeting,Sulawesi Utara,OH,Fullday / Halfday : Rp. 95.000; Fullboard : Rp. 130.000
+331,Uang Harian Meeting,Gorontalo,OH,Fullday / Halfday : Rp. 95.000; Fullboard : Rp. 130.000
+332,Uang Harian Meeting,Sulawesi Barat,OH,Fullday / Halfday : Rp. 85.000; Fullboard : Rp. 120.000
+333,Uang Harian Meeting,Sulawesi Selatan,OH,Fullday / Halfday : Rp. 105.000; Fullboard : Rp. 150.000
+334,Uang Harian Meeting,Sulawesi Tengah,OH,Fullday / Halfday : Rp. 95.000; Fullboard : Rp. 130.000
+335,Uang Harian Meeting,Sulawesi Tenggara,OH,Fullday / Halfday : Rp. 95.000; Fullboard : Rp. 130.000
+336,Uang Harian Meeting,Maluku,OH,Fullday / Halfday : Rp. 85.000; Fullboard : Rp. 20.000
+337,Uang Harian Meeting,Maluku Utara,OH,Fullday / Halfday : Rp. 95.000; Fullboard : Rp. 130.000
+338,Uang Harian Meeting,Papua,OH,Fullday / Halfday : Rp. 140.000; Fullboard : Rp. 200.000
+339,Uang Harian Meeting,Papua Barat,OH,Fullday / Halfday : Rp. 115.000; Fullboard : Rp. 60.000
+340,Uang Harian Meeting,Papua Barat Daya,OH,Fullday / Halfday : Rp. 115.000; Fullboard : Rp. 160.000
+341,Uang Harian Meeting,Papua Tengah,OH,Fullday / Halfday : Rp. 140.000; Fullboard : Rp. 200.000
+342,Uang Harian Meeting,Papua Selatan,OH,Fullday / Halfday : Rp. 140.000; Fullboard : Rp. 200.000
+343,Uang Harian Meeting,Papua Pegunungan,OH,Fullday / Halfday : Rp. 140.000; Fullboard : Rp. 200.000
+344,Konsumsi rapat,Aceh,OK,Makan Siang : Rp. 51.000; Snack : Rp. 20.000
+345,Konsumsi rapat,Sumatra Utara,OK,Makan Siang : Rp. 47.000; Snack : Rp. 17.000
+346,Konsumsi rapat,Riau,OK,Makan Siang : Rp. 50.000; Snack : Rp. 17.000
+347,Konsumsi rapat,Kepulauan Riau,OK,Makan Siang : Rp. 44.000; Snack : Rp. 25.000
+348,Konsumsi rapat,Jambi,OK,Makan Siang : Rp. 50.000; Snack : Rp. 18.000
+349,Konsumsi rapat,Sumatra Barat,OK,Makan Siang : Rp. 45.000; Snack : Rp. 18.000
+350,Konsumsi rapat,Sumatra Selatan,OK,Makan Siang : Rp. 63.000; Snack : Rp. 18.000
+351,Konsumsi rapat,Lampung,OK,Makan Siang : Rp. 43.000; Snack : Rp. 21.000
+352,Konsumsi rapat,Bengkulu,OK,Makan Siang : Rp. 48.000; Snack : Rp. 16.000
+353,Konsumsi rapat,Bangka Belitung,OK,Makan Siang : Rp. 44.000; Snack : Rp. 19.000
+354,Konsumsi rapat,Banten,OK,Makan Siang : Rp. 54.000; Snack : Rp. 20.000
+355,Konsumsi rapat,Jawa Barat,OK,Makan Siang : Rp. 50.000; Snack : Rp. 21.000
+356,Konsumsi rapat,D.K.I. Jakarta,OK,Makan Siang : Rp. 53.000; Snack : Rp. 24.000
+357,Konsumsi rapat,Jawa Tengah,OK,Makan Siang : Rp. 68.750; Snack : Rp. 16.000
+358,Konsumsi rapat,D.I. Yogyakarta,OK,Makan Siang : Rp. 55.000; Snack : Rp. 16.000
+359,Konsumsi rapat,Jawa Timur,OK,Makan Siang : Rp. 49.000; Snack : Rp. 23.000
+360,Konsumsi rapat,Bali,OK,Makan Siang : Rp. 48.000; Snack : Rp. 21.000
+361,Konsumsi rapat,Nusa Tenggara Barat,OK,Makan Siang : Rp. 49.000; Snack : Rp. 18.000
+362,Konsumsi rapat,Nusa Tenggara Timur,OK,Makan Siang : Rp. 52.000; Snack : Rp. 22.000
+363,Konsumsi rapat,Kalimantan Barat,OK,Makan Siang : Rp. 51.000; Snack : Rp. 17.000
+364,Konsumsi rapat,Kalimantan Tengah,OK,Makan Siang : Rp. 42.000; Snack : Rp. 15.000
+365,Konsumsi rapat,Kalimantan Selatan,OK,Makan Siang : Rp. 51.000; Snack : Rp. 17.000
+366,Konsumsi rapat,Kalimantan Timur,OK,Makan Siang : Rp. 48.000; Snack : Rp. 26.000
+367,Konsumsi rapat,Kalimantan Utara,OK,Makan Siang : Rp. 53.000; Snack : Rp. 21.000
+368,Konsumsi rapat,Sulawesi Utara,OK,Makan Siang : Rp. 55.000; Snack : Rp. 26.000
+369,Konsumsi rapat,Gorontalo,OK,Makan Siang : Rp. 45.000; Snack : Rp. 15.000
+370,Konsumsi rapat,Sulawesi Barat,OK,Makan Siang : Rp. 54.000; Snack : Rp. 21.000
+371,Konsumsi rapat,Sulawesi Selatan,OK,Makan Siang : Rp. 56.000; Snack : Rp. 26.000
+372,Konsumsi rapat,Sulawesi Tengah,OK,Makan Siang : Rp. 48.000; Snack : Rp. 18.000
+373,Konsumsi rapat,Sulawesi Tenggara,OK,Makan Siang : Rp. 49.000; Snack : Rp. 21.000
+374,Konsumsi rapat,Maluku,OK,Makan Siang : Rp. 59.000; Snack : Rp. 24.000
+375,Konsumsi rapat,Maluku Utara,OK,Makan Siang : Rp. 63.000; Snack : Rp. 25.000
+376,Konsumsi rapat,Papua,OK,Makan Siang : Rp. 61.000; Snack : Rp. 33.000
+377,Konsumsi rapat,Papua Barat,OK,Makan Siang : Rp. 62.000; Snack : Rp. 27.000
+378,Konsumsi rapat,Papua Barat Daya,OK,Makan Siang : Rp. 62.000; Snack : Rp. 27.000
+379,Konsumsi rapat,Papua Tengah,OK,Makan Siang : Rp. 61.000; Snack : Rp. 33.000
+380,Konsumsi rapat,Papua Selatan,OK,Makan Siang : Rp. 90.000; Snack : Rp. 49.000
+381,Konsumsi rapat,Papua Pegunungan,OK,Makan Siang : Rp. 91.000; Snack : Rp. 40.000

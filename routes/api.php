@@ -23,6 +23,7 @@ use App\Http\Controllers\PerjadinDetailController;
 use App\Http\Controllers\ProvinsiController;
 use App\Http\Controllers\RateController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\SbmController;
 use App\Http\Controllers\TempatController;
 use App\Http\Controllers\TemplateController;
 use App\Models\MutasiPersediaan;
@@ -127,6 +128,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::resource('/keuangan/mak', MakController::class);
     Route::resource('/keuangan/mak-nominatif', MakNominatifController::class);
+    Route::resource('/keuangan/sbm', SbmController::class);
 
     Route::get('/persediaan/cek-nama', [InventoryController::class, 'cekNama']);
     Route::post('persediaan/upload-image', [InventoryController::class, 'imageUpload']);
