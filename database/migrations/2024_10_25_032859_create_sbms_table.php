@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('daerah')->nullable();
             $table->string('satuan')->nullable();
             $table->text('nilai')->nullable();
+            $table->string('tahun_anggaran')->nullable();
             $table->timestamps();
         });
     }
