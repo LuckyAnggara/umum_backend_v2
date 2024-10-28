@@ -56,7 +56,7 @@ class PerjadinController extends BaseController
                 ->when($isAdmin, function ($query) {
                     return $query->where('user_id', Auth::id());
                 })
-                ->orderBy('created_at', 'desc')
+                ->orderBy(DB::raw('CAST(no_st AS UNSIGNED)'), 'asc')
                 ->latest()
                 ->paginate($perPage);
 

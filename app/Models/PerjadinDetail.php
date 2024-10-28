@@ -97,4 +97,9 @@ class PerjadinDetail extends Model
     {
         return  $this->hasOne(MakNominatif::class, 'id', 'nominatif_representatif_id');
     }
+
+    public function getNoSppdIntAttribute()
+    {
+        return (int) $this->no_sppd;
+    }
 }
