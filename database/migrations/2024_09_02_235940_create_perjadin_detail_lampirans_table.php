@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('perjadin_detail_lampirans', function (Blueprint $table) {
             $table->id();
             $table->foreignUlid('perjadin_detail_id');
-            $table->enum('type', ['HOTEL', 'UH', 'PESAWAT', 'REP', 'DARAT', 'LAINNYA', 'TRANSPORT']);
+            $table->enum('type', ['HOTEL', 'UH', 'PESAWAT', 'REP', 'DARAT', 'LAINNYA', 'TRANSPORT', 'TAKSI JAKARTA', 'PESAWAT', 'TAKSI TUJUAN']);
             $table->string('file_name');
             $table->string('lampiran');
             $table->timestamps();

@@ -69,6 +69,10 @@ class PerjadinDetail extends Model
     {
         return  $this->hasMany(PerjadinDetailLampiran::class, 'perjadin_detail_id', 'id');
     }
+    public function catatan()
+    {
+        return $this->hasMany(PerjadinDetailCatatan::class, 'perjadin_detail_id', 'id');
+    }
     public function nominatif_hotel()
     {
         return  $this->hasOne(MakNominatif::class, 'id', 'nominatif_hotel_id');

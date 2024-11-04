@@ -32,9 +32,10 @@ return new class extends Migration
             $table->integer('user_id');
             $table->integer('unit_id')->nullable();
             $table->string('kapokja')->nullable();
-            $table->integer('nip_kapokja')->nullable();
+            $table->string('nip_kapokja')->nullable();
             $table->string('pengusul')->nullable();
-            $table->integer('nip_pengusul')->nullable();
+            $table->string('nip_pengusul')->nullable();
+            $table->date('tanggal_rab')->nullable();
             $table->timestamps();
         });
     }

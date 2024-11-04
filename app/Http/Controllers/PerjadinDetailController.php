@@ -31,7 +31,8 @@ class PerjadinDetailController extends BaseController
 
         try {
             // Mengambil data inventaris dengan paginasi
-            $detail = PerjadinDetail::with('hotel', 'transport', 'uang_harian', 'representatif', 'master.unit', 'ppk', 'bendahara', 'lampiran')
+            $detail = PerjadinDetail::with('master.unit', 'hotel', 'transport', 'uang_harian', 'pesawat', 'taksi_jakarta', 'taksi_tujuan', 'representatif', 'master.mak', 'ppk', 'bendahara', 'lampiran')
+
                 ->when($name, function ($query, $name) {
                     return $query
                         ->whereHas('master', function ($q) use ($name) {
@@ -67,7 +68,8 @@ class PerjadinDetailController extends BaseController
     {
         try {
 
-            $result = PerjadinDetail::where('id', $id)->with('hotel', 'transport', 'uang_harian', 'representatif', 'master.mak', 'ppk', 'bendahara', 'lampiran')->first();
+            $result = PerjadinDetail::where('id', $id)->with('hotel', 'transport', 'uang_harian', 'pesawat', 'taksi_jakarta', 'taksi_tujuan', 'representatif', 'master.mak', 'ppk', 'bendahara', 'lampiran')->first();
+
             return $this->sendResponse($result, 'Data tersedia');
         } catch (\Exception $e) {
             return $this->sendError($e->getMessage(), 'Error');

@@ -717,6 +717,7 @@ class PerjadinController extends BaseController
         try {
             // Cari dan hapus data bmn berdasarkan ID
             $result = Perjadin::where('id', $id)->with('mak.nominatif.detail', 'log', 'detail.catatan', 'detail.lampiran', 'detail.hotel', 'detail.transport', 'detail.pesawat', 'detail.taksi_jakarta',  'detail.taksi_tujuan', 'detail.uang_harian', 'detail.representatif', 'detail.ppk', 'detail.bendahara', 'lampiran', 'provinsi', 'detail.nominatif_hotel.detail')->first();
+
             if ($result) {
                 if (count($result->lampiran) > 0) {
                     foreach ($result->lampiran as $key => $lampiran) {
@@ -731,50 +732,50 @@ class PerjadinController extends BaseController
                 }
                 if (count($result->detail) > 0) {
                     foreach ($result->detail as $key => $detail) {
-                        if ($detail->catatan) {
+                        if (count($detail->lampiran) > 0) {
                             foreach ($detail->lampiran as $key => $value) {
                                 Storage::disk('public')->delete($value->lampiran);
                                 $value->delete();
                             }
                         }
-                        if ($detail->catatan) {
+                        if (count($detail->catatan) > 0) {
                             foreach ($detail->catatan as $key => $value) {
                                 $value->delete();
                             }
                         }
-                        if ($detail->hotel) {
+                        if (count($detail->hotel) > 0) {
                             foreach ($detail->hotel as $key => $value) {
                                 $value->delete();
                             }
                         }
-                        if ($detail->pesawat) {
+                        if (count($detail->pesawat) > 0) {
                             foreach ($detail->pesawat as $key => $value) {
                                 $value->delete();
                             }
                         }
-                        if ($detail->taksi_tujuan) {
+                        if (count($detail->taksi_tujuan) > 0) {
                             foreach ($detail->taksi_tujuan as $key => $value) {
                                 $value->delete();
                             }
                         }
-                        if ($detail->taksi_jakarta) {
+                        if (count($detail->taksi_jakarta) > 0) {
                             foreach ($detail->taksi_jakarta as $key => $value) {
                                 $value->delete();
                             }
                         }
 
-                        if ($detail->transport) {
+                        if (count($detail->transport) > 0) {
                             foreach ($detail->transport as $key => $transport) {
                                 $transport->delete();
                             }
                         }
-                        if ($detail->uang_harian) {
-                            foreach ($detail->uh as $key => $value) {
+                        if (count($detail->uang_harian) > 0) {
+                            foreach ($detail->uang_harian as $key => $value) {
                                 $value->delete();
                             }
                         }
-                        if ($detail->representatif) {
-                            foreach ($detail->rep as $key => $value) {
+                        if (count($detail->representatif) > 0) {
+                            foreach ($detail->representatif as $key => $value) {
                                 $value->delete();
                             }
                         }
