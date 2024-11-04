@@ -45,6 +45,10 @@ class PerjadinDetail extends Model
     {
         return $this->hasOne(Ppk::class, 'id', 'ppk');
     }
+    public function catatan()
+    {
+        return $this->hasMany(PerjadinDetailCatatan::class, 'perjadin_detail_id', 'id');
+    }
     public function pesawat()
     {
         return $this->hasMany(PerjadinDetailPesawat::class, 'perjadin_detail_id', 'id');
@@ -100,5 +104,10 @@ class PerjadinDetail extends Model
     public function nominatif_representatif()
     {
         return  $this->hasOne(MakNominatif::class, 'id', 'nominatif_representatif_id');
+    }
+
+    public function getNoSppdIntAttribute()
+    {
+        return (int) $this->no_sppd;
     }
 }

@@ -56,7 +56,7 @@ class PerjadinController extends BaseController
                 ->when($isAdmin, function ($query) {
                     return $query->where('user_id', Auth::id());
                 })
-                ->orderBy('created_at', 'desc')
+                ->orderBy(DB::raw('CAST(no_st AS UNSIGNED)'), 'asc')
                 ->latest()
                 ->paginate($perPage);
 
@@ -305,7 +305,7 @@ class PerjadinController extends BaseController
     public function show($id)
     {
         try {
-            $result = Perjadin::where('id', $id)->with('mak.nominatif.detail', 'log', 'detail.hotel', 'detail.transport', 'detail.pesawat', 'detail.taksi_jakarta',  'detail.taksi_tujuan', 'detail.uang_harian', 'detail.representatif', 'detail.ppk', 'detail.bendahara', 'lampiran', 'provinsi', 'detail.nominatif_hotel.detail', 'detail.nominatif_uh.detail', 'detail.nominatif_transport.detail', 'detail.nominatif_pesawat.detail', 'detail.nominatif_taksi_jakarta.detail', 'detail.nominatif_taksi_tujuan.detail', 'detail.nominatif_representatif.detail')->first();
+            $result = Perjadin::where('id', $id)->with('mak.nominatif.detail', 'log', 'detail.catatan', 'detail.hotel', 'detail.transport', 'detail.pesawat', 'detail.taksi_jakarta',  'detail.taksi_tujuan', 'detail.uang_harian', 'detail.representatif', 'detail.ppk', 'detail.bendahara', 'lampiran', 'provinsi', 'detail.nominatif_hotel.detail', 'detail.nominatif_uh.detail', 'detail.nominatif_transport.detail', 'detail.nominatif_pesawat.detail', 'detail.nominatif_taksi_jakarta.detail', 'detail.nominatif_taksi_tujuan.detail', 'detail.nominatif_representatif.detail')->first();
             return $this->sendResponse($result, 'Ada');
         } catch (\Exception $e) {
             return $this->sendError($e->getMessage(), 'Error');
@@ -414,6 +414,7 @@ class PerjadinController extends BaseController
                         'tanggal_awal' => Carbon::parse($detail->tanggal_awal)->format('Y-m-d'),
                         'tanggal_akhir' => Carbon::parse($detail->tanggal_akhir)->format('Y-m-d'),
                         'jumlah_hari' => $detail->jumlah_hari ?? 0,
+                        'tahun_anggaran' => $umum->tahun_anggaran,
                     ]);
 
                     $total_hotel = 0;
@@ -637,11 +638,27 @@ class PerjadinController extends BaseController
                     'status' => $data->status,
                 ]);
                 foreach ($perjadin->detail as $key => $detail) {
-                    $latestSppd = PerjadinDetail::max('no_sppd'); // Replace 'Detail' with your actual model if different
-                    // Increment the number
-                    $nextSppd = $latestSppd + 1;
-                    // Format the number to 4 digits with leading zeros
+                    // Find the maximum `no_sppd` for the specified `tahun_anggaran`
+                    $latestSppd = PerjadinDetail::where('tahun_anggaran', $perjadin->tahun_anggaran)->max('no_sppd');
+
+                    if ($latestSppd) {
+                        // If there's an existing `no_sppd`, find the first missing number in the sequence for the given year
+                        $nextSppd = PerjadinDetail::where('tahun_anggaran', $perjadin->tahun_anggaran)
+                            ->orderBy('no_sppd')
+                            ->pluck('no_sppd')
+                            ->zip(range(1, $latestSppd)) // Create pairs with expected values
+                            ->firstWhere(function ($pair) {
+                                return $pair[0] !== $pair[1]; // Check where actual and expected differ
+                            })[1] ?? $latestSppd + 1; // Get the missing number or next in sequence
+                    } else {
+                        // If there's no `no_sppd` for this `tahun_anggaran`, start from 1
+                        $nextSppd = 1;
+                    }
+
+                    // Format `no_sppd` to 4 digits with leading zeros
                     $no_sppd = sprintf('%04d', $nextSppd);
+
+                    // Update the detail with the new `no_sppd` and other details
                     $detail->update([
                         'no_sppd' => $no_sppd,
                         'ppk' => $data->ppk->id,
@@ -717,7 +734,6 @@ class PerjadinController extends BaseController
         try {
             // Cari dan hapus data bmn berdasarkan ID
             $result = Perjadin::where('id', $id)->with('mak.nominatif.detail', 'log', 'detail.catatan', 'detail.lampiran', 'detail.hotel', 'detail.transport', 'detail.pesawat', 'detail.taksi_jakarta',  'detail.taksi_tujuan', 'detail.uang_harian', 'detail.representatif', 'detail.ppk', 'detail.bendahara', 'lampiran', 'provinsi', 'detail.nominatif_hotel.detail')->first();
-
             if ($result) {
                 if (count($result->lampiran) > 0) {
                     foreach ($result->lampiran as $key => $lampiran) {
@@ -732,7 +748,7 @@ class PerjadinController extends BaseController
                 }
                 if (count($result->detail) > 0) {
                     foreach ($result->detail as $key => $detail) {
-                        if (count($detail->lampiran) > 0) {
+                        if ($detail->catatan) {
                             foreach ($detail->lampiran as $key => $value) {
                                 Storage::disk('public')->delete($value->lampiran);
                                 $value->delete();
