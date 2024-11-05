@@ -45,10 +45,7 @@ class PerjadinDetail extends Model
     {
         return $this->hasOne(Ppk::class, 'id', 'ppk');
     }
-    public function catatan()
-    {
-        return $this->hasMany(PerjadinDetailCatatan::class, 'perjadin_detail_id', 'id');
-    }
+
     public function pesawat()
     {
         return $this->hasMany(PerjadinDetailPesawat::class, 'perjadin_detail_id', 'id');

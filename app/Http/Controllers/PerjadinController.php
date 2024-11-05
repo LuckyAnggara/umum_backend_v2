@@ -323,6 +323,7 @@ class PerjadinController extends BaseController
             $perjadin =
                 Perjadin::where('id', $id)->with('mak.nominatif.detail', 'log', 'detail.hotel', 'detail.transport', 'detail.pesawat', 'detail.taksi_jakarta',  'detail.taksi_tujuan', 'detail.uang_harian', 'detail.representatif', 'detail.ppk', 'detail.bendahara', 'lampiran', 'provinsi', 'detail.nominatif_hotel.detail', 'detail.nominatif_uh.detail', 'detail.nominatif_transport.detail', 'detail.nominatif_pesawat.detail', 'detail.nominatif_taksi_jakarta.detail', 'detail.nominatif_taksi_tujuan.detail', 'detail.nominatif_representatif.detail')->first();
             // return Storage::url($inventory->image);
+
             $perjadin->update([
                 'tahun_anggaran' => $umum->tahun_anggaran,
                 'no_st' => $umum->no_st,
@@ -638,26 +639,7 @@ class PerjadinController extends BaseController
                     'status' => $data->status,
                 ]);
                 foreach ($perjadin->detail as $key => $detail) {
-                    // Find the maximum `no_sppd` for the specified `tahun_anggaran`
-                    $latestSppd = PerjadinDetail::where('tahun_anggaran', $perjadin->tahun_anggaran)->max('no_sppd');
-
-                    if ($latestSppd) {
-                        // If there's an existing `no_sppd`, find the first missing number in the sequence for the given year
-                        $nextSppd = PerjadinDetail::where('tahun_anggaran', $perjadin->tahun_anggaran)
-                            ->orderBy('no_sppd')
-                            ->pluck('no_sppd')
-                            ->zip(range(1, $latestSppd)) // Create pairs with expected values
-                            ->firstWhere(function ($pair) {
-                                return $pair[0] !== $pair[1]; // Check where actual and expected differ
-                            })[1] ?? $latestSppd + 1; // Get the missing number or next in sequence
-                    } else {
-                        // If there's no `no_sppd` for this `tahun_anggaran`, start from 1
-                        $nextSppd = 1;
-                    }
-
-                    // Format `no_sppd` to 4 digits with leading zeros
-                    $no_sppd = sprintf('%04d', $nextSppd);
-
+                    $no_sppd = $this->assignNoSppd();
                     // Update the detail with the new `no_sppd` and other details
                     $detail->update([
                         'no_sppd' => $no_sppd,
@@ -818,5 +800,61 @@ class PerjadinController extends BaseController
             // Berikan respons error jika data tidak ditemukan
             return response()->json(['message' => $e->getMessage()], 404);
         }
+    }
+
+    function setTotalAnggaran()
+    {
+
+        // $value = Perjadin::with('mak.nominatif.detail', 'log', 'detail.catatan', 'detail.hotel', 'detail.transport', 'detail.pesawat', 'detail.taksi_jakarta',  'detail.taksi_tujuan', 'detail.uang_harian', 'detail.representatif')->where('id', 1)->first();
+
+        // // $data = Perjadin::with([
+        // //     'detail.hotel',
+        // //     'detail.transport',
+        // //     'detail.pesawat',
+        // //     'detail.taksi_jakarta',
+        // //     'detail.taksi_tujuan',
+        // //     'detail.uang_harian',
+        // //     'detail.representatif'
+        // // ])->get();
+
+        // // foreach ($data as $perjadin) {
+        // //     if ($perjadin->total_realisasi > 0) {
+        // //         $perjadin->status = "SELESAI";
+        // //     }
+        // //     // $perjadin->total_anggaran = $perjadin->calculateTotalAnggaran();
+        // //     // $perjadin->total_realisasi = $perjadin->calculateTotalRealisasi();
+        // //     $perjadin->save();
+        // // }
+
+        // return response()->json(['message' => 'Total anggaran updated successfully']);
+    }
+
+    public function assignNoSppd()
+    {
+        // Step 1: Get all existing `no_sppd` values in ascending order
+        $existingNos = PerjadinDetail::whereNotNull('no_sppd')->orderBy('no_sppd')->pluck('no_sppd')->toArray();
+        $no_sppd = null;
+        if (empty($existingNos)) {
+            // If there are no existing numbers, start from 1
+            $no_sppd = 1;
+        } else {
+            // Step 2: Define expected range based on the min and max values
+            $minNo = min($existingNos);
+            $maxNo = max($existingNos);
+            $expectedNos = range($minNo, $maxNo);
+
+            // Step 3: Find the first missing number in the range
+            $missingNos = array_diff($expectedNos, $existingNos);
+            $firstMissingNo = reset($missingNos); // Get the first missing number, if any
+
+            if ($firstMissingNo) {
+                // Step 4: Assign the first missing number if there's a gap
+                $no_sppd = $firstMissingNo;
+            } else {
+                // Step 5: Otherwise, assign the next number in the sequence
+                $no_sppd  = $maxNo + 1;
+            }
+        }
+        return $no_sppd;
     }
 }

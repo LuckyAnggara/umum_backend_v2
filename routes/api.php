@@ -133,3 +133,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/persediaan/cek-nama', [InventoryController::class, 'cekNama']);
     Route::post('persediaan/upload-image', [InventoryController::class, 'imageUpload']);
 });
+
+Route::get('/setset', [PerjadinController::class, 'assignNoSppd']);

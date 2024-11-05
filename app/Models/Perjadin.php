@@ -87,4 +87,44 @@ class Perjadin extends Model
     {
         return $this->hasOne(Provinsi::class, 'id', 'provinsi_id');
     }
+
+    public function calculateTotalAnggaran()
+    {
+        $total = 0;
+
+        foreach ($this->detail as $detail) {
+            // For models with both biaya and hari columns (hotel, uang_harian, representatif)
+            $total += $detail->hotel ? $detail->hotel->sum(fn($item) => $item->biaya * $item->hari) : 0;
+            $total += $detail->uang_harian ? $detail->uang_harian->sum(fn($item) => $item->biaya * $item->hari) : 0;
+            $total += $detail->representatif ? $detail->representatif->sum(fn($item) => $item->biaya * $item->hari) : 0;
+
+            // For models with only biaya column (transport, pesawat, taksi_jakarta, taksi_tujuan)
+            $total += $detail->transport ? $detail->transport->sum('biaya') : 0;
+            $total += $detail->pesawat ? $detail->pesawat->sum('biaya') : 0;
+            $total += $detail->taksi_jakarta ? $detail->taksi_jakarta->sum('biaya') : 0;
+            $total += $detail->taksi_tujuan ? $detail->taksi_tujuan->sum('biaya') : 0;
+        }
+
+        return $total;
+    }
+
+    public function calculateTotalRealisasi()
+    {
+        $total = 0;
+
+        foreach ($this->detail as $detail) {
+            // For models with both biaya and hari columns (hotel, uang_harian, representatif)
+            $total += $detail->hotel ? $detail->hotel->sum(fn($item) => $item->realisasi_biaya * $item->realisasi_hari) : 0;
+            $total += $detail->uang_harian ? $detail->uang_harian->sum(fn($item) => $item->realisasi_biaya * $item->realisasi_hari) : 0;
+            $total += $detail->representatif ? $detail->representatif->sum(fn($item) => $item->realisasi_biaya * $item->realisasi_hari) : 0;
+
+            // For models with only biaya column (transport, pesawat, taksi_jakarta, taksi_tujuan)
+            $total += $detail->transport ? $detail->transport->sum('realisasi_biaya') : 0;
+            $total += $detail->pesawat ? $detail->pesawat->sum('realisasi_biaya') : 0;
+            $total += $detail->taksi_jakarta ? $detail->taksi_jakarta->sum('realisasi_biaya') : 0;
+            $total += $detail->taksi_tujuan ? $detail->taksi_tujuan->sum('realisasi_biaya') : 0;
+        }
+
+        return $total;
+    }
 }

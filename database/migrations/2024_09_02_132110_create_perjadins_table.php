@@ -28,7 +28,7 @@ return new class extends Migration
             $table->date('tanggal_verifikasi')->nullable();
             $table->date('tanggal_verifikasi_ptj')->nullable();
             $table->boolean('ptj')->default(0);
-            $table->enum('status', ['PERENCANAAN', 'VERIFIKASI', 'PERTANGGUNG JAWABAN', 'VERFIKASI PTJ', 'SELESAI']);
+            $table->enum('status', ['PERENCANAAN', 'VERIFIKASI', 'PERTANGGUNG JAWABAN', 'VERFIKASI PTJ', 'SELESAI', 'ARSIP']);
             $table->integer('user_id');
             $table->integer('unit_id')->nullable();
             $table->string('kapokja')->nullable();
