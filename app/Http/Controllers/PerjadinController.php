@@ -93,6 +93,11 @@ class PerjadinController extends BaseController
 
             if ($result) {
                 foreach ($umum->detail as $key => $detail) {
+
+                    $tanggal_awal = Carbon::parse($detail->tanggal_awal);
+                    $tanggal_akhir = Carbon::parse($detail->tanggal_akhir);
+                    $jumlah_hari = $tanggal_awal->diffInDays($tanggal_akhir) + 1;
+
                     $details = PerjadinDetail::create([
                         'perjadin_id' => $result->id,
                         'tanggal_sppd' => Carbon::parse($umum->tanggal_st)->format('Y-m-d'),
@@ -113,7 +118,7 @@ class PerjadinController extends BaseController
                         'nominatif_representatif_id' => $detail->nominatif_representatif ? $detail->nominatif_representatif->id : null,
                         'tanggal_awal' => Carbon::parse($detail->tanggal_awal)->format('Y-m-d'),
                         'tanggal_akhir' => Carbon::parse($detail->tanggal_akhir)->format('Y-m-d'),
-                        'jumlah_hari' => $detail->jumlah_hari ?? 0,
+                        'jumlah_hari' => $jumlah_hari
                     ]);
 
                     $total_hotel = 0;

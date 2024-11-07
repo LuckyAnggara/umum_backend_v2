@@ -23,3 +23,7 @@ Route::get('/', function () {
 Route::get('/test-pesan', [PesanController::class, 'test']);
 
 Route::get('/download-word', [TemplateController::class, 'sptjmDocx']);
+
+Route::get('/debug-sentry', function () {
+    throw new Exception('My first Sentry error!');
+});
