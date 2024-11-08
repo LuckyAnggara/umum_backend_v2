@@ -37,10 +37,10 @@ class AuthController extends Controller
         //     }
         // } else {
         //     if ($user->role !== 'USER') {
-                // return response([
-                //     'success'   => false,
-                //     'message' => ['Not credentials user.']
-                // ], 404);
+        // return response([
+        //     'success'   => false,
+        //     'message' => ['Not credentials user.']
+        // ], 404);
         //     }
         // }
 
@@ -112,7 +112,7 @@ class AuthController extends Controller
             $user = User::findOrFail(Auth::id());
             $user->update([
                 'name' => $request->name,
-                'unit' =>  $request->unit,
+                'unit_id' =>  $request->unit_id,
                 'role' =>  $request->role,
             ]);
             // Commit transaksi jika berhasil
@@ -163,7 +163,7 @@ class AuthController extends Controller
         $request->validate([
             'name' => 'required',
             'nip' => 'required',
-            'unit' => 'required',
+            'unit_id' => 'required',
             'role' => 'required',
             'password' => 'required',
         ]);
@@ -173,7 +173,7 @@ class AuthController extends Controller
         $user = User::create([
             'nip' => $request->nip,
             'name' =>  $request->name,
-            'unit' =>  $request->unit,
+            'unit_id' =>  $request->unit_id,
             'role' =>  $request->role,
             'password' => $password,
 

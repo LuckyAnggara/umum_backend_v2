@@ -31,29 +31,27 @@ class PerjadinDetailController extends BaseController
 
         try {
             // Mengambil data inventaris dengan paginasi
-            $detail = PerjadinDetail::with('master.unit', 'hotel', 'transport', 'uang_harian', 'pesawat', 'taksi_jakarta', 'taksi_tujuan', 'representatif', 'master.mak', 'ppk', 'bendahara', 'lampiran')
-
-                ->when($name, function ($query, $name) {
-                    return $query
-                        ->whereHas('master', function ($q) use ($name) {
-                            $q->where('nama_kegiatan', 'like', '%' . $name . '%')
-                                ->orWhere('no_st', 'like', '%' . $name . '%');
-                        })
-                        ->orWhere('no_sppd', 'like', '%' . $name . '%')
-                        ->orWhere('nama', 'like', '%' . $name . '%')
-                        ->orWhere('nip', 'like', '%' . $name . '%');
-                })->when($unit, function ($query, $unit) {
-                    return $query
-                        ->whereHas('master', function ($q) use ($unit) {
-                            $q->where('unit_id', $unit);
-                        });
-                })
+            $detail = PerjadinDetail::when($name, function ($query, $name) {
+                return $query
+                    ->whereHas('master', function ($q) use ($name) {
+                        $q->where('nama_kegiatan', 'like', '%' . $name . '%')
+                            ->orWhere('no_st', 'like', '%' . $name . '%');
+                    })
+                    ->orWhere('no_sppd', 'like', '%' . $name . '%')
+                    ->orWhere('nama', 'like', '%' . $name . '%')
+                    ->orWhere('nip', 'like', '%' . $name . '%');
+            })->when($unit, function ($query, $unit) {
+                return $query
+                    ->whereHas('master', function ($q) use ($unit) {
+                        $q->where('unit_id', $unit);
+                    });
+            })
                 ->when($status, function ($query, $status) {
                     return $query->where('status', $status);
                 })
                 ->when($isAdmin, function ($query) {
                     return $query->where('user_id', Auth::id());
-                })
+                })->with('master.unit', 'hotel', 'transport', 'uang_harian', 'pesawat', 'taksi_jakarta', 'taksi_tujuan', 'representatif')
                 ->orderBy(DB::raw('CAST(no_sppd AS UNSIGNED)'), 'asc')
                 ->latest()
                 ->paginate($perPage);

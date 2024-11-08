@@ -23,6 +23,7 @@ class User extends Authenticatable
         'nip',
         'unit_id',
         'unit',
+        'role',
         'email',
         'password',
     ];
@@ -54,7 +55,7 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-        public function unit()
+    public function unit()
     {
         return $this->hasOne(Unit::class, 'id', 'unit_id');
     }
