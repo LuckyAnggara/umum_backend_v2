@@ -310,7 +310,7 @@ class PerjadinController extends BaseController
     public function show($id)
     {
         try {
-            $result = Perjadin::where('id', $id)->with('mak.nominatif.detail', 'log', 'detail.catatan', 'detail.hotel', 'detail.transport', 'detail.pesawat', 'detail.taksi_jakarta',  'detail.taksi_tujuan', 'detail.uang_harian', 'detail.representatif', 'detail.ppk', 'detail.bendahara', 'lampiran', 'provinsi', 'detail.nominatif_hotel.detail', 'detail.nominatif_uh.detail', 'detail.nominatif_transport.detail', 'detail.nominatif_pesawat.detail', 'detail.nominatif_taksi_jakarta.detail', 'detail.nominatif_taksi_tujuan.detail', 'detail.nominatif_representatif.detail')->first();
+            $result = Perjadin::where('id', $id)->with('mak.nominatif.detail', 'log', 'log.user', 'detail.catatan', 'detail.hotel', 'detail.transport', 'detail.pesawat', 'detail.taksi_jakarta',  'detail.taksi_tujuan', 'detail.uang_harian', 'detail.representatif', 'detail.ppk', 'detail.bendahara', 'lampiran', 'provinsi', 'detail.nominatif_hotel.detail', 'detail.nominatif_uh.detail', 'detail.nominatif_transport.detail', 'detail.nominatif_pesawat.detail', 'detail.nominatif_taksi_jakarta.detail', 'detail.nominatif_taksi_tujuan.detail', 'detail.nominatif_representatif.detail')->first();
             return $this->sendResponse($result, 'Ada');
         } catch (\Exception $e) {
             return $this->sendError($e->getMessage(), 'Error');
@@ -836,30 +836,47 @@ class PerjadinController extends BaseController
 
     public function assignNoSppd()
     {
-        // Step 1: Get all existing `no_sppd` values in ascending order
-        $existingNos = PerjadinDetail::whereNotNull('no_sppd')->orderBy('no_sppd')->pluck('no_sppd')->toArray();
-        $no_sppd = null;
-        if (empty($existingNos)) {
-            // If there are no existing numbers, start from 1
-            $no_sppd = 1;
+        // // Step 1: Get all existing `no_sppd` values in ascending order
+        // $existingNos = PerjadinDetail::whereNotNull('no_sppd')->orderBy('no_sppd')->pluck('no_sppd')->toArray();
+        // $no_sppd = null;
+        // if (empty($existingNos)) {
+        //     // If there are no existing numbers, start from 1
+        //     $no_sppd = 1;
+        // } else {
+        //     // Step 2: Define expected range based on the min and max values
+        //     $minNo = min($existingNos);
+        //     $maxNo = max($existingNos);
+        //     $expectedNos = range($minNo, $maxNo);
+
+        //     // Step 3: Find the first missing number in the range
+        //     $missingNos = array_diff($expectedNos, $existingNos);
+        //     $firstMissingNo = reset($missingNos); // Get the first missing number, if any
+
+        //     if ($firstMissingNo) {
+        //         // Step 4: Assign the first missing number if there's a gap
+        //         $no_sppd = $firstMissingNo;
+        //     } else {
+        //         // Step 5: Otherwise, assign the next number in the sequence
+        //         $no_sppd  = $maxNo + 1;
+        //     }
+        // }
+        // return $no_sppd;
+
+        // Nomor awal yang ingin digunakan
+        $startNo = 4500;
+
+        // Cari nomor terbesar di rentang 4500 ke atas
+        $lastNo = PerjadinDetail::where('no_sppd', '>=', $startNo)->max('no_sppd');
+
+
+        // Paksa mulai dari 4500 tanpa memperhatikan nomor di bawah 4500
+        if ($lastNo === null || $lastNo < $startNo) {
+            $no_sppd = $startNo;
         } else {
-            // Step 2: Define expected range based on the min and max values
-            $minNo = min($existingNos);
-            $maxNo = max($existingNos);
-            $expectedNos = range($minNo, $maxNo);
-
-            // Step 3: Find the first missing number in the range
-            $missingNos = array_diff($expectedNos, $existingNos);
-            $firstMissingNo = reset($missingNos); // Get the first missing number, if any
-
-            if ($firstMissingNo) {
-                // Step 4: Assign the first missing number if there's a gap
-                $no_sppd = $firstMissingNo;
-            } else {
-                // Step 5: Otherwise, assign the next number in the sequence
-                $no_sppd  = $maxNo + 1;
-            }
+            // Abaikan nomor di bawah 4500 dan lanjutkan hanya dari rentang 4500 ke atas
+            $no_sppd = $startNo + 1;
         }
+
         return $no_sppd;
     }
 }

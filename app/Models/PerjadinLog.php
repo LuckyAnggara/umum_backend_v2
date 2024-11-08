@@ -20,4 +20,8 @@ class PerjadinLog extends Model
         'created_at' => 'datetime:d F Y',
     ];
 
+    public function user()
+    {
+        return $this->hasOne(User::class, 'id', 'user_id');
+    }
 }
