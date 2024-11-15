@@ -92,8 +92,9 @@ class PerjadinController extends BaseController
             ]);
 
             if ($result) {
-                foreach ($umum->detail as $key => $detail) {
 
+
+                foreach ($umum->detail as $key => $detail) {
                     $tanggal_awal = Carbon::parse($detail->tanggal_awal);
                     $tanggal_akhir = Carbon::parse($detail->tanggal_akhir);
                     $jumlah_hari = $tanggal_awal->diffInDays($tanggal_akhir) + 1;
@@ -107,180 +108,78 @@ class PerjadinController extends BaseController
                         'pangkat' => $detail->pangkat,
                         'unit' => $detail->unit,
                         'peran' => $detail->peran,
-                        'nominatif_hotel_id' => $detail->nominatif_hotel ? $detail->nominatif_hotel->id : null,
-                        'nominatif_pesawat_id' => $detail->nominatif_pesawat ? $detail->nominatif_pesawat->id : null,
-                        'nominatif_uh_id' => $detail->nominatif_uh ? $detail->nominatif_uh->id : null,
-                        'nominatif_transport_id' =>
-                        $detail->nominatif_transport ? $detail->nominatif_transport->id : null,
-                        'nominatif_taksi_jakarta_id' => $detail->nominatif_taksi_jakarta ? $detail->nominatif_taksi_jakarta->id : null,
-                        'nominatif_taksi_tujuan_id' =>
-                        $detail->nominatif_taksi_tujuan ? $detail->nominatif_taksi_tujuan->id : null,
-                        'nominatif_representatif_id' => $detail->nominatif_representatif ? $detail->nominatif_representatif->id : null,
+                        'nominatif_hotel_id' => $detail->nominatif_hotel->id ?? null,
+                        'nominatif_pesawat_id' => $detail->nominatif_pesawat->id ?? null,
+                        'nominatif_uh_id' => $detail->nominatif_uh->id ?? null,
+                        'nominatif_transport_id' => $detail->nominatif_transport->id ?? null,
+                        'nominatif_taksi_jakarta_id' => $detail->nominatif_taksi_jakarta->id ?? null,
+                        'nominatif_taksi_tujuan_id' => $detail->nominatif_taksi_tujuan->id ?? null,
+                        'nominatif_representatif_id' => $detail->nominatif_representatif->id ?? null,
                         'tanggal_awal' => Carbon::parse($detail->tanggal_awal)->format('Y-m-d'),
                         'tanggal_akhir' => Carbon::parse($detail->tanggal_akhir)->format('Y-m-d'),
                         'jumlah_hari' => $jumlah_hari
                     ]);
 
-                    $total_hotel = 0;
-                    $total_uh = 0;
-                    $total_pesawat = 0;
-                    $total_rep = 0;
-                    $total_taksi_jakarta = 0;
-                    $total_taksi_tujuan = 0;
-                    $total_transport = 0;
 
-                    // STORE HOTEL
-                    foreach ($detail->hotel as $key => $hotel) {
-                        $hot = PerjadinDetailHotel::create([
-                            'perjadin_detail_id' => $details->id,
-                            'keterangan' => $hotel->keterangan,
-                            'hari' => $hotel->hari,
-                            'realisasi_hari' => $hotel->hari,
-                            'biaya' => $hotel->biaya,
-                            'realisasi_biaya' => 0,
-                        ]);
-                        $total_hotel += $hotel->biaya * $hotel->hari;
-                    }
+                    $categories = [
+                        'hotel' => PerjadinDetailHotel::class,
+                        'pesawat' => PerjadinDetailPesawat::class,
+                        'taksi_jakarta' => PerjadinDetailTaksiJakarta::class,
+                        'taksi_tujuan' => PerjadinDetailTaksiTujuan::class,
+                        'transport' => PerjadinDetailTransport::class,
+                        'uang_harian' => PerjadinDetailUh::class, // Gunakan 'uang_harian'
+                        'representatif' => PerjadinDetailRep::class,
+                    ];
 
-                    if ($detail->nominatif_hotel) {
-                        MakNominatifDetail::create([
-                            'mak_nominatif_id' => $detail->nominatif_hotel->id,
-                            'kegiatan_id' => $result->id,
-                            'jumlah' => $total_hotel,
-                            'status_realisasi' => 'BELUM'
-                        ]);
-                    }
+                    $totals = [];
+                    foreach ($categories as $dataKey => $model) {
+                        $totals[$dataKey] = 0;
 
+                        // Periksa apakah properti data tersedia
+                        if (!isset($detail->$dataKey)) {
+                            continue;
+                        }
 
-                    // STORE PESAWAT
-                    foreach ($detail->pesawat as $key => $value) {
-                        $pes = PerjadinDetailPesawat::create([
-                            'perjadin_detail_id' => $details->id,
-                            'keterangan' => $value->keterangan,
-                            'biaya' => $value->biaya,
-                            'realisasi_biaya' => 0,
-                        ]);
-                        $total_pesawat += $value->biaya;
-                    }
+                        foreach ($detail->$dataKey as $item) {
+                            $data = [
+                                'perjadin_detail_id' => $details->id,
+                                'keterangan' => $item->keterangan,
+                                'biaya' => $item->biaya,
+                                'realisasi_biaya' => 0,
+                                'hari' => $item->hari ?? null,
+                                'realisasi_hari' => $item->hari ?? null,
+                            ];
 
-                    if ($detail->nominatif_pesawat) {
-                        MakNominatifDetail::create([
-                            'mak_nominatif_id' => $detail->nominatif_pesawat->id,
-                            'kegiatan_id' => $result->id,
-                            'jumlah' => $total_pesawat,
-                            'status_realisasi' => 'BELUM'
-                        ]);
-                    }
+                            // Tambahkan field tipe khusus untuk kategori transport
+                            if ($dataKey === 'transport') {
+                                $data['tipe'] = $item->tipe; // Pastikan tipe ada dalam $item
+                            }
 
-                    // STORE TAKSI JAKARTA
-                    foreach ($detail->taksi_jakarta as $key => $value) {
-                        $val = PerjadinDetailTaksiJakarta::create([
-                            'perjadin_detail_id' => $details->id,
-                            'keterangan' => $value->keterangan,
-                            'biaya' => $value->biaya,
-                            'realisasi_biaya' => 0,
-                        ]);
-                        $total_taksi_jakarta += $value->biaya;
-                    }
+                            $model::create($data);
 
-                    if ($detail->nominatif_taksi_jakarta) {
-                        MakNominatifDetail::create([
-                            'mak_nominatif_id' => $detail->nominatif_taksi_jakarta->id,
-                            'kegiatan_id' => $result->id,
-                            'jumlah' => $total_taksi_jakarta,
-                            'status_realisasi' => 'BELUM'
-                        ]);
-                    }
+                            // Kalkulasi total biaya
+                            $totals[$dataKey] += $item->biaya * ($item->hari ?? 1);
+                        }
 
-                    // STORE TAKSI TUJUAN
-                    foreach ($detail->taksi_tujuan as $key => $value) {
-                        $val = PerjadinDetailTaksiTujuan::create([
-                            'perjadin_detail_id' => $details->id,
-                            'keterangan' => $value->keterangan,
-                            'biaya' => $value->biaya,
-                            'realisasi_biaya' => 0,
-                        ]);
+                        // Periksa apakah nominatif ada sebelum diproses
+                        $nominatifKey = "nominatif_$dataKey";
+                        if (isset($detail->$nominatifKey)) {
+                            MakNominatifDetail::create([
+                                'mak_nominatif_id' => $detail->$nominatifKey->id,
+                                'kegiatan_id' => $result->id,
+                                'jumlah' => $totals[$dataKey],
+                                'status_realisasi' => 'BELUM',
+                            ]);
+                        }
 
-                        $total_taksi_tujuan += $value->biaya;
-                    }
-
-                    if ($detail->nominatif_taksi_tujuan) {
-                        MakNominatifDetail::create([
-                            'mak_nominatif_id' => $detail->nominatif_taksi_tujuan->id,
-                            'kegiatan_id' => $result->id,
-                            'jumlah' => $total_taksi_tujuan,
-                            'status_realisasi' => 'BELUM'
-                        ]);
-                    }
-
-                    // STORE TRANSPORT
-                    foreach ($detail->transport as $key => $transport) {
-                        $pes = PerjadinDetailTransport::create([
-                            'perjadin_detail_id' => $details->id,
-                            'keterangan' => $transport->keterangan,
-                            'tipe' => $transport->tipe,
-                            'biaya' => $transport->biaya,
-                            'realisasi_biaya' => 0,
-                        ]);
-                        $total_transport += $transport->biaya;
-                    }
-
-
-                    if ($detail->nominatif_transport) {
-                        MakNominatifDetail::create([
-                            'mak_nominatif_id' => $detail->nominatif_transport->id,
-                            'kegiatan_id' => $result->id,
-                            'jumlah' => $total_transport,
-                            'status_realisasi' => 'BELUM'
-                        ]);
-                    }
-
-
-                    // STORE UH
-                    foreach ($detail->uang_harian as $key => $uang_harian) {
-                        $dar = PerjadinDetailUh::create([
-                            'perjadin_detail_id' => $details->id,
-                            'keterangan' => $uang_harian->keterangan,
-                            'hari' => $uang_harian->hari,
-                            'realisasi_hari' => $uang_harian->hari,
-                            'biaya' => $uang_harian->biaya,
-                            'realisasi_biaya' => 0,
-                        ]);
-                        $total_uh += $uang_harian->biaya * $uang_harian->hari;
-                    }
-
-                    if ($detail->nominatif_uh) {
-                        MakNominatifDetail::create([
-                            'mak_nominatif_id' => $detail->nominatif_uh->id,
-                            'kegiatan_id' => $result->id,
-                            'jumlah' => $total_uh,
-                            'status_realisasi' => 'BELUM'
-                        ]);
-                    }
-
-
-                    // STORE REPRESENTATIF
-                    foreach ($detail->representatif as $key => $representatif) {
-                        $rep = PerjadinDetailRep::create([
-                            'perjadin_detail_id' => $details->id,
-                            'keterangan' => $representatif->keterangan,
-                            'hari' => $representatif->hari,
-                            'realisasi_hari' => $representatif->hari,
-                            'biaya' => $representatif->biaya,
-                            'realisasi_biaya' => 0,
-                        ]);
-
-                        $total_rep += $representatif->biaya * $representatif->hari;
-                    }
-
-
-                    if ($detail->nominatif_representatif) {
-                        MakNominatifDetail::create([
-                            'mak_nominatif_id' => $detail->nominatif_representatif->id,
-                            'kegiatan_id' => $result->id,
-                            'jumlah' => $total_rep,
-                            'status_realisasi' => 'BELUM'
-                        ]);
+                        if (isset($detail->nominatif_uh)) {
+                            MakNominatifDetail::create([
+                                'mak_nominatif_id' => $detail->nominatif_uh->id,
+                                'kegiatan_id' => $result->id,
+                                'jumlah' => $totals[$dataKey],
+                                'status_realisasi' => 'BELUM',
+                            ]);
+                        }
                     }
                 }
 
@@ -408,15 +307,15 @@ class PerjadinController extends BaseController
                         'pangkat' => $detail->pangkat,
                         'unit' => $detail->unit,
                         'peran' => $detail->peran,
-                        'nominatif_hotel_id' => $detail->nominatif_hotel ? $detail->nominatif_hotel->id : null,
-                        'nominatif_pesawat_id' => $detail->nominatif_pesawat ? $detail->nominatif_pesawat->id : null,
-                        'nominatif_uh_id' => $detail->nominatif_uh ? $detail->nominatif_uh->id : null,
-                        'nominatif_transport_id' =>
-                        $detail->nominatif_transport ? $detail->nominatif_transport->id : null,
-                        'nominatif_taksi_jakarta_id' => $detail->nominatif_taksi_jakarta ? $detail->nominatif_taksi_jakarta->id : null,
-                        'nominatif_taksi_tujuan_id' =>
-                        $detail->nominatif_taksi_tujuan ? $detail->nominatif_taksi_tujuan->id : null,
-                        'nominatif_representatif_id' => $detail->nominatif_representatif ? $detail->nominatif_representatif->id : null,
+                        // 'nominatif_hotel_id' => $detail->nominatif_hotel ? $detail->nominatif_hotel->id : null,
+                        // 'nominatif_pesawat_id' => $detail->nominatif_pesawat ? $detail->nominatif_pesawat->id : null,
+                        // 'nominatif_uh_id' => $detail->nominatif_uh ? $detail->nominatif_uh->id : null,
+                        // 'nominatif_transport_id' =>
+                        // $detail->nominatif_transport ? $detail->nominatif_transport->id : null,
+                        // 'nominatif_taksi_jakarta_id' => $detail->nominatif_taksi_jakarta ? $detail->nominatif_taksi_jakarta->id : null,
+                        // 'nominatif_taksi_tujuan_id' =>
+                        // $detail->nominatif_taksi_tujuan ? $detail->nominatif_taksi_tujuan->id : null,
+                        // 'nominatif_representatif_id' => $detail->nominatif_representatif ? $detail->nominatif_representatif->id : null,
                         'tanggal_awal' => Carbon::parse($detail->tanggal_awal)->format('Y-m-d'),
                         'tanggal_akhir' => Carbon::parse($detail->tanggal_akhir)->format('Y-m-d'),
                         'jumlah_hari' => $detail->jumlah_hari ?? 0,
@@ -862,21 +761,216 @@ class PerjadinController extends BaseController
         // }
         // return $no_sppd;
 
+
+
+        // // Step 1: Retrieve and sort existing numbers
+        // $existingNos = PerjadinDetail::whereNotNull('no_sppd')->orderBy('no_sppd')->pluck('no_sppd')->toArray();
+
+        // if (empty($existingNos)) {
+        //     return response()->json(['message' => 'No records found']);
+        // }
+
+        // // Step 2: Define the expected range based on the minimum and maximum values
+        // $minNo = min($existingNos);
+        // $maxNo = max($existingNos);
+        // $expectedNos = range($minNo, $maxNo);
+
+        // // Step 3: Find the first missing number
+        // $missingNos = array_diff($expectedNos, $existingNos);
+        // $firstMissingNo = reset($missingNos); // Gets the first missing number
+
+        // return response()->json([
+        //     'first_missing_number' => $firstMissingNo,
+        //     'total_missing' => array_slice($missingNos, 0, 5),
+        // ]);
+
         // Nomor awal yang ingin digunakan
+
         $startNo = 4500;
 
-        // Cari nomor terbesar di rentang 4500 ke atas
         $lastNo = PerjadinDetail::where('no_sppd', '>=', $startNo)->max('no_sppd');
-
-
-        // Paksa mulai dari 4500 tanpa memperhatikan nomor di bawah 4500
-        if ($lastNo === null || $lastNo < $startNo) {
+        if ($lastNo == null || $lastNo < $startNo) {
             $no_sppd = $startNo;
         } else {
-            // Abaikan nomor di bawah 4500 dan lanjutkan hanya dari rentang 4500 ke atas
-            $no_sppd = $startNo + 1;
+            $no_sppd = $lastNo + 1;
         }
 
         return $no_sppd;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// $total_hotel = 0;
+// $total_uh = 0;
+// $total_pesawat = 0;
+// $total_rep = 0;
+// $total_taksi_jakarta = 0;
+// $total_taksi_tujuan = 0;
+// $total_transport = 0;
+
+// // // STORE HOTEL
+// foreach ($detail->hotel as $key => $hotel) {
+//     $hot = PerjadinDetailHotel::create([
+//         'perjadin_detail_id' => $details->id,
+//         'keterangan' => $hotel->keterangan,
+//         'hari' => $hotel->hari,
+//         'realisasi_hari' => $hotel->hari,
+//         'biaya' => $hotel->biaya,
+//         'realisasi_biaya' => 0,
+//     ]);
+//     $total_hotel += $hotel->biaya * $hotel->hari;
+// }
+
+// if (!isset($detail->nominatif_hotel)) {
+//     MakNominatifDetail::create([
+//         'mak_nominatif_id' => $detail->nominatif_hotel->id,
+//         'kegiatan_id' => $result->id,
+//         'jumlah' => $total_hotel,
+//         'status_realisasi' => 'BELUM'
+//     ]);
+// }
+
+
+// // STORE PESAWAT
+// foreach ($detail->pesawat as $key => $value) {
+//     $pes = PerjadinDetailPesawat::create([
+//         'perjadin_detail_id' => $details->id,
+//         'keterangan' => $value->keterangan,
+//         'biaya' => $value->biaya,
+//         'realisasi_biaya' => 0,
+//     ]);
+//     $total_pesawat += $value->biaya;
+// }
+
+// if ($detail->nominatif_pesawat) {
+//     MakNominatifDetail::create([
+//         'mak_nominatif_id' => $detail->nominatif_pesawat->id,
+//         'kegiatan_id' => $result->id,
+//         'jumlah' => $total_pesawat,
+//         'status_realisasi' => 'BELUM'
+//     ]);
+// }
+
+// // STORE TAKSI JAKARTA
+// foreach ($detail->taksi_jakarta as $key => $value) {
+//     $val = PerjadinDetailTaksiJakarta::create([
+//         'perjadin_detail_id' => $details->id,
+//         'keterangan' => $value->keterangan,
+//         'biaya' => $value->biaya,
+//         'realisasi_biaya' => 0,
+//     ]);
+//     $total_taksi_jakarta += $value->biaya;
+// }
+
+// if ($detail->nominatif_taksi_jakarta) {
+//     MakNominatifDetail::create([
+//         'mak_nominatif_id' => $detail->nominatif_taksi_jakarta->id,
+//         'kegiatan_id' => $result->id,
+//         'jumlah' => $total_taksi_jakarta,
+//         'status_realisasi' => 'BELUM'
+//     ]);
+// }
+
+// // STORE TAKSI TUJUAN
+// foreach ($detail->taksi_tujuan as $key => $value) {
+//     $val = PerjadinDetailTaksiTujuan::create([
+//         'perjadin_detail_id' => $details->id,
+//         'keterangan' => $value->keterangan,
+//         'biaya' => $value->biaya,
+//         'realisasi_biaya' => 0,
+//     ]);
+
+//     $total_taksi_tujuan += $value->biaya;
+// }
+
+// if ($detail->nominatif_taksi_tujuan) {
+//     MakNominatifDetail::create([
+//         'mak_nominatif_id' => $detail->nominatif_taksi_tujuan->id,
+//         'kegiatan_id' => $result->id,
+//         'jumlah' => $total_taksi_tujuan,
+//         'status_realisasi' => 'BELUM'
+//     ]);
+// }
+
+// // STORE TRANSPORT
+// foreach ($detail->transport as $key => $transport) {
+//     $pes = PerjadinDetailTransport::create([
+//         'perjadin_detail_id' => $details->id,
+//         'keterangan' => $transport->keterangan,
+//         'tipe' => $transport->tipe,
+//         'biaya' => $transport->biaya,
+//         'realisasi_biaya' => 0,
+//     ]);
+//     $total_transport += $transport->biaya;
+// }
+
+
+// if ($detail->nominatif_transport) {
+//     MakNominatifDetail::create([
+//         'mak_nominatif_id' => $detail->nominatif_transport->id,
+//         'kegiatan_id' => $result->id,
+//         'jumlah' => $total_transport,
+//         'status_realisasi' => 'BELUM'
+//     ]);
+// }
+
+
+// // STORE UH
+// foreach ($detail->uang_harian as $key => $uang_harian) {
+//     $dar = PerjadinDetailUh::create([
+//         'perjadin_detail_id' => $details->id,
+//         'keterangan' => $uang_harian->keterangan,
+//         'hari' => $uang_harian->hari,
+//         'realisasi_hari' => $uang_harian->hari,
+//         'biaya' => $uang_harian->biaya,
+//         'realisasi_biaya' => 0,
+//     ]);
+//     $total_uh += $uang_harian->biaya * $uang_harian->hari;
+// }
+
+// if ($detail->nominatif_uh) {
+//     MakNominatifDetail::create([
+//         'mak_nominatif_id' => $detail->nominatif_uh->id,
+//         'kegiatan_id' => $result->id,
+//         'jumlah' => $total_uh,
+//         'status_realisasi' => 'BELUM'
+//     ]);
+// }
+
+
+// // STORE REPRESENTATIF
+// foreach ($detail->representatif as $key => $representatif) {
+//     $rep = PerjadinDetailRep::create([
+//         'perjadin_detail_id' => $details->id,
+//         'keterangan' => $representatif->keterangan,
+//         'hari' => $representatif->hari,
+//         'realisasi_hari' => $representatif->hari,
+//         'biaya' => $representatif->biaya,
+//         'realisasi_biaya' => 0,
+//     ]);
+
+//     $total_rep += $representatif->biaya * $representatif->hari;
+// }
+
+
+// if ($detail->nominatif_representatif) {
+//     MakNominatifDetail::create([
+//         'mak_nominatif_id' => $detail->nominatif_representatif->id,
+//         'kegiatan_id' => $result->id,
+//         'jumlah' => $total_rep,
+//         'status_realisasi' => 'BELUM'
+//     ]);
+// }
