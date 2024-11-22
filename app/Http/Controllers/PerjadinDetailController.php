@@ -319,4 +319,60 @@ class PerjadinDetailController extends BaseController
             return $this->sendError($e->getMessage(), 'Error');
         }
     }
+
+    public function groupBy(Request $request)
+    {
+
+        $name = $request->input('query');
+        $status = $request->input('status');
+        $startDate = $request->input('start-date');
+        $endDate = $request->input('end-date');
+        $perPage = $request->input('limit', 5);
+        $isAdmin = $request->input('is-admin', false);
+        $status = $request->input('status');
+        $unit = $request->input('unit');
+
+
+        try {
+            // Mengambil data inventaris dengan paginasi
+            $result = PerjadinDetail::when($name, function ($query, $name) {
+                return $query
+                    ->orWhere('nama', 'like', '%' . $name . '%')
+                    ->orWhere('nip', 'like', '%' . $name . '%');
+            })->selectRaw('nama, nip, 
+            COUNT(*) as total,
+            SUM(CASE WHEN status = "verified" THEN 1 ELSE 0 END) as verified,
+            SUM(CASE WHEN status = "unverified" THEN 1 ELSE 0 END) as unverified')
+
+                ->groupBy('nama')->groupBy('nip')
+                ->orderBy('nama')
+                ->paginate($perPage);
+
+            return response()->json(['data' => $result], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
+    }
+
+    public function getDataPegawai(Request $request)
+    {
+        $name = $request->input('query');
+        $perPage = $request->input('limit', 5);
+
+        try {
+            // Mengambil data inventaris dengan paginasi
+            $result = PerjadinDetail::when($name, function ($query, $name) {
+                return $query
+                    ->orWhere('nama', 'like', '%' . $name . '%')
+                    ->orWhere('nip', 'like', '%' . $name . '%');
+            })->selectRaw('nama, nip')
+                ->groupBy('nama')->groupBy('nip')
+                ->orderBy('nama')
+                ->paginate($perPage);
+
+            return response()->json(['data' => $result], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
+    }
 }

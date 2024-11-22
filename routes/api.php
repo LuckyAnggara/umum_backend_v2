@@ -99,6 +99,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/kirim-pesan', [PesanController::class, 'kirim']);
     Route::get('/user/layanan', [AuthController::class, 'layanan']);
 
+    Route::get('/keuangan/get-data-pegawai', [PerjadinDetailController::class, 'getDataPegawai']);
+
     Route::resource('permintaan-persediaan', PermintaanPersediaanController::class)->only(['index', 'update']);
     Route::resource('tempat', TempatController::class);
     Route::resource('agenda', AgendaController::class);
@@ -123,6 +125,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/keuangan/perjadin/update-status/{id}', [PerjadinController::class, 'updateStatus']);
     Route::put('/keuangan/perjadin-detail/update-status/{id}', [PerjadinDetailController::class, 'updateStatus']);
 
+
+
+
     Route::resource('/keuangan/non-perjadin', NonPerjadinController::class);
     Route::put('/keuangan/non-perjadin/update-status/{id}', [NonPerjadinController::class, 'updateStatus']);
 
@@ -135,3 +140,4 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 Route::get('/setset', [PerjadinController::class, 'assignNoSppd']);
+Route::get('/11', [PerjadinDetailController::class, 'groupBy']);
