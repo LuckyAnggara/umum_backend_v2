@@ -259,6 +259,7 @@ class PerjadinController extends BaseController
                         $value->delete();
                     }
                 }
+
                 foreach ($perjadin->detail as $key => $value) {
                     if ($value->hotel) {
                         foreach ($value->hotel as $key => $hotel) {
@@ -266,18 +267,18 @@ class PerjadinController extends BaseController
                         }
                     }
                     if ($value->pesawat) {
-                        foreach ($value->pesawat as $key => $value) {
-                            $value->delete();
+                        foreach ($value->pesawat as $key => $pesawat) {
+                            $pesawat->delete();
                         }
                     }
                     if ($value->taksi_tujuan) {
-                        foreach ($value->taksi_tujuan as $key => $value) {
-                            $value->delete();
+                        foreach ($value->taksi_tujuan as $key => $taksi_tujuan) {
+                            $taksi_tujuan->delete();
                         }
                     }
                     if ($value->taksi_jakarta) {
-                        foreach ($value->taksi_jakarta as $key => $value) {
-                            $value->delete();
+                        foreach ($value->taksi_jakarta as $key => $taksi_jakarta) {
+                            $taksi_jakarta->delete();
                         }
                     }
                     if ($value->transport) {
@@ -286,17 +287,18 @@ class PerjadinController extends BaseController
                         }
                     }
                     if ($value->uang_harian) {
-                        foreach ($value->uang_harian as $key => $value) {
-                            $value->delete();
+                        foreach ($value->uang_harian as $key => $uang_harian) {
+                            $uang_harian->delete();
                         }
                     }
                     if ($value->representatif) {
-                        foreach ($value->representatif as $key => $value) {
-                            $value->delete();
+                        foreach ($value->representatif as $key => $representatif) {
+                            $representatif->delete();
                         }
                     }
                     $value->delete();
                 }
+
                 foreach ($umum->detail as $key => $detail) {
                     $details = PerjadinDetail::create([
                         'perjadin_id' => $perjadin->id,

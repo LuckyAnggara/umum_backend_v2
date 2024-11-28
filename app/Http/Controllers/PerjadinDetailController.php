@@ -339,12 +339,17 @@ class PerjadinDetailController extends BaseController
                 return $query
                     ->orWhere('nama', 'like', '%' . $name . '%')
                     ->orWhere('nip', 'like', '%' . $name . '%');
-            })->selectRaw('nama, nip, 
+            })->selectRaw('
+            nama, 
+            MAX(nip) as nip, 
+            MAX(jabatan) as jabatan, 
+            MAX(pangkat) as pangkat, 
+            MAX(unit) as unit, 
             COUNT(*) as total,
             SUM(CASE WHEN status = "verified" THEN 1 ELSE 0 END) as verified,
-            SUM(CASE WHEN status = "unverified" THEN 1 ELSE 0 END) as unverified')
-
-                ->groupBy('nama')->groupBy('nip')
+            SUM(CASE WHEN status = "unverified" THEN 1 ELSE 0 END) as unverified
+        ')
+                ->groupBy('nama')
                 ->orderBy('nama')
                 ->paginate($perPage);
 
@@ -365,10 +370,30 @@ class PerjadinDetailController extends BaseController
                 return $query
                     ->orWhere('nama', 'like', '%' . $name . '%')
                     ->orWhere('nip', 'like', '%' . $name . '%');
-            })->selectRaw('nama, nip')
-                ->groupBy('nama')->groupBy('nip')
+            })->selectRaw('nama, MAX(nip) as nip, MAX(jabatan) as jabatan, MAX(pangkat) as pangkat, MAX(unit) as unit')
+                ->groupBy('nama')
                 ->orderBy('nama')
                 ->paginate($perPage);
+
+            return response()->json(['data' => $result], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
+    }
+
+    public function getDataUangHarian(Request $request)
+    {
+        $name = $request->input('query');
+        $perPage = $request->input('limit', 5);
+
+        try {
+            // Mengambil data inventaris dengan paginasi
+            $result = PerjadinDetail::with('uang_harian')->when($name, function ($query, $name) {
+                return $query
+                    ->orWhere('nama', 'like', '%' . $name . '%')
+                    ->orWhere('nip', 'like', '%' . $name . '%');
+            })
+                ->get();
 
             return response()->json(['data' => $result], 200);
         } catch (\Exception $e) {
