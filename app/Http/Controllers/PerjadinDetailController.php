@@ -74,6 +74,18 @@ class PerjadinDetailController extends BaseController
         }
     }
 
+    public function showAndValidate($id, Request $request)
+    {
+        try {
+
+            $result = PerjadinDetail::where('id', $id)->with('hotel', 'transport', 'uang_harian', 'pesawat', 'taksi_jakarta', 'taksi_tujuan', 'representatif', 'master.mak', 'ppk', 'bendahara', 'lampiran')->first();
+
+            return $this->sendResponse($result, 'Data tersedia');
+        } catch (\Exception $e) {
+            return $this->sendError($e->getMessage(), 'Error');
+        }
+    }
+
     /// STORE REALISASI
     public function store(Request $request)
     {

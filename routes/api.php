@@ -26,6 +26,7 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SbmController;
 use App\Http\Controllers\TempatController;
 use App\Http\Controllers\TemplateController;
+use App\Http\Controllers\TokenAccessPtjController;
 use App\Models\MutasiPersediaan;
 use App\Models\PerjadinDetail;
 use Illuminate\Http\Request;
@@ -125,9 +126,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/keuangan/perjadin/update-status/{id}', [PerjadinController::class, 'updateStatus']);
     Route::put('/keuangan/perjadin-detail/update-status/{id}', [PerjadinDetailController::class, 'updateStatus']);
 
-
-
-
     Route::resource('/keuangan/non-perjadin', NonPerjadinController::class);
     Route::put('/keuangan/non-perjadin/update-status/{id}', [NonPerjadinController::class, 'updateStatus']);
 
@@ -137,7 +135,13 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/persediaan/cek-nama', [InventoryController::class, 'cekNama']);
     Route::post('persediaan/upload-image', [InventoryController::class, 'imageUpload']);
+
+    //Generate Token untuk Temporary PTJ
 });
+
+Route::get('/keuangan/generate-token/{id}', [TokenAccessPtjController::class, 'generateToken']);
 
 Route::get('/setset', [PerjadinController::class, 'assignNoSppd']);
 Route::get('/11', [PerjadinDetailController::class, 'groupBy']);
+
+Route::post('/keuangan/ptj/perjadin-detail/{id}', [PerjadinDetailController::class, 'showAndValidate']);

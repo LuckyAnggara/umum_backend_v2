@@ -17,6 +17,7 @@ class TemplateController extends Controller
     {
         $result = PerjadinDetail::where('id', $id)->with('master')->first();
         try {
+            return Response::download(storage_path('app\public\template\template_sptjm.docx'));
             $templateProcessor = new TemplateProcessor(storage_path('app\public\template\template_sptjm.docx'));
             $templateProcessor->setValue('nama', $result->nama);
             $templateProcessor->setValue('nip', $result->nip);
@@ -25,6 +26,7 @@ class TemplateController extends Controller
             $templateProcessor->setValue('tahun_anggaran', $result->master->tahun_anggaran);
             $templateProcessor->setValue('tanggal_st', Carbon::parse($result->master->tanggal_st)->format('d F Y'));
             $templateProcessor->saveAs(storage_path('app\public\perjadin\ptj\lainnya\sptjm\sptjm_' . $result->id . '.docx'));
+            return 'done';
 
             return Response::download(storage_path('app\public\perjadin\ptj\lainnya\sptjm\sptjm_' . $result->id . '.docx'), 'sptjm_' . $result->no_sppd . '.docx');
         } catch (Exception $e) {
