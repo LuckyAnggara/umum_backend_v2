@@ -139,7 +139,10 @@ Route::middleware('auth:sanctum')->group(function () {
     //Generate Token untuk Temporary PTJ
 });
 
-Route::get('/keuangan/generate-token/{id}', [TokenAccessPtjController::class, 'generateToken']);
+Route::post('/keuangan/generate-token', [TokenAccessPtjController::class, 'generateToken']);
+Route::post('/keuangan/validate-token', [TokenAccessPtjController::class, 'validateToken']);
+Route::get('/keuangan/perjadin/master/{id}', [TokenAccessPtjController::class, 'showMaster']);
+Route::post('/keuangan/perjadin-detail/external', [PerjadinDetailController::class, 'store']);
 
 Route::get('/setset', [PerjadinController::class, 'assignNoSppd']);
 Route::get('/11', [PerjadinDetailController::class, 'groupBy']);

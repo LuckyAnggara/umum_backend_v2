@@ -29,12 +29,14 @@ class PerjadinDetailController extends BaseController
         $status = $request->input('status');
         $unit = $request->input('unit');
 
+
         try {
             // Mengambil data inventaris dengan paginasi
             $detail = PerjadinDetail::when($name, function ($query, $name) {
                 return $query
                     ->whereHas('master', function ($q) use ($name) {
                         $q->where('nama_kegiatan', 'like', '%' . $name . '%')
+                            ->where('status', 'PERTANGGUNG JAWABAN')
                             ->orWhere('no_st', 'like', '%' . $name . '%');
                     })
                     ->orWhere('no_sppd', 'like', '%' . $name . '%')
