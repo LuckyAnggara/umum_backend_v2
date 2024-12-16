@@ -25,9 +25,6 @@ class TemplateController extends Controller
             $templateProcessor->setValue('no_st', $result->master->no_st);
             $templateProcessor->setValue('tahun_anggaran', $result->master->tahun_anggaran);
             $templateProcessor->setValue('tanggal_st', Carbon::parse($result->master->tanggal_st)->format('d F Y'));
-            $templateProcessor->saveAs(storage_path('app\public\perjadin\ptj\lainnya\sptjm\sptjm_' . $result->id . '.docx'));
-            return 'done';
-
             return Response::download(storage_path('app\public\perjadin\ptj\lainnya\sptjm\sptjm_' . $result->id . '.docx'), 'sptjm_' . $result->no_sppd . '.docx');
         } catch (Exception $e) {
             return $e->getMessage();
