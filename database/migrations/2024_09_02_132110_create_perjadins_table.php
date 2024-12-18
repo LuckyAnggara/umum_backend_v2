@@ -20,6 +20,9 @@ return new class extends Migration
             $table->date('tanggal_akhir');
             $table->string('nama_kegiatan');
             $table->string('tempat_kegiatan');
+            $table->string('jenis_kegiatan');
+            $table->string('tujuan_pdln');
+            $table->enum('jenis_perjalanan_dinas', ['DALAM NEGERI', 'LUAR NEGERI']);
             $table->string('tempat_kedudukan')->default('Jakarta');
             $table->integer('provinsi_id');
             $table->integer('mak_id');

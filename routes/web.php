@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\PesanController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\TemplateController;
 use Illuminate\Support\Facades\Route;
 
@@ -18,6 +19,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/report/perjadin', [ReportController::class, 'reportPerjadin']);
 
 
 Route::get('/test-pesan', [PesanController::class, 'test']);

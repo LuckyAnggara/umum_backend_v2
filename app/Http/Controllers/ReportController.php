@@ -2,18 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\PerjadinExport;
 use App\Http\Controllers\BaseController;
 use App\Models\Agenda;
 use App\Models\Inventory;
 use App\Models\Item;
 use App\Models\MutasiPersediaan;
 use App\Models\Mutation;
+use App\Models\PerjadinDetail;
 use App\Models\ProductionOrder;
 use App\Models\Warehouse;
 use Illuminate\Http\Request;
 use PDF;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 use stdClass;
 
 class ReportController extends BaseController
@@ -144,12 +147,12 @@ class ReportController extends BaseController
                 }
             }
 
-    // Mengurutkan hasil berdasarkan pimpinan dari 1 hingga 8
-    $sortedDetails = $groupedDetails->sortBy('pimpinan')->values()->toArray();
+            // Mengurutkan hasil berdasarkan pimpinan dari 1 hingga 8
+            $sortedDetails = $groupedDetails->sortBy('pimpinan')->values()->toArray();
 
-    $item['detail'] = $sortedDetails;
+            $item['detail'] = $sortedDetails;
 
-    return $item;
+            return $item;
         });
 
         // return collect($transformed)->toJson();
@@ -160,7 +163,7 @@ class ReportController extends BaseController
         ]);
     }
 
-      public function reportTextAgenda(Request $request)
+    public function reportTextAgenda(Request $request)
     {
         $fromDate = $request->input('start');
         $toDate = $request->input('end');
@@ -248,14 +251,28 @@ class ReportController extends BaseController
                 }
             }
 
-    // Mengurutkan hasil berdasarkan pimpinan dari 1 hingga 8
-    $sortedDetails = $groupedDetails->sortBy('pimpinan')->values()->toArray();
+            // Mengurutkan hasil berdasarkan pimpinan dari 1 hingga 8
+            $sortedDetails = $groupedDetails->sortBy('pimpinan')->values()->toArray();
 
-    $item['detail'] = $sortedDetails;
+            $item['detail'] = $sortedDetails;
 
-    return $item;
+            return $item;
         });
         return $transformed->toJson();
+    }
 
+    public function reportPerjadin(Request $request)
+    {
+        $now = Carbon::now();
+
+        $startDate = $request->input('tanggal_awal'); // Ambil data dari request (2024-12-17T15:07:00.000)
+        $endDate = $request->input('tanggal_akhir'); // Ambil data dari request (2024-12-17T15:07:00.000)
+
+        // Parse tanggal menggunakan Carbon
+        $start = Carbon::parse($startDate)->format('Y-m-d');
+        $end = Carbon::parse($endDate)->format('Y-m-d');
+
+        // return PerjadinDetail::with('master.mak')->get();
+        return Excel::download(new PerjadinExport($start, $end), 'Report' . $now->toTimeString() . '.xlsx');
     }
 }
