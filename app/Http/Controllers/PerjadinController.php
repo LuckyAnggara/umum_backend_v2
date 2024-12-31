@@ -235,8 +235,8 @@ class PerjadinController extends BaseController
                 'tahun_anggaran' => $umum->tahun_anggaran,
                 'no_st' => $umum->no_st,
                 'tanggal_st' => Carbon::parse($umum->tanggal_st)->format('Y-m-d'),
-                'tanggal_awal' => Carbon::parse($umum->tanggal_awal)->format('Y-m-d'),
-                'tanggal_akhir' => Carbon::parse($umum->tanggal_akhir)->format('Y-m-d'),
+                'tanggal_awal' => Carbon::parse($umum->tanggal_awal)->setTimezone('Asia/Jakarta')->format('Y-m-d'),
+                'tanggal_akhir' => Carbon::parse($umum->tanggal_akhir)->setTimezone('Asia/Jakarta')->format('Y-m-d'),
                 'nama_kegiatan' => $umum->nama_kegiatan,
                 'jenis_kegiatan' => $umum->jenis_kegiatan,
                 'jenis_perjalanan_dinas' => $umum->jenis_perjalanan_dinas,
@@ -514,7 +514,9 @@ class PerjadinController extends BaseController
             $catatan = 'Perjalanan Dinas telah di di perbaharui';
             PerjadinLogController::createLogPerjadin($perjadin->id, 'PEMBAHARUAN', $catatan);
 
-            $result = Perjadin::where('id', $id)->with('mak.nominatif.detail', 'log', 'detail.hotel', 'detail.transport', 'detail.pesawat', 'detail.taksi_jakarta',  'detail.taksi_tujuan', 'detail.uang_harian', 'detail.representatif', 'detail.ppk', 'detail.bendahara', 'lampiran', 'provinsi', 'detail.nominatif_hotel.detail')->first();
+            $result = Perjadin::where('id', $id)->with('mak.nominatif.detail', 'log', 'log.user', 'detail.catatan', 'detail.hotel', 'detail.transport', 'detail.pesawat', 'detail.taksi_jakarta',  'detail.taksi_tujuan', 'detail.uang_harian', 'detail.representatif', 'detail.ppk', 'detail.bendahara', 'lampiran', 'provinsi', 'detail.nominatif_hotel.detail', 'detail.nominatif_uh.detail', 'detail.nominatif_transport.detail', 'detail.nominatif_pesawat.detail', 'detail.nominatif_taksi_jakarta.detail', 'detail.nominatif_taksi_tujuan.detail', 'detail.nominatif_representatif.detail')->first();
+
+
             DB::commit();
             return $this->sendResponse($result, 'Data berhasil di perbaharui');
         } catch (\Exception $e) {
