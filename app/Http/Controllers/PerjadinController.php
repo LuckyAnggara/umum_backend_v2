@@ -248,10 +248,13 @@ class PerjadinController extends BaseController
                 'total_anggaran' => $umum->total_anggaran,
                 'total_realisasi' => 0,
                 'status' => 'PERENCANAAN',
-                'user_id' => Auth::id(),
             ]);
 
-
+            if (Auth::user()->role !== 'ADMIN') {
+                $perjadin->update([
+                    'user_id' => Auth::id(),
+                ]);
+            }
             // UBAH DETAIL MAK
 
             $mak = MakDetail::where('TYPE', 'PERJADIN')->where('kegiatan_id', $id)->first();
@@ -351,9 +354,9 @@ class PerjadinController extends BaseController
                         $total_hotel += $hotel->biaya * $hotel->hari;
                     }
 
-                    if ($detail->nominatif_hotel) {
+                    if ($detail->nominatif_hotel_id) {
                         MakNominatifDetail::create([
-                            'mak_nominatif_id' => $detail->nominatif_hotel->id,
+                            'mak_nominatif_id' => $detail->nominatif_hotel_id,
                             'kegiatan_id' => $details->id,
                             'jumlah' => $total_hotel,
                             'status_realisasi' => 'BELUM'
@@ -372,9 +375,9 @@ class PerjadinController extends BaseController
                         $total_pesawat += $value->biaya;
                     }
 
-                    if ($detail->nominatif_pesawat) {
+                    if ($detail->nominatif_pesawat_id) {
                         MakNominatifDetail::create([
-                            'mak_nominatif_id' => $detail->nominatif_pesawat->id,
+                            'mak_nominatif_id' => $detail->nominatif_pesawat_id,
                             'kegiatan_id' => $details->id,
                             'jumlah' => $total_pesawat,
                             'status_realisasi' => 'BELUM'
@@ -392,9 +395,9 @@ class PerjadinController extends BaseController
                         $total_taksi_jakarta += $value->biaya;
                     }
 
-                    if ($detail->nominatif_taksi_jakarta) {
+                    if ($detail->nominatif_taksi_jakarta_id) {
                         MakNominatifDetail::create([
-                            'mak_nominatif_id' => $detail->nominatif_taksi_jakarta->id,
+                            'mak_nominatif_id' => $detail->nominatif_taksi_jakarta_id,
                             'kegiatan_id' => $details->id,
                             'jumlah' => $total_taksi_jakarta,
                             'status_realisasi' => 'BELUM'
@@ -413,9 +416,9 @@ class PerjadinController extends BaseController
                         $total_taksi_tujuan += $value->biaya;
                     }
 
-                    if ($detail->nominatif_taksi_tujuan) {
+                    if ($detail->nominatif_taksi_tujuan_id) {
                         MakNominatifDetail::create([
-                            'mak_nominatif_id' => $detail->nominatif_taksi_tujuan->id,
+                            'mak_nominatif_id' => $detail->nominatif_taksi_tujuan_id,
                             'kegiatan_id' => $details->id,
                             'jumlah' => $total_taksi_tujuan,
                             'status_realisasi' => 'BELUM'
@@ -434,10 +437,9 @@ class PerjadinController extends BaseController
                         $total_transport += $transport->biaya;
                     }
 
-
-                    if ($detail->nominatif_transport) {
+                    if ($detail->nominatif_transport_id) {
                         MakNominatifDetail::create([
-                            'mak_nominatif_id' => $detail->nominatif_transport->id,
+                            'mak_nominatif_id' => $detail->nominatif_transport_id,
                             'kegiatan_id' => $details->id,
                             'jumlah' => $total_transport,
                             'status_realisasi' => 'BELUM'
@@ -457,9 +459,9 @@ class PerjadinController extends BaseController
                         $total_uh += $uang_harian->biaya * $uang_harian->hari;
                     }
 
-                    if ($detail->nominatif_uh) {
+                    if ($detail->nominatif_uh_id) {
                         MakNominatifDetail::create([
-                            'mak_nominatif_id' => $detail->nominatif_uh->id,
+                            'mak_nominatif_id' => $detail->nominatif_uh_id,
                             'kegiatan_id' => $details->id,
                             'jumlah' => $total_uh,
                             'status_realisasi' => 'BELUM'
@@ -479,9 +481,9 @@ class PerjadinController extends BaseController
 
                         $total_rep += $representatif->biaya * $representatif->hari;
                     }
-                    if ($detail->nominatif_representatif) {
+                    if ($detail->nominatif_representatif_id) {
                         MakNominatifDetail::create([
-                            'mak_nominatif_id' => $detail->nominatif_representatif->id,
+                            'mak_nominatif_id' => $detail->nominatif_representatif_id,
                             'kegiatan_id' => $details->id,
                             'jumlah' => $total_rep,
                             'status_realisasi' => 'BELUM'
