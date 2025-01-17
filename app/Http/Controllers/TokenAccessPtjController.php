@@ -73,14 +73,32 @@ class TokenAccessPtjController extends BaseController
 
     public function showMaster($id)
     {
-        try {
-            $exist = TokenAccessPtj::where('perjadin_id', $id)
-                ->where('expires_at', '>', Carbon::now())
-                ->first();
+        // try {
+        //     $exist = TokenAccessPtj::where('perjadin_id', $id)
+        //         ->where('expires_at', '>', Carbon::now())
+        //         ->first();
 
-            if ($exist) {
+        //     if ($exist) {
+        //         $result = Perjadin::where('id', $id)->with('detail')->first();
+        //     } else {
+        //         return response()->json(['message' => 'Link telah expire'], 204);
+        //     }
+        // } catch (\Exception $e) {
+        //     return response()->json(['message' => $e->getMessage()], 500);
+        // }
+
+        try {
+            // $exist = TokenAccessPtj::where('perjadin_id', $id)
+            //     ->where('expires_at', '>', Carbon::now())
+            //     ->first();
+
+            $result = Perjadin::where('id', $id)->with('detail')->first();
+
+            if ($result) {
                 $result = Perjadin::where('id', $id)->with('detail')->first();
+                return $this->sendResponse($result, 'Data tersedia');
             } else {
+
                 return response()->json(['message' => 'Link telah expire'], 204);
             }
         } catch (\Exception $e) {
