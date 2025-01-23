@@ -27,9 +27,10 @@ class MakController extends BaseController
             })->when($unit, function ($query, $unit) {
                 return $query
                     ->where('unit_id', $unit);
-            })
-                ->where('tahun_anggaran', $tahun)
-                ->orderBy('created_at', 'desc')
+            })->when($tahun, function ($query, $tahun) {
+                return $query
+                    ->where('tahun_anggaran', $tahun);
+            })->orderBy('created_at', 'desc')
                 ->latest()
                 ->paginate($perPage);
 

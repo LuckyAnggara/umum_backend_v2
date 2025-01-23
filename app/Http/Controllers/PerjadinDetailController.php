@@ -28,6 +28,7 @@ class PerjadinDetailController extends BaseController
         $isAdmin = $request->input('is-admin', false);
         $status = $request->input('status');
         $unit = $request->input('unit');
+        $tahun = $request->input('tahun');
 
 
         try {
@@ -46,6 +47,11 @@ class PerjadinDetailController extends BaseController
                 return $query
                     ->whereHas('master', function ($q) use ($unit) {
                         $q->where('unit_id', $unit);
+                    });
+            })->when($tahun, function ($query, $tahun) {
+                return $query
+                    ->whereHas('master', function ($q) use ($tahun) {
+                        $q->where('tahun_anggaran', $tahun);
                     });
             })
                 ->when($status, function ($query, $status) {

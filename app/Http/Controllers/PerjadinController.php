@@ -30,6 +30,7 @@ class PerjadinController extends BaseController
         $status = $request->input('status');
         $startDate = $request->input('start-date');
         $endDate = $request->input('end-date');
+        $tahun = $request->input('tahun');
         $perPage = $request->input('limit', 5);
         $isAdmin = $request->input('is-admin', false);
         $status = $request->input('status');
@@ -49,6 +50,9 @@ class PerjadinController extends BaseController
                 })
                 ->when($status, function ($query, $status) {
                     return $query->where('status', $status);
+                })
+                ->when($tahun, function ($query, $tahun) {
+                    return $query->where('tahun_anggaran', $tahun);
                 })
                 ->when($startDate && $endDate, function ($query) use ($startDate, $endDate) {
                     return $query->whereBetween('tanggal', [$startDate, $endDate]);
