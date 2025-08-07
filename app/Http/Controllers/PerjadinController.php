@@ -262,7 +262,9 @@ class PerjadinController extends BaseController
             // UBAH DETAIL MAK
 
             $mak = MakDetail::where('TYPE', 'PERJADIN')->where('kegiatan_id', $id)->first();
-            $mak->delete();
+            if($mak){
+                $mak->delete();
+            }
             $mak = MakDetailController::createMakDetail($perjadin, 'PERJADIN', 'BELUM');
 
 
@@ -332,8 +334,8 @@ class PerjadinController extends BaseController
                         // 'nominatif_taksi_tujuan_id' =>
                         // $detail->nominatif_taksi_tujuan ? $detail->nominatif_taksi_tujuan->id : null,
                         // 'nominatif_representatif_id' => $detail->nominatif_representatif ? $detail->nominatif_representatif->id : null,
-                        'tanggal_awal' => Carbon::parse($detail->tanggal_awal)->format('Y-m-d'),
-                        'tanggal_akhir' => Carbon::parse($detail->tanggal_akhir)->format('Y-m-d'),
+                        'tanggal_awal' => Carbon::parse($detail->tanggal_awal)->setTimezone('Asia/Jakarta')->format('Y-m-d'),
+                        'tanggal_akhir' => Carbon::parse($detail->tanggal_akhir)->setTimezone('Asia/Jakarta')->format('Y-m-d'),
                         'jumlah_hari' => $detail->jumlah_hari ?? 0,
                         'tahun_anggaran' => $umum->tahun_anggaran,
                     ]);

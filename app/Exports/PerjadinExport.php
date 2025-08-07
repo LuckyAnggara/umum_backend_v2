@@ -24,7 +24,7 @@ class PerjadinExport implements FromView
     {
 
         return view('perjadinreport', [
-            'data' => PerjadinDetail::with('master.mak')->whereBetween('tanggal_sppd', [$this->start, $this->end])->orderBy('no_sppd')->get()
+            'data' => PerjadinDetail::with('master.mak','hotel','uang_harian','pesawat','taksi_jakarta','taksi_tujuan','transport','representatif')->whereBetween('tanggal_sppd', [$this->start, $this->end])->orderBy('no_sppd')->get()
         ]);
     }
 }

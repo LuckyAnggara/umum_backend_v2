@@ -261,6 +261,7 @@ class ReportController extends BaseController
         return $transformed->toJson();
     }
 
+
     public function reportPerjadin(Request $request)
     {
         $now = Carbon::now();
@@ -272,6 +273,7 @@ class ReportController extends BaseController
         $start = Carbon::parse($startDate)->format('Y-m-d');
         $end = Carbon::parse($endDate)->format('Y-m-d');
 
+        // return PerjadinDetail::with(['master.mak','hotel','uang_harian','pesawat','taksi_jakarta','taksi_tujuan','transport','representatif'])->whereBetween('tanggal_sppd', [$startDate,$endDate])->orderBy('no_sppd')->get();
         // return PerjadinDetail::with('master.mak')->get();
         return Excel::download(new PerjadinExport($start, $end), 'Report' . $now->toTimeString() . '.xlsx');
     }
