@@ -273,6 +273,13 @@ class ReportController extends BaseController
         $start = Carbon::parse($startDate)->format('Y-m-d');
         $end = Carbon::parse($endDate)->format('Y-m-d');
 
+        // $result = PerjadinDetail::with('master.mak','hotel','uang_harian','pesawat','taksi_jakarta','taksi_tujuan','transport','representatif')->whereBetween('tanggal_sppd', [$start, $end])->orderBy('no_sppd')->get();
+
+        // return view('perjadinreport', [
+        //     'data' => $result,
+        //     // 'date' => Carbon::parse($date)->format('d F Y'),
+        // ]);
+
         // return PerjadinDetail::with(['master.mak','hotel','uang_harian','pesawat','taksi_jakarta','taksi_tujuan','transport','representatif'])->whereBetween('tanggal_sppd', [$startDate,$endDate])->orderBy('no_sppd')->get();
         // return PerjadinDetail::with('master.mak')->get();
         return Excel::download(new PerjadinExport($start, $end), 'Report' . $now->toTimeString() . '.xlsx');

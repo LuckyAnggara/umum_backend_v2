@@ -13,7 +13,6 @@ class PerjadinDetailUh extends Model
         'keterangan',
         'hari',
         'realisasi_hari',
-
         'biaya',
         'realisasi_biaya',
         'notes',
