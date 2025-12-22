@@ -420,4 +420,99 @@ class PerjadinDetailController extends BaseController
             return response()->json(['message' => $e->getMessage()], 500);
         }
     }
+
+    // Check if no_sppd is available (not already used)
+    public function checkNoSppd(Request $request)
+    {
+        try {
+            $no_sppd = $request->input('no_sppd');
+            $current_id = $request->input('id'); // Current detail ID to exclude from check
+
+            // Convert to integer for proper comparison
+            $no_sppd_int = intval($no_sppd);
+
+            $query = PerjadinDetail::whereRaw('CAST(no_sppd AS UNSIGNED) = ?', [$no_sppd_int]);
+            
+            // Exclude current record if updating
+            if ($current_id) {
+                $query->where('id', '!=', $current_id);
+            }
+
+            $exists = $query->exists();
+
+            // Debug: Get the record if exists
+            $existingRecord = null;
+            if ($exists) {
+                $existingRecord = $query->first();
+            }
+
+            return response()->json([
+                'available' => !$exists,
+                'message' => $exists ? 'Nomor SPPD sudah digunakan' : 'Nomor SPPD tersedia',
+                'debug' => [
+                    'checking_no_sppd' => $no_sppd_int,
+                    'current_id' => $current_id,
+                    'exists' => $exists,
+                    'existing_record_id' => $existingRecord ? $existingRecord->id : null,
+                    'existing_record_no_sppd' => $existingRecord ? $existingRecord->no_sppd : null,
+                ]
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
+    }
+
+    // Update no_sppd for a specific detail
+    public function updateNoSppd(Request $request, $id)
+    {
+        DB::beginTransaction();
+        try {
+            $no_sppd = $request->input('no_sppd');
+            
+            // Convert to integer for proper comparison
+            $no_sppd_int = intval($no_sppd);
+
+            // Check if no_sppd already exists (excluding current record)
+            $exists = PerjadinDetail::whereRaw('CAST(no_sppd AS UNSIGNED) = ?', [$no_sppd_int])
+                ->where('id', '!=', $id)
+                ->exists();
+
+            if ($exists) {
+                $existingRecord = PerjadinDetail::whereRaw('CAST(no_sppd AS UNSIGNED) = ?', [$no_sppd_int])
+                    ->where('id', '!=', $id)
+                    ->first();
+                
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Nomor SPPD sudah digunakan oleh data lain',
+                    'debug' => [
+                        'existing_id' => $existingRecord->id,
+                        'existing_no_sppd' => $existingRecord->no_sppd,
+                        'trying_to_set' => $no_sppd_int,
+                    ]
+                ], 422);
+            }
+
+            $detail = PerjadinDetail::findOrFail($id);
+            $detail->update(['no_sppd' => $no_sppd_int]);
+
+            DB::commit();
+
+            $result = PerjadinDetail::where('id', $id)
+                ->with('hotel', 'transport', 'uang_harian', 'pesawat', 'taksi_jakarta', 'taksi_tujuan', 'representatif', 'master.mak', 'ppk', 'bendahara', 'lampiran')
+                ->first();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Nomor SPPD berhasil diperbarui',
+                'data' => $result
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
 }

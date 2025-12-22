@@ -119,6 +119,11 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::resource('/persediaan/mutasi', MutasiPersediaanController::class);
     Route::resource('/keuangan/perjadin', PerjadinController::class);
+    
+    // Custom routes harus SEBELUM resource route untuk avoid conflict
+    Route::get('/keuangan/perjadin-detail/check-no-sppd', [PerjadinDetailController::class, 'checkNoSppd']);
+    Route::put('/keuangan/perjadin-detail/{id}/update-no-sppd', [PerjadinDetailController::class, 'updateNoSppd']);
+    
     Route::resource('/keuangan/perjadin-detail', PerjadinDetailController::class);
     Route::resource('keuangan/perjadin-detail/catatan', PerjadinDetailCatatanController::class);
 

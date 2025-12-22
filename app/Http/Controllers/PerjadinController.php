@@ -562,13 +562,21 @@ class PerjadinController extends BaseController
                     'status' => $data->status,
                 ]);
                 foreach ($perjadin->detail as $key => $detail) {
-                    $no_sppd = $this->assignNoSppd();
-                    // Update the detail with the new `no_sppd` and other details
-                    $detail->update([
-                        'no_sppd' => $no_sppd,
-                        'ppk' => $data->ppk->id,
-                        'bendahara' => $data->bendahara->id,
-                    ]);
+                    // Only assign no_sppd if it doesn't exist yet
+                    if (empty($detail->no_sppd)) {
+                        $no_sppd = $this->assignNoSppd();
+                        $detail->update([
+                            'no_sppd' => $no_sppd,
+                            'ppk' => $data->ppk->id,
+                            'bendahara' => $data->bendahara->id,
+                        ]);
+                    } else {
+                        // Just update ppk and bendahara without changing no_sppd
+                        $detail->update([
+                            'ppk' => $data->ppk->id,
+                            'bendahara' => $data->bendahara->id,
+                        ]);
+                    }
                 }
                 $catatan = $request->catatan;
             } else if ($data->status == 'SELESAI') {
